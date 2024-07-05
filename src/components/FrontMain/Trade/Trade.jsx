@@ -7,6 +7,10 @@ import axios from "axios";
 import { convertTimestampToLocalTime, formatNumberWithMillions } from "../../../utils/utils";
 import InfoBarChart from "./InfoBarChart";
 import InfoHistChart from "./InfoHistChart";
+import { useInterval } from "react-use";
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ConfirmModal from "./ConfirmModal";
 
 const ControlChip = ({ label, ...props }) => (
     <Chip
@@ -28,32 +32,44 @@ const ControlChip = ({ label, ...props }) => (
 export default function Trade() {
     const [value, setValue] = useState(0);
     const [data, setData] = useState([]);
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const API = 'https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=1';
-                const response = await axios.get(API);
+    const [open,setOpen] = useState(false);
+    const fetchData = async () => {
+        try {
+            const API = 'https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=2';
+            const response = await axios.get(API);
 
-                let data = response.data.Data.Data;
-                console.log(data)
-                data = data.map((item) => {
-                    return {
-                        time: convertTimestampToLocalTime(item.time),
-                        open: item.open,
-                        high: item.high,
-                        low: item.low,
-                        close: item.close,
-                        volumn: item.volumeto
-                    };
-                });
+            let data = response.data.Data.Data;
 
-                setData(data[0]);
-                console.log(data)
-            } catch (error) {
-                console.error(error);
+            // data = data.map((item) => {
+            //     console.log('itm=em',item);
+            //     return {
+            //         time: convertTimestampToLocalTime(item.time),
+            //         open: item.open,
+            //         high: item.high,
+            //         low: item.low,
+            //         close: item.close,
+            //         volumn: item.volumeto
+            //     };
+            // });
+            let finalData = {
+                time: convertTimestampToLocalTime(data[1].time),
+                open: data[1].open,
+                high: data[1].high,
+                low: data[1].low,
+                close: data[1].close,
+                volumn: data[1].volumeto,
+                increase: (data[1].open - data[0].open).toFixed(2),
+                increasePercent: (((data[1].open - data[0].open) / data[0].open) * 100).toFixed(2)
             }
-        };
-
+            setData(finalData);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    useInterval(() => {
+        fetchData();
+    }, [5000])
+    useEffect(() => {
         fetchData();
     }, []);
     return (
@@ -131,10 +147,12 @@ export default function Trade() {
                     <Box p={1} sx={{ flexGrow: 1 }}>
                         <Box>
                             <Typography sx={{ marginBottom: 1 }} variant="body2" color='GrayText'>Current</Typography>
-                            <Typography sx={{ marginBottom: 1 }} variant="h4" color='green' fontWeight='bold'>{data.open}</Typography>
+                            <Typography sx={{ marginBottom: 1 }} variant="h4" color={Math.sign(data.increase) === 1 ? 'green' : 'red'} fontWeight='bold'>{data.open}</Typography>
                             <Box display='flex'>
-                                <Typography sx={{ marginRight: 1 }} variant="body2" color='green' fontWeight='bold'>50.78</Typography>
-                                <Typography variant="body2" color='green' fontWeight='bold'>0.08 %</Typography>
+                                <Typography sx={{ marginRight: 1 }} variant="body2" color={Math.sign(data.increase) === 1 ? 'green' : 'red'} fontWeight='bold'>{Math.abs(data.increase)}</Typography>
+                                <Typography variant="body2" color={Math.sign(data.increase)===1?'green':'red'} fontWeight='bold'>{Math.abs(data.increasePercent)} %</Typography>
+
+                                {Math.sign(data.increase)===1?<ArrowUpwardIcon fontSize="small" sx={{color:'green'}}/>:<ArrowDownwardIcon fontSize="small" sx={{color:'red'}}/>}
                             </Box>
                         </Box>
                     </Box>
@@ -209,11 +227,12 @@ export default function Trade() {
                         <Typography variant="body2">Cancel self-selection</Typography>
                     </Box>
                     <Box>
-                        <Button variant="contained" color="success" sx={{ borderRadius: '20px', marginRight: 1 }}>Long</Button>
-                        <Button variant="contained" color="error" sx={{ borderRadius: '20px' }}>Short</Button>
+                        <Button onClick={()=>setOpen(true)} variant="contained" color="success" sx={{ borderRadius: '20px', marginRight: 1 }}>Long</Button>
+                        <Button onClick={()=>setOpen(true)} variant="contained" color="error" sx={{ borderRadius: '20px' }}>Short</Button>
                     </Box>
                 </Box>
             </Box>
+            <ConfirmModal open={open} handleClose={()=>{setOpen(false)}}/>
         </Box>
     )
 }

@@ -3,31 +3,36 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend, Bar, Line, ComposedChart, LineChart, Brush, Cell } from "recharts";
 import { calculateMACD } from "../../../utils/macd";
+import { useInterval } from "react-use";
 
 export default function InfoBarChart() {
     const [macdData, setMacdData] = useState([]);
+    const fetchHistoricalData = async () => {
+        // const urlHist = 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USDT&limit=60';
+        const urlHist = 'https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=60';
+
+        try {
+            const responseHist = await axios.get(urlHist);
+            const histData = responseHist.data.Data.Data;
+            // Calculate MACD
+            const closePrices = histData.map(item => item.close);
+            const macdValues = calculateMACD(closePrices);
+            const macdWithTime = histData.map((item, index) => ({
+                time: item.time,
+                dif: macdValues.dif[index],
+                dea: macdValues.dea[index],
+                macd: macdValues.macd[index],
+            }));
+
+            setMacdData(macdWithTime);
+        } catch (error) {
+            console.error('Error fetching historical data:', error);
+        }
+    };
+    useInterval(() => {
+        fetchHistoricalData();
+    }, [1000])
     useEffect(() => {
-        const fetchHistoricalData = async () => {
-            const urlHist = 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USDT&limit=60';
-
-            try {
-                const responseHist = await axios.get(urlHist);
-                const histData = responseHist.data.Data.Data;
-                // Calculate MACD
-                const closePrices = histData.map(item => item.close);
-                const macdValues = calculateMACD(closePrices);
-                const macdWithTime = histData.map((item, index) => ({
-                    time: item.time,
-                    dif: macdValues.dif[index],
-                    dea: macdValues.dea[index],
-                    macd: macdValues.macd[index],
-                }));
-
-                setMacdData(macdWithTime);
-            } catch (error) {
-                console.error('Error fetching historical data:', error);
-            }
-        };
         fetchHistoricalData();
     }, []);
 
