@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Bar, CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, XAxis, YAxis,Tooltip } from "recharts";
+import { Bar, CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
 import { formatNumber } from "../../../utils/utils";
 import { useInterval } from "react-use";
 
@@ -47,8 +47,8 @@ export default function InfoHistChart() {
                         <Tooltip />
                         <Legend verticalAlign="top" align="left" />
                         <Bar dataKey="volumeto" fill="#8884d8" name="Volume" />
-                        <Line type="monotone" dataKey="ma5" stroke="#82ca9d" name="MA5" dot={false} />
-                        <Line type="monotone" dataKey="ma10" stroke="#ff7300" name="MA10" dot={false} />
+                        {data.length > 0 && (<><Line type="monotone" dataKey="ma5" stroke="#82ca9d" name="MA5" dot={false} />
+                            <Line type="monotone" dataKey="ma10" stroke="#ff7300" name="MA10" dot={false} /></>)}
                     </ComposedChart>
                 </ResponsiveContainer>
             </Box>

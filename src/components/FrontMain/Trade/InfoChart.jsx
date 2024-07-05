@@ -69,6 +69,12 @@ export default function InfoChart() {
             <Box sx={{ width: '90%', maxWidth: '100%', '@media (max-width: 600px)': { width: '100%' } }}>
                 <ResponsiveContainer width="100%" height={300}>
                     <ComposedChart data={data}>
+                        <defs>
+                            <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="55%" stopColor="#8884d8" stopOpacity={0.8} />
+                                <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+                            </linearGradient>
+                        </defs>
                         <CartesianGrid strokeDasharray="6 6" />
                         <XAxis dataKey="time" />
                         <YAxis domain={[(dataMin) => dataMin - 50, 'dataMax']} orientation="right" tickFormatter={formatNumber} />
@@ -79,10 +85,11 @@ export default function InfoChart() {
                         <Line type="monotone" dataKey="high" stroke="#8884d8" strokeWidth={2} dot={false} />
                         <Line type="monotone" dataKey="low" stroke="#5084d8" strokeWidth={2} dot={false} /> */}
 
-                        <Area type="monotone" dataKey="close" fill="#c0ca33" name="Closing Price" />
-                        <Line type="monotone" dataKey="ma5" stroke="#82ca9d" name="MA5" strokeWidth={2} dot={false} />
-                        <Line type="monotone" dataKey="ma10" stroke="#ffc658" name="MA10" strokeWidth={2} dot={false} />
-                        <Line type="monotone" dataKey="ma20" stroke="#ff7300" name="MA20" strokeWidth={2} dot={false} />
+                        <Area type="monotone" dataKey="close" name="Closing Price" fillOpacity={1} fill="url(#colorUv)" />
+                        {data.length > 0 && <><Line type="monotone" dataKey="ma5" stroke="#82ca9d" name="MA5" strokeWidth={2} dot={false} />
+                            <Line type="monotone" dataKey="ma10" stroke="#ffc658" name="MA10" strokeWidth={2} dot={false} />
+                            <Line type="monotone" dataKey="ma20" stroke="#ff7300" name="MA20" strokeWidth={2} dot={false} /></>}
+
                     </ComposedChart>
                 </ResponsiveContainer>
             </Box>

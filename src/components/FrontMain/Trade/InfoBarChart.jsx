@@ -45,14 +45,15 @@ export default function InfoBarChart() {
                         <XAxis dataKey="time" tickFormatter={(tick) => new Date(tick * 1000).toLocaleTimeString()} />
                         <YAxis orientation="right" />
                         <Tooltip />
-                        <Legend verticalAlign="top" align="left"/>
+                        <Legend verticalAlign="top" align="left" />
                         <Bar dataKey="macd" fill="#8884d8" name="MACD" barSize={1}>
                             {macdData.map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={entry.macd >= 0 ? 'green' : 'red'} />
                             ))}
                         </Bar>
-                        <Line type="monotone" dataKey="dif" stroke="#82ca9d" name="DIF (MACD)" dot={false} />
-                        <Line type="monotone" dataKey="dea" stroke="#ff7300" name="DEA (Signal)" dot={false} />
+                        {macdData.length > 0 && (<>
+                            <Line type="monotone" dataKey="dif" stroke="#82ca9d" name="DIF (MACD)" dot={false} />
+                            <Line type="monotone" dataKey="dea" stroke="#ff7300" name="DEA (Signal)" dot={false} /></>)}
                     </ComposedChart>
                 </ResponsiveContainer>
             </Box>
