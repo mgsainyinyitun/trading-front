@@ -15,17 +15,17 @@ export default function AssetCard({ data }) {
 
             <Box display='flex' justifyContent='space-evenly' p={2}>
                 <Box display='flex' flexDirection='column' alignItems='center'>
-                    <Typography fontFamily={'cursive'}>Available({data.name})</Typography>
+                    <Typography fontFamily={'monospace'}>Available({data.name})</Typography>
                     <Typography>{data.available || 0.0}</Typography>
                 </Box>
 
                 <Box display='flex' flexDirection='column' alignItems='center'>
-                    <Typography fontFamily={'cursive'}>InReview({data.name})</Typography>
+                    <Typography fontFamily={'monospace'}>InReview({data.name})</Typography>
                     <Typography>{data.inreview || 0.0}</Typography>
                 </Box>
 
                 <Box display='flex' flexDirection='column' alignItems='center'>
-                    <Typography fontFamily={'cursive'}>Con({data.name})</Typography>
+                    <Typography fontFamily={'monospace'}>Con({data.name})</Typography>
                     <Typography>{data.con || 0.0}</Typography>
                 </Box>
             </Box>
