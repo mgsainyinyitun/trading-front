@@ -1,4 +1,4 @@
-import { BottomNavigation, BottomNavigationAction, Box, Button, Checkbox, Chip, MenuItem, Select, Typography } from "@mui/material";
+import { BottomNavigation, BottomNavigationAction, Box, Button, Checkbox, Chip, CircularProgress, MenuItem, Select, Typography } from "@mui/material";
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import { useEffect, useState } from "react";
@@ -32,25 +32,13 @@ const ControlChip = ({ label, ...props }) => (
 export default function Trade() {
     const [value, setValue] = useState(0);
     const [data, setData] = useState([]);
-    const [open,setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
     const fetchData = async () => {
         try {
             const API = 'https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=2';
             const response = await axios.get(API);
-
             let data = response.data.Data.Data;
-
-            // data = data.map((item) => {
-            //     console.log('itm=em',item);
-            //     return {
-            //         time: convertTimestampToLocalTime(item.time),
-            //         open: item.open,
-            //         high: item.high,
-            //         low: item.low,
-            //         close: item.close,
-            //         volumn: item.volumeto
-            //     };
-            // });
             let finalData = {
                 time: convertTimestampToLocalTime(data[1].time),
                 open: data[1].open,
@@ -62,7 +50,9 @@ export default function Trade() {
                 increasePercent: (((data[1].open - data[0].open) / data[0].open) * 100).toFixed(2)
             }
             setData(finalData);
+            setLoading(false);
         } catch (error) {
+            setLoading(false);
             console.error(error);
         }
     };
@@ -70,6 +60,7 @@ export default function Trade() {
         fetchData();
     }, [5000])
     useEffect(() => {
+        setLoading(true);
         fetchData();
     }, []);
     return (
@@ -142,35 +133,36 @@ export default function Trade() {
             </Box>
 
             {/** info */}
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', background: 'white' }}>
-                <Box sx={{ display: 'flex', width: '85%', maxWidth: '100%', '@media (max-width: 600px)': { width: '100%' } }} pt={2} pb={2}>
-                    <Box p={1} sx={{ flexGrow: 1 }}>
-                        <Box>
-                            <Typography sx={{ marginBottom: 1 }} variant="body2" color='GrayText'>Current</Typography>
-                            <Typography sx={{ marginBottom: 1 }} variant="h4" color={Math.sign(data.increase) === 1 ? 'green' : 'red'} fontWeight='bold'>{data.open}</Typography>
-                            <Box display='flex'>
-                                <Typography sx={{ marginRight: 1 }} variant="body2" color={Math.sign(data.increase) === 1 ? 'green' : 'red'} fontWeight='bold'>{Math.abs(data.increase)}</Typography>
-                                <Typography variant="body2" color={Math.sign(data.increase)===1?'green':'red'} fontWeight='bold'>{Math.abs(data.increasePercent)} %</Typography>
+            <Box sx={{ minHeight: 100, display: 'flex', justifyContent: 'center', alignItems: 'center', background: 'white' }}>
+                {loading?(<CircularProgress/>) : (
+                    <Box sx={{ display: 'flex', width: '85%', maxWidth: '100%', '@media (max-width: 600px)': { width: '100%' } }} pt={2} pb={2}>
+                        <Box p={1} sx={{ flexGrow: 1 }}>
+                            <Box>
+                                <Typography sx={{ marginBottom: 1 }} variant="body2" color='GrayText'>Current</Typography>
+                                <Typography sx={{ marginBottom: 1 }} variant="h4" color={Math.sign(data.increase) === 1 ? 'green' : 'red'} fontWeight='bold'>{data.open}</Typography>
+                                <Box display='flex'>
+                                    <Typography sx={{ marginRight: 1 }} variant="body2" color={Math.sign(data.increase) === 1 ? 'green' : 'red'} fontWeight='bold'>{Math.abs(data.increase)}</Typography>
+                                    <Typography variant="body2" color={Math.sign(data.increase) === 1 ? 'green' : 'red'} fontWeight='bold'>{Math.abs(data.increasePercent)} %</Typography>
 
-                                {Math.sign(data.increase)===1?<ArrowUpwardIcon fontSize="small" sx={{color:'green'}}/>:<ArrowDownwardIcon fontSize="small" sx={{color:'red'}}/>}
+                                    {Math.sign(data.increase) === 1 ? <ArrowUpwardIcon fontSize="small" sx={{ color: 'green' }} /> : <ArrowDownwardIcon fontSize="small" sx={{ color: 'red' }} />}
+                                </Box>
                             </Box>
                         </Box>
-                    </Box>
-                    <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <Box sx={{ flexGrow: 1 }}>
-                            <Typography variant="body2" color='GrayText'>Opening</Typography>
-                            <Typography>{data.open}</Typography>
-                            <Typography variant="body2" color='GrayText'>Lowest</Typography>
-                            <Typography>{data.low}</Typography>
+                        <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <Box sx={{ flexGrow: 1 }}>
+                                <Typography variant="body2" color='GrayText'>Opening</Typography>
+                                <Typography>{data.open}</Typography>
+                                <Typography variant="body2" color='GrayText'>Lowest</Typography>
+                                <Typography>{data.low}</Typography>
+                            </Box>
+                            <Box sx={{ flexGrow: 1 }}>
+                                <Typography variant="body2" color='GrayText'>Volumn</Typography>
+                                <Typography>{formatNumberWithMillions(data.volumn)}</Typography>
+                                <Typography variant="body2" color='GrayText'>Highest</Typography>
+                                <Typography>{data.high}</Typography>
+                            </Box>
                         </Box>
-                        <Box sx={{ flexGrow: 1 }}>
-                            <Typography variant="body2" color='GrayText'>Volumn</Typography>
-                            <Typography>{formatNumberWithMillions(data.volumn)}</Typography>
-                            <Typography variant="body2" color='GrayText'>Highest</Typography>
-                            <Typography>{data.high}</Typography>
-                        </Box>
-                    </Box>
-                </Box>
+                    </Box>)}
             </Box>
 
             {/** graph control */}
@@ -227,12 +219,12 @@ export default function Trade() {
                         <Typography variant="body2">Cancel self-selection</Typography>
                     </Box>
                     <Box>
-                        <Button onClick={()=>setOpen(true)} variant="contained" color="success" sx={{ borderRadius: '20px', marginRight: 1 }}>Long</Button>
-                        <Button onClick={()=>setOpen(true)} variant="contained" color="error" sx={{ borderRadius: '20px' }}>Short</Button>
+                        <Button onClick={() => setOpen(true)} variant="contained" color="success" sx={{ borderRadius: '20px', marginRight: 1 }}>Long</Button>
+                        <Button onClick={() => setOpen(true)} variant="contained" color="error" sx={{ borderRadius: '20px' }}>Short</Button>
                     </Box>
                 </Box>
             </Box>
-            <ConfirmModal open={open} handleClose={()=>{setOpen(false)}}/>
+            <ConfirmModal open={open} handleClose={() => { setOpen(false) }} />
         </Box>
     )
 }
