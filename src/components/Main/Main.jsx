@@ -21,9 +21,9 @@ export default function Main() {
 
     return (
         <Box sx={{ height: '100%', width: '100%', overflow: 'auto', marginTop: isAuthPage ? 0 : 5 }}>
-            <Container sx={{ height: '100%', width: '100%', background: '#eeeeee', padding: 0 }}>
+            <Container sx={{ height: '100%', width: '100%',  background: '#eeeeee', padding: 0 }}>
                 {!isAuthPage && <TopBar />}
-                <Box sx={{ flexGrow: 1, background: "#eeeeee" , paddingBottom:1}}>
+                <Box sx={{ flexGrow: 1, background: "#eeeeee" , paddingBottom:1,maxWidth:'900px',margin:'0 auto'}}>
                     <Routes>
                         <Route path='/' element={<Home />} />
                         <Route path='/market' element={<Market />} />

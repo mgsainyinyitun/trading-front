@@ -45,7 +45,7 @@ const BottomNavi = () => {
                 <BottomNavigationAction label="Home" icon={<HomeIcon />} />
                 <BottomNavigationAction label="Market" icon={<StorefrontIcon />} />
                 <BottomNavigationAction label="Trade" icon={<SwapVertIcon />} />
-                <BottomNavigationAction label="Asset" icon={<AccountBalanceWalletIcon />} />
+                <BottomNavigationAction label="Wallet" icon={<AccountBalanceWalletIcon />} />
                 <BottomNavigationAction label="Mine" icon={<PersonIcon />} />
             </BottomNavigation>
         </Box>

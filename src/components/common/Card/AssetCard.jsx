@@ -20,12 +20,12 @@ export default function AssetCard({ data }) {
                 </Box>
 
                 <Box display='flex' flexDirection='column' alignItems='center'>
-                    <Typography fontFamily={'monospace'} sx={{marginBottom:2}}>InReview({data.name})</Typography>
+                    <Typography fontFamily={'monospace'} sx={{marginBottom:2}}>On Hold({data.name})</Typography>
                     <Typography color='darkviolet'>{data.inreview || 0.0}</Typography>
                 </Box>
 
                 <Box display='flex' flexDirection='column' alignItems='center'>
-                    <Typography fontFamily={'monospace'} sx={{marginBottom:2}}>Con({data.name})</Typography>
+                    <Typography fontFamily={'monospace'} sx={{marginBottom:2}}>Estimated (USD) ({data.name})</Typography>
                     <Typography color='darkviolet'>{data.con || 0.0}</Typography>
                 </Box>
             </Box>

@@ -1,13 +1,22 @@
-import { Avatar, BottomNavigation, BottomNavigationAction, Box, Typography } from "@mui/material";
+import { Avatar, BottomNavigation, BottomNavigationAction, Box, Typography, IconButton } from "@mui/material";
 import deposit from '../../../images/general/deposit.png';
 import withdraw from '../../../images/general/withdraw.png';
 import exchange from '../../../images/general/exchange.png';
 import { useState } from "react";
 import AccountAsset from "./AccountAsset";
 import CoinAsset from "./CoinAsset";
+import { useNavigate } from "react-router-dom";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 export default function Asset() {
     const [value, setValue] = useState(0);
+    const [showBalance, setShowBalance] = useState(true);
+    const navigate = useNavigate();
+
+    const toggleBalance = () => {
+        setShowBalance(!showBalance);
+    };
 
     return (
         <Box pb={1}>
@@ -21,8 +30,15 @@ export default function Asset() {
                 }}
             >
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: "100%", flexDirection: 'column' }}>
-                    <Typography variant="body" color='white'>Asset</Typography>
-                    <Typography variant="h6" color='white'>621229.80 USD</Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <Typography variant="body" color='white'>Total Asset</Typography>
+                        <IconButton onClick={toggleBalance} size="small" sx={{ color: 'white' }}>
+                            {showBalance ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                        </IconButton>
+                    </Box>
+                    <Typography variant="h5" color='white'>
+                        {showBalance ? '621229.80 USD' : '********'}
+                    </Typography>
                 </Box>
             </Box>
 
@@ -39,12 +55,21 @@ export default function Asset() {
                     height: '100%'
                 }}>
 
-                <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-around',marginBottom:1 }}>
                     <Box>
-                        <a href="#" className="asset-a">
+                        <Box 
+                            onClick={() => navigate('/deposit')}
+                            sx={{ 
+                                cursor: 'pointer',
+                                textDecoration: 'none',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center'
+                            }}
+                        >
                             <img src={deposit} width={50} />
                             <Typography variant="body" color='MenuText'>Deposit</Typography>
-                        </a>
+                        </Box>
                     </Box>
 
                     <Box>
@@ -64,38 +89,6 @@ export default function Asset() {
             </Box>
 
             {/** Navigation */}
-            <Box pb={3} sx={{
-                overflow: 'hidden',
-                margin: 0,
-                borderTopRightRadius: '10px',
-                borderTopLeftRadius: '10px',
-                marginTop: '-10px',
-                position: 'relative',
-                zIndex: 1,
-                background: '#b2ebf2'
-            }}>
-                <BottomNavigation
-                    sx={{ padding: 1, margin: 0, background: '#b2ebf2' }}
-                    showLabels
-                    value={value}
-                    onChange={(event, newValue) => {
-                        setValue(newValue)
-                    }}
-                >
-                    <BottomNavigationAction label="Account Asset" sx={{
-                        '&.Mui-selected': {
-                            borderBottom: '2px solid #2196f3',
-                            fontWeight: 'bold'
-                        },
-                    }} />
-                    <BottomNavigationAction label="Coin Asset" sx={{
-                        '&.Mui-selected': {
-                            borderBottom: '2px solid #2196f3',
-                            fontWeight: 'bold'
-                        },
-                    }} />
-                </BottomNavigation>
-            </Box>
 
             {/** Account Asset  and Coin Asset*/}
             {value === 0 ?

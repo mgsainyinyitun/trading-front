@@ -3,6 +3,9 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
+import PersonIcon from '@mui/icons-material/Person';
+import LogoutIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Login';
 export default function TopBar() {
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState(null);
@@ -28,7 +31,7 @@ export default function TopBar() {
     };
 
     return (
-        <AppBar position="fixed" sx={{ background: '#fff', color: 'primary.main', height: '48px' }}>
+        <AppBar position="fixed" sx={{ background: '#fff', color: 'primary.main', height: '48px', boxShadow: 'none', borderBottom: '1px solid #b3e5fc' }}>
             <Toolbar sx={{ minHeight: '48px !important' }}>
                 <Typography variant="subtitle1" component="div" sx={{ flexGrow: 1 }}>
                    Welcome ! {customer ? customer.name : 'Guest'}
@@ -56,11 +59,20 @@ export default function TopBar() {
                     >
                         {customer ? (
                             <>
-                                <MenuItem onClick={handleProfile}>Profile</MenuItem>
-                                <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
+                                <MenuItem onClick={handleProfile} sx={{ color: 'primary.main' }}>
+                                    <PersonIcon sx={{ mr: 1 }} fontSize="small" />
+                                    Profile
+                                </MenuItem>
+                                <MenuItem onClick={handleSignOut} sx={{ color: 'primary.main' }}>
+                                    <LogoutIcon sx={{ mr: 1 }} fontSize="small" />
+                                    Sign Out
+                                </MenuItem>
                             </>
                         ) : (
-                            <MenuItem onClick={() => navigate('/signin')}>Sign In</MenuItem>
+                            <MenuItem onClick={() => navigate('/signin')} sx={{ color: 'primary.main' }}>
+                                <LoginIcon sx={{ mr: 1 }} fontSize="small" />
+                                Sign In
+                            </MenuItem>
                         )}
                     </Menu>
                 </div>
