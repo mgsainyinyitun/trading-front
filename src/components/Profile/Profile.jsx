@@ -70,7 +70,7 @@ export default function Profile() {
                                             Account #{account.accountNo}
                                         </Typography>
                                         <Typography variant="body2">
-                                            Balance: {account.balance} {account.currency}
+                                            Balance: {account.balance} {account.currency.toUpperCase()}
                                         </Typography>
                                         <Typography variant="caption" display="block" color="text.secondary">
                                             Created: {format(new Date(account.createdAt), 'PP')}

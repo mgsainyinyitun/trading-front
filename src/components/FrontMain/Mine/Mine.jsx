@@ -2,8 +2,20 @@ import { Avatar, Box, Divider, IconButton, List, ListItem, ListItemButton, ListI
 import background from '../../../images/general/bluebackground.png';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { minemenu } from "./minemenu";
+import { useNavigate } from 'react-router-dom';
 
 export default function Mine() {
+    const navigate = useNavigate();
+
+    const handleClick = (menuId, menuName) => {
+        if (menuId === 3) {
+            navigate('/transactions');
+        }
+        if (menuId === 9 && menuName === 'Online Customer Service') {
+            window.open('https://t.me/support', '_blank');
+        }
+    };
+
     return (
         <Box pb={1}>
             <Box
@@ -32,10 +44,9 @@ export default function Mine() {
                     {
                         minemenu.map((menu, i) => {
                             return (
-                                <Box pl={3} pr={3}>
+                                <Box pl={3} pr={3} key={menu.id}>
                                     <ListItem
                                         sx={{ padding: 1 }}
-                                        key={menu.id}
                                         secondaryAction={
                                             <IconButton edge="end" aria-label="comments">
                                                 <ArrowForwardIosIcon />
@@ -43,7 +54,7 @@ export default function Mine() {
                                         }
                                         disablePadding
                                     >
-                                        <ListItemButton role={undefined} onClick={() => console.log('click')} dense>
+                                        <ListItemButton role={undefined} onClick={() => handleClick(menu.id, menu.name)} dense>
                                             <ListItemIcon>
                                                 {menu.icon}
                                             </ListItemIcon>

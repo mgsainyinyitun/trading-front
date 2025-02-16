@@ -9,10 +9,17 @@ import FutureTrading from '../../../images/general/future_trading.png';
 import Mining from '../../../images/general/mining.png';
 import SupportAgentRoundedIcon from '@mui/icons-material/SupportAgentRounded';
 import GTranslateRoundedIcon from '@mui/icons-material/GTranslateRounded';
+import PaymentIcon from '@mui/icons-material/Payment';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import DescriptionIcon from '@mui/icons-material/Description';
+import GetAppIcon from '@mui/icons-material/GetApp';
+
 import { currencyInfo } from "../../../demo/currency";
 import CustomCard from "../../common/Card/CustomCard";
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
+    const navigate = useNavigate();
     const settings = {
         className: "center",
         centerMode: true,
@@ -68,19 +75,55 @@ export default function Home() {
             </Box>
 
             {/** support and language section */}
-            <Box p={3} display='flex' justifyContent={'space-around'} sx={{ background: 'white' }}>
-                <Box display='flex' flexDirection='column' alignItems='center'>
-                    <SupportAgentRoundedIcon color="primary" sx={{ fontSize: 50 }} />
-                    <Typography variant="body1" component="div" color={'purple'}>
-                        Online Customer Service
-                    </Typography>
-                </Box>
-                <Box display='flex' flexDirection='column' alignItems='center'>
-                    <GTranslateRoundedIcon color="primary" sx={{ fontSize: 50 }} />
-                    <Typography variant="body1" component="div" color={'purple'}>
-                        Select Language
-                    </Typography>
-                </Box>
+            <Box p={3} sx={{ background: 'white' }}>
+                <Grid container spacing={2} justifyContent="center">
+                    <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
+                        <PaymentIcon 
+                            color="primary" 
+                            sx={{ fontSize: 50, cursor: 'pointer' }} 
+                            onClick={() => navigate('/deposit')}
+                        />
+                        <Typography 
+                            variant="body1" 
+                            component="div" 
+                            color={'purple'}
+                            sx={{ cursor: 'pointer' }}
+                            onClick={() => navigate('/deposit')}
+                        >
+                            Payment
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
+                        <AccountBalanceWalletIcon color="primary" sx={{ fontSize: 50 }} />
+                        <Typography variant="body1" component="div" color={'purple'}>
+                            Withdraw
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
+                        <SupportAgentRoundedIcon color="primary" sx={{ fontSize: 50 }} />
+                        <Typography variant="body1" component="div" color={'purple'}>
+                            Online Customer Service
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
+                        <GTranslateRoundedIcon color="primary" sx={{ fontSize: 50 }} />
+                        <Typography variant="body1" component="div" color={'purple'}>
+                            Select Language
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
+                        <DescriptionIcon color="primary" sx={{ fontSize: 50 }} />
+                        <Typography variant="body1" component="div" color={'purple'}>
+                            Contract
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
+                        <GetAppIcon color="primary" sx={{ fontSize: 50 }} />
+                        <Typography variant="body1" component="div" color={'purple'}>
+                            Download App
+                        </Typography>
+                    </Grid>
+                </Grid>
             </Box>
             {/** quick transation section */}
             <Box display='flex' mt={1} gap={1}>
