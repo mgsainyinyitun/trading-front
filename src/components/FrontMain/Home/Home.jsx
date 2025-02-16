@@ -13,13 +13,47 @@ import PaymentIcon from '@mui/icons-material/Payment';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import DescriptionIcon from '@mui/icons-material/Description';
 import GetAppIcon from '@mui/icons-material/GetApp';
-
-import { currencyInfo } from "../../../demo/currency";
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import CustomCard from "../../common/Card/CustomCard";
 import { useNavigate } from 'react-router-dom';
+import { getCoinStringList } from '../../../utils/utils';
 
 export default function Home() {
     const navigate = useNavigate();
+    const [currencyData, setCurrencyData] = useState([]);
+
+    useEffect(() => {
+        const fetchCryptoPairs = async () => {
+            try {
+                const response = await axios.get('https://min-api.cryptocompare.com/data/pricemultifull', {
+                    params: {
+                        fsyms: getCoinStringList(),
+                        tsyms: 'USDT'
+                    }
+                });
+                const rawData = response.data.RAW;
+
+                const formattedData = Object.entries(rawData).map(([symbol, data]) => ({
+                    name: symbol,
+                    currency: "USDT",
+                    price: data.USDT.PRICE.toFixed(3),
+                    change: data.USDT.CHANGEPCT24HOUR.toFixed(3),
+                    imageUrl: `https://www.cryptocompare.com${data.USDT.IMAGEURL}`
+                }));
+
+                setCurrencyData(formattedData);
+            } catch (error) {
+                console.error('Error fetching crypto data:', error);
+            }
+        };
+
+        fetchCryptoPairs();
+        const interval = setInterval(fetchCryptoPairs, 10000);
+
+        return () => clearInterval(interval);
+    }, []);
+
     const settings = {
         className: "center",
         centerMode: true,
@@ -59,15 +93,15 @@ export default function Home() {
 
     const theme = useTheme();
     return (
-        <Box p={1}>
+        <Box p={1} sx={{ background: 'linear-gradient(to bottom, #f0f8ff, #ffffff)' }}>
             <Box>
                 <ImageSlick />
             </Box>
             {/** coin price slider section */}
-            <Box sx={{ background: '#eeeeee', borderRadius: "5px" }}>
+            <Box sx={{ background: 'rgba(238, 238, 238, 0.7)', borderRadius: "15px", boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
                 <Slider {...settings}>
                     {
-                        coininfo.map(coin => {
+                        currencyData.map(coin => {
                             return <CoinCard coin={coin} />
                         })
                     }
@@ -75,125 +109,100 @@ export default function Home() {
             </Box>
 
             {/** support and language section */}
-            <Box p={3} sx={{ background: 'white' }}>
+            <Box p={3} sx={{ background: 'rgba(255, 255, 255, 0.9)', borderRadius: '15px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', mt: 2 }}>
                 <Grid container spacing={2} justifyContent="center">
                     <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
-                        <PaymentIcon 
-                            color="primary" 
-                            sx={{ fontSize: 50, cursor: 'pointer' }} 
+                        <PaymentIcon
+                            sx={{ fontSize: 50, cursor: 'pointer', color: '#6a1b9a', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.1)' } }}
                             onClick={() => navigate('/deposit')}
                         />
-                        <Typography 
-                            variant="body1" 
-                            component="div" 
-                            color={'purple'}
-                            sx={{ cursor: 'pointer' }}
+                        <Typography
+                            variant="body1"
+                            component="div"
+                            sx={{ cursor: 'pointer', color: '#6a1b9a', fontWeight: 'bold', '&:hover': { color: '#9c27b0' } }}
                             onClick={() => navigate('/deposit')}
                         >
-                            Payment
+                            Payment 💰
                         </Typography>
                     </Grid>
                     <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
-                        <AccountBalanceWalletIcon color="primary" sx={{ fontSize: 50 }} />
-                        <Typography variant="body1" component="div" color={'purple'}>
-                            Withdraw
+                        <AccountBalanceWalletIcon sx={{ fontSize: 50, color: '#1976d2', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.1)' } }} />
+                        <Typography variant="body1" component="div" sx={{ color: '#1976d2', fontWeight: 'bold' }}>
+                            Withdraw 💎
                         </Typography>
                     </Grid>
                     <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
-                        <SupportAgentRoundedIcon color="primary" sx={{ fontSize: 50 }} />
-                        <Typography variant="body1" component="div" color={'purple'}>
-                            Online Customer Service
+                        <SupportAgentRoundedIcon sx={{ fontSize: 50, color: '#388e3c', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.1)' } }} />
+                        <Typography variant="body1" component="div" sx={{ color: '#388e3c', fontWeight: 'bold' }}>
+                            Support 🎧
                         </Typography>
                     </Grid>
                     <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
-                        <GTranslateRoundedIcon color="primary" sx={{ fontSize: 50 }} />
-                        <Typography variant="body1" component="div" color={'purple'}>
-                            Select Language
+                        <GTranslateRoundedIcon sx={{ fontSize: 50, color: '#d32f2f', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.1)' } }} />
+                        <Typography variant="body1" component="div" sx={{ color: '#d32f2f', fontWeight: 'bold' }}>
+                            Language 🌍
                         </Typography>
                     </Grid>
                     <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
-                        <DescriptionIcon color="primary" sx={{ fontSize: 50 }} />
-                        <Typography variant="body1" component="div" color={'purple'}>
-                            Contract
+                        <DescriptionIcon sx={{ fontSize: 50, color: '#f57c00', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.1)' } }} />
+                        <Typography variant="body1" component="div" sx={{ color: '#f57c00', fontWeight: 'bold' }}>
+                            Contract 📝
                         </Typography>
                     </Grid>
                     <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
-                        <GetAppIcon color="primary" sx={{ fontSize: 50 }} />
-                        <Typography variant="body1" component="div" color={'purple'}>
-                            Download App
+                        <GetAppIcon sx={{ fontSize: 50, color: '#0097a7', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.1)' } }} />
+                        <Typography variant="body1" component="div" sx={{ color: '#0097a7', fontWeight: 'bold' }}>
+                            Download 📱
                         </Typography>
                     </Grid>
                 </Grid>
             </Box>
             {/** quick transation section */}
-            <Box display='flex' mt={1} gap={1}>
-                <Card sx={{ width: '100%' }}>
+            <Box display='flex' mt={2} gap={2}>
+                <Card sx={{ width: '100%', borderRadius: '15px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', background: 'linear-gradient(135deg, #fff6f6, #f0f8ff)' }}>
                     <CardContent>
                         <Box display='flex' justifyContent='space-evenly' alignItems='center'>
                             <Box>
-                                <Typography variant="h6" fontWeight={'bold'}>
-                                    Quick Transation
+                                <Typography variant="h6" fontWeight={'bold'} color="#6a1b9a">
+                                    Quick Transaction ⚡
                                 </Typography>
                                 <Typography variant="body2" color={'gray'}>
                                     Support
                                 </Typography>
-                                <Typography variant="body1" fontWeight={'bold'} color={'violet'}>
-                                    BTC,USDT,ETH
+                                <Typography variant="body1" fontWeight={'bold'} sx={{ color: '#9c27b0' }}>
+                                    BTC 🌟 USDT 💫 ETH ✨
                                 </Typography>
-                                <Typography variant="body1" fontWeight={'bold'} color={'violet'}>
-                                    etc.
+                                <Typography variant="body1" fontWeight={'bold'} sx={{ color: '#9c27b0' }}>
+                                    and more... 🚀
                                 </Typography>
                             </Box>
-                            <Box>
-                                <Box>
-                                    <img src={QuickTransaction} width={100} />
-                                </Box>
+                            <Box sx={{ transform: 'scale(1.1)', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.2)' } }}>
+                                <img src={QuickTransaction} width={100} style={{ borderRadius: '10px' }} />
                             </Box>
                         </Box>
                     </CardContent>
-                    {/* <CardContent>
-                        <Grid container spacing={2} justifyContent="space-around">
-                            <Grid item xs={6} sm={4} md={3}>
-                                <Typography variant="h6" fontWeight={'bold'}>
-                                    Quick Transation
-                                </Typography>
-                                <Typography variant="body2" color={'gray'}>
-                                    Support
-                                </Typography>
-                                <Typography variant="body1" fontWeight={'bold'} color={'violet'}>
-                                    BTC,USDT,ETH
-                                </Typography>
-                                <Typography variant="body1" fontWeight={'bold'} color={'violet'}>
-                                    etc.
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={6} sm={4} md={3} sx={{border:'1px solid red',flexGrow:1}}>
-                                <img src={QuickTransaction} width="100%" />
-                            </Grid>
-                        </Grid>
-                    </CardContent> */}
                 </Card>
-                <Box sx={{ width: '40%' }} display='flex' flexDirection='column' gap={1}>
-                    <Card sx={{ height: '100%' }}>
+                <Box sx={{ width: '40%' }} display='flex' flexDirection='column' gap={2}>
+                    <Card sx={{ height: '100%', borderRadius: '15px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', background: 'linear-gradient(135deg, #f0f8ff, #e3f2fd)' }}>
                         <CardContent>
-                            <Box display='flex' alignItems='center'>
-                                <Box>
-                                    <img src={FutureTrading} width={70} />
+                            <Box display='flex' alignItems='center' gap={2}>
+                                <Box sx={{ transform: 'scale(1)', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.1)' } }}>
+                                    <img src={FutureTrading} width={70} style={{ borderRadius: '10px' }} />
                                 </Box>
-                                <Typography variant="h6" >
-                                    Future Trading
+                                <Typography variant="h6" color="#1976d2">
+                                    Future Trading 📈
                                 </Typography>
                             </Box>
                         </CardContent>
                     </Card>
-                    <Card sx={{ height: '100%' }}>
+                    <Card sx={{ height: '100%', borderRadius: '15px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', background: 'linear-gradient(135deg, #fff6f6, #ffebee)' }}>
                         <CardContent>
-                            <Box display='flex' alignItems='center'>
-                                <Box>
-                                    <img src={HelpCenter} width={70} />
+                            <Box display='flex' alignItems='center' gap={2}>
+                                <Box sx={{ transform: 'scale(1)', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.1)' } }}>
+                                    <img src={HelpCenter} width={70} style={{ borderRadius: '10px' }} />
                                 </Box>
-                                <Typography variant="h6">
-                                    Help Center
+                                <Typography variant="h6" color="#d32f2f">
+                                    Help Center 💁‍♂️
                                 </Typography>
                             </Box>
                         </CardContent>
@@ -202,13 +211,22 @@ export default function Home() {
             </Box>
 
             {/** minning section */}
-            <Box mt={1} sx={{ borderRadius: '5px', overflow: 'hidden', position: 'relative', background: 'white' }}>
+            <Box mt={2} sx={{ borderRadius: '15px', overflow: 'hidden', position: 'relative', background: 'white', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
                 <Box>
-                    <img className="home-banner" src={Mining} />
-                    <Box sx={{ position: 'absolute', top: '35%', left: '50%', transform: 'translate(-50%, -50%)', color: 'white', fontSize: '24px' }}>
-                        <Typography variant="h4" color={'blueviolet'} fontWeight={'bold'}>
-                            LOCK-UP MINNING
-                            <Typography variant="h6" color={'green'} sx={{
+                    <img className="home-banner" src={Mining} style={{ width: '100%', height: 'auto' }} />
+                    <Box sx={{
+                        position: 'absolute',
+                        top: '35%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        color: 'white',
+                        textAlign: 'center',
+                        textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
+                    }}>
+                        <Typography variant="h4" sx={{ color: '#7c4dff', fontWeight: 'bold' }}>
+                            LOCK-UP MINING 🌟
+                            <Typography variant="h6" sx={{
+                                color: '#4caf50',
                                 fontSize: '1.1rem',
                                 [theme.breakpoints.down('sm')]: {
                                     fontSize: '1rem',
@@ -217,40 +235,51 @@ export default function Home() {
                                     fontSize: '0.7rem',
                                 },
                             }}>
-                                More wealth is waiting for you to discover.
+                                More wealth is waiting for you to discover ✨
                             </Typography>
                         </Typography>
                     </Box>
                 </Box>
-                <Box display='flex' justifyContent='space-around' p={2}>
+                <Box display='flex' justifyContent='space-around' p={2} sx={{ background: 'rgba(255,255,255,0.9)' }}>
                     <Box>
-                        <a className="main-a" href="#">Running List </a>
+                        <a className="main-a" href="#" style={{ color: '#7c4dff', fontWeight: 'bold', textDecoration: 'none' }}>
+                            Running List 📋
+                        </a>
                     </Box>
                     <Box>
-                        <a className="main-a" href="#">Volumn </a>
+                        <a className="main-a" href="#" style={{ color: '#7c4dff', fontWeight: 'bold', textDecoration: 'none' }}>
+                            Volume 📊
+                        </a>
                     </Box>
                 </Box>
             </Box>
 
             {/** list section */}
-            <Box>
+            <Box sx={{ background: 'rgba(255,255,255,0.9)', borderRadius: '15px', mt: 2, p: 2, boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: 1 }}>
                     <Box sx={{ minWidth: '20%' }}>
-                        <Typography variant="body2" color={'gray'}>Name</Typography>
+                        <Typography variant="body2" sx={{ color: '#666', fontWeight: 'bold' }}>Name 💎</Typography>
                     </Box>
                     <Box sx={{ minWidth: '20%' }}>
-                        <Typography variant="body2" color={'gray'}>Last Price</Typography>
+                        <Typography variant="body2" sx={{ color: '#666', fontWeight: 'bold' }}>Last Price 💰</Typography>
                     </Box>
                     <Box sx={{ minWidth: '20%', display: 'flex', justifyContent: 'flex-end' }}>
-                        <Typography variant="body2" color={'gray'}>Ups and Downs</Typography>
+                        <Typography variant="body2" sx={{ color: '#666', fontWeight: 'bold' }}>Ups and Downs 📈</Typography>
                     </Box>
                 </Box>
             </Box>
 
-            <Box sx={{ width: '100%', borderRadius: '5px', background: 'white', maxHeight: 500, overflow: 'auto' }}>
-                {currencyInfo.map(cu => {
+            <Box sx={{
+                width: '100%',
+                borderRadius: '15px',
+                background: 'rgba(255,255,255,0.9)',
+                minHeight: 500,
+                boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                mt: 1
+            }}>
+                {currencyData.map((cu, index) => {
                     return (
-                        <CustomCard data={cu} />
+                        <CustomCard key={index} data={cu} />
                     )
                 })}
             </Box>

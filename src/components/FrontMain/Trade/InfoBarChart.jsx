@@ -5,11 +5,11 @@ import { BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis, Tooltip, Le
 import { calculateMACD } from "../../../utils/macd";
 import { useInterval } from "react-use";
 
-export default function InfoBarChart() {
+export default function InfoBarChart({ focusCoin }) {
     const [macdData, setMacdData] = useState([]);
     const fetchHistoricalData = async () => {
         // const urlHist = 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USDT&limit=60';
-        const urlHist = 'https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=60';
+        const urlHist = `https://min-api.cryptocompare.com/data/v2/histominute?fsym=${focusCoin}&tsym=USD&limit=60`;
 
         try {
             const responseHist = await axios.get(urlHist);

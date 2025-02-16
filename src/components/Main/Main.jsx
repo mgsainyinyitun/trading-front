@@ -13,6 +13,7 @@ import Profile from "../Profile/Profile";
 import Deposit from "../FrontMain/Deposit/Deposit";
 import DepositDetail from "../FrontMain/Deposit/DepositDetail";
 import TransactionList from "../Transaction/TransactionList";
+import MarketDetail from "../FrontMain/Market/MarketDetail";
 
 export default function Main() {
     const location = useLocation();
@@ -36,6 +37,7 @@ export default function Main() {
                         <Route path='/deposit' element={<Deposit />} />
                         <Route path='/deposit/:coin' element={<DepositDetail />} />
                         <Route path='/transactions' element={<TransactionList />} />
+                        <Route path='/market/:coin' element={<MarketDetail />} />
                     </Routes>
                 </Box>
             </Container>

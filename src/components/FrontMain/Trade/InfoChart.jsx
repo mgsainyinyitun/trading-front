@@ -6,7 +6,7 @@ import { convertTimestampToLocalTime, formatNumber } from "../../../utils/utils"
 import { useInterval } from "react-use";
 
 
-export default function InfoChart() {
+export default function InfoChart({ focusCoin }) {
     const [data, setData] = useState([]);
     const [averageMA, setAverageMA] = useState({ ma5: 0, ma10: 0, ma20: 0 });
     const CustomLegend = () => {
@@ -22,7 +22,7 @@ export default function InfoChart() {
     const fetchData = async () => {
         try {
             // const API = 'https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=24';
-            const API = 'https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=60';
+            const API = `https://min-api.cryptocompare.com/data/v2/histominute?fsym=${focusCoin}&tsym=USD&limit=60`;
             const response = await axios.get(API);
 
             let data = response.data.Data.Data;

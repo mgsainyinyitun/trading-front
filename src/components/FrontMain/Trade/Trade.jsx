@@ -1,16 +1,18 @@
-import { BottomNavigation, BottomNavigationAction, Box, Button, Checkbox, Chip, CircularProgress, MenuItem, Select, Typography } from "@mui/material";
+import { BottomNavigation, BottomNavigationAction, Box, Button, Checkbox, Chip, CircularProgress, Drawer, IconButton, List, ListItem, ListItemText, Typography, Avatar } from "@mui/material";
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
+import MenuIcon from '@mui/icons-material/Menu';
 import { useEffect, useState } from "react";
 import InfoChart from "./InfoChart";
 import axios from "axios";
-import { convertTimestampToLocalTime, formatNumberWithMillions } from "../../../utils/utils";
+import { convertTimestampToLocalTime, formatNumberWithMillions, getCoinStringList } from "../../../utils/utils";
 import InfoBarChart from "./InfoBarChart";
 import InfoHistChart from "./InfoHistChart";
 import { useInterval } from "react-use";
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ConfirmModal from "./ConfirmModal";
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 
 const ControlChip = ({ label, ...props }) => (
     <Chip
@@ -34,9 +36,54 @@ export default function Trade() {
     const [data, setData] = useState([]);
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [focusCoin, setFocusCoin] = useState('BTC');
+    const [focusCoinImage, setFocusCoinImage] = useState('https://www.cryptocompare.com/media/37746251/btc.png');
+
+    const [cryptoPairs, setCryptoPairs] = useState([]);
+
+
+    const fetchCryptoPairs = async () => {
+        try {
+            const response = await axios.get('https://min-api.cryptocompare.com/data/pricemultifull', {
+                params: {
+                    fsyms: getCoinStringList(),
+                    tsyms: 'USDT'
+                }
+            });
+            const rawData = response.data.RAW;
+            console.log("crypto pairs", rawData);
+
+            const formattedPairs = Object.entries(rawData).map(([symbol, data]) => ({
+                symbol: symbol,
+                pair: `${symbol}/USDT`,
+                price: data.USDT.PRICE.toFixed(2),
+                change24h: data.USDT.CHANGEPCT24HOUR.toFixed(2),
+                volume24h: data.USDT.VOLUME24HOUR.toFixed(2),
+                imageUrl: `https://www.cryptocompare.com${data.USDT.IMAGEURL}` // Add image URL
+            }));
+
+            setCryptoPairs(formattedPairs);
+        } catch (error) {
+            console.error('Error fetching crypto pairs:', error);
+        }
+    };
+
+    // fetchCryptoPairs();
+    // const interval = setInterval(fetchCryptoPairs, 10000); // Update every 10 seconds
+    // return () => clearInterval(interval);
+
+
+    const toggleDrawer = (open) => (event) => {
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+            return;
+        }
+        setDrawerOpen(open);
+    };
+
     const fetchData = async () => {
         try {
-            const API = 'https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=2';
+            const API = `https://min-api.cryptocompare.com/data/v2/histominute?fsym=${focusCoin}&tsym=USD&limit=2`	;
             const response = await axios.get(API);
             let data = response.data.Data.Data;
             let finalData = {
@@ -56,13 +103,17 @@ export default function Trade() {
             console.error(error);
         }
     };
+
     useInterval(() => {
         fetchData();
     }, [5000])
+
     useEffect(() => {
         setLoading(true);
         fetchData();
-    }, []);
+        fetchCryptoPairs();
+    }, [focusCoin]);
+
     return (
         <Box>
             {/** Navigation */}
@@ -71,56 +122,88 @@ export default function Trade() {
                 margin: 0,
                 background: 'white'
             }}>
-                <BottomNavigation
-                    sx={{ padding: 1, margin: 0 }}
-                    showLabels
-                    value={value}
-                    onChange={(event, newValue) => {
-                        setValue(newValue)
-                    }}
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <IconButton onClick={toggleDrawer(true)}>
+                        <MenuIcon />
+                    </IconButton>
+                    <BottomNavigation
+                        sx={{ padding: 1, margin: 0, flexGrow: 1 }}
+                        showLabels
+                        value={value}
+                        onChange={(event, newValue) => {
+                            setValue(newValue)
+                        }}
+                    >
+                        <BottomNavigationAction label="Trade" sx={{
+                            '&.Mui-selected': {
+                                borderBottom: '2px solid #2196f3',
+                                fontWeight: 'bold',
+                            },
+                        }} />
+                        <BottomNavigationAction label="Exchange" sx={{
+                            '&.Mui-selected': {
+                                borderBottom: '2px solid #2196f3',
+                                fontWeight: 'bold',
+                            },
+                        }} />
+                    </BottomNavigation>
+                </Box>
+
+                <Drawer
+                    anchor="left"
+                    open={drawerOpen}
+                    onClose={toggleDrawer(false)}
                 >
-                    <BottomNavigationAction label="Fast" sx={{
-                        '&.Mui-selected': {
-                            borderBottom: '2px solid #2196f3',
-                            fontWeight: 'bold',
-                        },
-                    }} />
-                    <BottomNavigationAction label="Contract" sx={{
-                        '&.Mui-selected': {
-                            borderBottom: '2px solid #2196f3',
-                            fontWeight: 'bold',
-                        },
-                    }} />
-                    <BottomNavigationAction label="Currency" sx={{
-                        '&.Mui-selected': {
-                            borderBottom: '2px solid #2196f3',
-                            fontWeight: 'bold',
-                        },
-                    }} />
-                </BottomNavigation>
+                    <Box
+                        sx={{ width: 250 }}
+                        role="presentation"
+                        onClick={toggleDrawer(false)}
+                        onKeyDown={toggleDrawer(false)}
+                    >
+                        <List>
+                            {cryptoPairs.map((item, index) => (
+                                <ListItem 
+                                    key={index} 
+                                    divider 
+                                    onClick={() => {
+                                        setFocusCoin(item.symbol);
+                                        setFocusCoinImage(item.imageUrl);
+                                    }}
+                                    sx={{ cursor: 'pointer' }}
+                                >
+                                    <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                                        <Avatar 
+                                            src={item.imageUrl} 
+                                            sx={{ width: 24, height: 24, marginRight: 1 }}
+                                        />
+                                        <ListItemText
+                                            primary={item.pair}
+                                            secondary={item.price}
+                                            primaryTypographyProps={{
+                                                style: { fontWeight: 'bold' }
+                                            }}
+                                            secondaryTypographyProps={{
+                                                style: { color: '#2196f3' }
+                                            }}
+                                        />
+                                    </Box>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Box>
+                </Drawer>
             </Box>
 
             {/** settings  */}
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', background: 'white' }}>
                 <Box p={1} sx={{ background: 'white', width: '90%', maxWidth: '100%', '@media (max-width: 600px)': { width: '100%' } }} display='flex' justifyContent='space-between'>
-                    <Box>
-                        <Select size="small" sx={{
-                            boxShadow: "none",
-                            minWidth: 150,
-                            ".MuiOutlinedInput-notchedOutline": { border: 0 },
-                            "&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-                            {
-                                border: 0,
-                            },
-                            "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                            {
-                                border: 0,
-                            },
-                        }} value={10}>
-                            <MenuItem value={10}>BTC/USTD</MenuItem>
-                            <MenuItem value={20}>ETH/USTD</MenuItem>
-                            <MenuItem value={30}>DOGE/USTD</MenuItem>
-                        </Select>
+                    <Box display='flex' alignItems='center' justifyContent='center'>
+                        <Typography variant="body1" color="primary" fontWeight="bold">
+                            <Box display="flex" alignItems="center">
+                                <Avatar src={focusCoinImage} sx={{ width: 20, height: 20, marginRight: 1 }} />
+                                {focusCoin} <CompareArrowsIcon sx={{mx: 1}} /> <Avatar src="https://www.cryptocompare.com/media/37746338/usdt.png" sx={{ width: 20, height: 20, marginRight: 1 }} /> USDT
+                            </Box>
+                        </Typography>
                     </Box>
                     <Box display='flex' alignItems='center' justifyContent='center'>
                         <Brightness4Icon color="primary" />
@@ -134,7 +217,7 @@ export default function Trade() {
 
             {/** info */}
             <Box sx={{ minHeight: 100, display: 'flex', justifyContent: 'center', alignItems: 'center', background: 'white' }}>
-                {loading?(<CircularProgress/>) : (
+                {loading ? (<CircularProgress />) : (
                     <Box sx={{ display: 'flex', width: '85%', maxWidth: '100%', '@media (max-width: 600px)': { width: '100%' } }} pt={2} pb={2}>
                         <Box p={1} sx={{ flexGrow: 1 }}>
                             <Box>
@@ -202,9 +285,9 @@ export default function Trade() {
                 <Typography variant="body" sx={{ marginRight: 3 }} color='error'>L:{data ? data.low : ''}</Typography>
             </Box>
 
-            <InfoChart />
-            <InfoHistChart />
-            <InfoBarChart />
+            <InfoChart focusCoin={focusCoin} />
+            <InfoHistChart focusCoin={focusCoin} />
+            <InfoBarChart focusCoin={focusCoin} />
 
             <Box sx={{
                 display: 'flex',

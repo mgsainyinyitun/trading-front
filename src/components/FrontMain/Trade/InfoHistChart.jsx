@@ -5,11 +5,11 @@ import { Bar, CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, X
 import { formatNumber } from "../../../utils/utils";
 import { useInterval } from "react-use";
 
-export default function InfoHistChart() {
+export default function InfoHistChart({ focusCoin }) {
     const [data, setData] = useState([]);
     const fetchHistoricalData = async () => {
         // const urlHist = 'https://min-api.cryptocompare.com/data/v2/histohour?fsym=BTC&tsym=USDT&limit=60';
-        const urlHist = 'https://min-api.cryptocompare.com/data/v2/histominute?fsym=BTC&tsym=USD&limit=60';
+        const urlHist = `https://min-api.cryptocompare.com/data/v2/histominute?fsym=${focusCoin}&tsym=USD&limit=60`;
         try {
             const responseHist = await axios.get(urlHist);
             const histData = responseHist.data.Data.Data;
