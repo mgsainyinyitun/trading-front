@@ -6,6 +6,8 @@ import { useAppContext } from '../../context/AppContext';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
+import HomeIcon from '@mui/icons-material/Home';
+
 export default function TopBar() {
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState(null);
@@ -33,9 +35,19 @@ export default function TopBar() {
     return (
         <AppBar position="fixed" sx={{ background: '#fff', color: 'primary.main', height: '48px', boxShadow: 'none', borderBottom: '1px solid #b3e5fc' }}>
             <Toolbar sx={{ minHeight: '48px !important' }}>
-                <Typography variant="subtitle1" component="div" sx={{ flexGrow: 1 }}>
-                   Welcome ! {customer ? customer.name : 'Guest'}
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+                    <IconButton
+                        size="large"
+                        onClick={() => navigate('/')}
+                        color="primary"
+                        sx={{ mr: 1 }}
+                    >
+                        <HomeIcon fontSize="small" />
+                    </IconButton>
+                    <Typography variant="subtitle1" component="div">
+                        Welcome ! {customer ? customer.name : 'Guest'}
+                    </Typography>
+                </Box>
                 <div>
                     <IconButton
                         size="small"

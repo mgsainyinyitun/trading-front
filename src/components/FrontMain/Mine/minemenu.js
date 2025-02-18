@@ -25,28 +25,15 @@ export const minemenu = [
     },
     {
         id: 3,
-        name: 'Transaction details',
+        name: 'Transaction Records',
         status: null,
         icon: <ReceiptIcon style={{ color: '#01579b', fontSize: 45 }} />,
     },
     {
         id: 4,
-        name: 'Fast transaction',
+        name: 'Order Records',
         status: null,
         icon: <AssignmentIcon style={{ color: '#616161', fontSize: 45 }} />,
-    },
-    {
-        id: 5,
-        name: 'Contract position',
-        status: null,
-        icon: <AssignmentIcon style={{ color: '#616161', fontSize: 45 }} />,
-    },
-    {
-        id: 6,
-        name: 'Wallet Address',
-        status: null,
-        icon: <Avatar src={btc} />,
-        color: '#616161'
     },
     {
         id: 7,

@@ -3,9 +3,39 @@ import background from '../../../images/general/bluebackground.png';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { minemenu } from "./minemenu";
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export default function Mine() {
     const navigate = useNavigate();
+    const [profileData, setProfileData] = useState({
+        name: '',
+        loginId: ''
+    });
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/customer/profile`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.data.success) {
+                    setProfileData({
+                        name: response.data.data.name,
+                        loginId: response.data.data.loginId
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+            }
+        };
+
+        fetchProfile();
+    }, []);
 
     const handleClick = (menuId, menuName) => {
         if (menuId === 3) {
@@ -13,6 +43,9 @@ export default function Mine() {
         }
         if (menuId === 9 && menuName === 'Online Customer Service') {
             window.open('https://t.me/support', '_blank');
+        }
+        if (menuId === 10) {
+            navigate('/help');
         }
     };
 
@@ -25,7 +58,8 @@ export default function Mine() {
                     height: '20vh',
                     borderRadius:'10px',
                     overflow:'hidden',
-                    padding: 1.5
+                    padding: 1.5,
+                    margin: '0 auto',
                 }}
             >
                 <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: "100%" }}>
@@ -36,10 +70,10 @@ export default function Mine() {
                         />
                         <Box>
                             <Typography variant="h6" color='white' sx={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
-                                John Doe
+                                {profileData.name}
                             </Typography>
                             <Typography variant="body2" color='white' sx={{ fontSize: '0.9rem' }}>
-                                ID: 123456789
+                                ID: {profileData.loginId}
                             </Typography>
                         </Box>
                     </Box>
@@ -51,10 +85,8 @@ export default function Mine() {
                 borderTopRightRadius: '10px',
                 borderTopLeftRadius: '10px',
                 position: 'relative',
-                marginTop: '-10px',
-                width: '95%',
+                marginTop: '-20px',
                 margin: '0 auto',
-                marginTop: '-10px'
             }}>
 
                 <List sx={{ width: '100%' }}>

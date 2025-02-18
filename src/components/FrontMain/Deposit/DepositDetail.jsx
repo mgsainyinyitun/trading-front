@@ -69,6 +69,12 @@ export default function DepositDetail() {
 
     const handleSubmit = async () => {
         try {
+            // check if not logged in
+            if (!localStorage.getItem('token')) {
+                toast.error('Please login to deposit 🔒');
+                navigate('/signin');
+                return;
+            }
             setLoading(true);
             const formData = new FormData();
             formData.append('amount', amount);

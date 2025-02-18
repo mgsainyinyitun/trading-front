@@ -14,6 +14,7 @@ import Deposit from "../FrontMain/Deposit/Deposit";
 import DepositDetail from "../FrontMain/Deposit/DepositDetail";
 import TransactionList from "../Transaction/TransactionList";
 import MarketDetail from "../FrontMain/Market/MarketDetail";
+import HelpCenter from "../FrontMain/Help/HelpCenter";
 
 export default function Main() {
     const location = useLocation();
@@ -38,6 +39,7 @@ export default function Main() {
                         <Route path='/deposit/:coin' element={<DepositDetail />} />
                         <Route path='/transactions' element={<TransactionList />} />
                         <Route path='/market/:coin' element={<MarketDetail />} />
+                        <Route path='/help' element={<HelpCenter />} />
                     </Routes>
                 </Box>
             </Container>

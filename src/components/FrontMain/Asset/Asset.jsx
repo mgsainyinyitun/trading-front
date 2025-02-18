@@ -1,18 +1,99 @@
-import { Avatar, BottomNavigation, BottomNavigationAction, Box, Typography, IconButton } from "@mui/material";
+import { Avatar, Box, Typography, IconButton } from "@mui/material";
 import deposit from '../../../images/general/deposit.png';
 import withdraw from '../../../images/general/withdraw.png';
 import exchange from '../../../images/general/exchange.png';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AccountAsset from "./AccountAsset";
 import CoinAsset from "./CoinAsset";
 import { useNavigate } from "react-router-dom";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import axios from 'axios';
 
 export default function Asset() {
     const [value, setValue] = useState(0);
     const [showBalance, setShowBalance] = useState(true);
+    const [assets, setAssets] = useState(null);
+    const [totalBalance, setTotalBalance] = useState(0);
     const navigate = useNavigate();
+
+    const mockAssets = [
+        {
+            accountNo: "DEFAULT_USD",
+            balance: "0",
+            inreview_balance: "0",
+            currency: "USD",
+            isActive: true
+        },
+        {
+            accountNo: "DEFAULT_BTC",
+            balance: "0",
+            inreview_balance: "0",
+            currency: "BTC",
+            isActive: true
+        },
+        {
+            accountNo: "DEFAULT_ETH",
+            balance: "0",
+            inreview_balance: "0", 
+            currency: "ETH",
+            isActive: true
+        },
+        {
+            accountNo: "DEFAULT_USDT",
+            balance: "0",
+            inreview_balance: "0",
+            currency: "USDT",
+            isActive: true
+        }
+    ];
+
+    useEffect(() => {
+        const fetchAssets = async () => {
+            try {
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/customer/assets`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const accounts = response.data.data.accounts;
+                
+                if (!accounts || accounts.length === 0) {
+                    setAssets(mockAssets);
+                    setTotalBalance("0.00");
+                    return;
+                }
+
+                // Add default crypto assets if not present
+                const cryptos = ['BTC', 'ETH', 'USDT'];
+                const allAssets = [...accounts];
+                
+                cryptos.forEach(crypto => {
+                    if (!accounts.find(a => a.currency.toUpperCase() === crypto)) {
+                        allAssets.push({
+                            accountNo: `DEFAULT_${crypto}`,
+                            balance: "0",
+                            inreview_balance: "0",
+                            currency: crypto,
+                            isActive: true
+                        });
+                    }
+                });
+
+                setAssets(allAssets);
+                const total = allAssets.reduce((sum, account) => 
+                    sum + parseFloat(account.balance), 0);
+                setTotalBalance(total.toFixed(2));
+            } catch (error) {
+                console.error('Error fetching assets:', error);
+                setAssets(mockAssets);
+                setTotalBalance("0.00");
+            }
+        };
+
+        fetchAssets();
+    }, []);
 
     const toggleBalance = () => {
         setShowBalance(!showBalance);
@@ -37,12 +118,11 @@ export default function Asset() {
                         </IconButton>
                     </Box>
                     <Typography variant="h5" color='white'>
-                        {showBalance ? '621229.80 USD' : '********'}
+                        {showBalance ? `${totalBalance} USD` : '********'}
                     </Typography>
                 </Box>
             </Box>
 
-            {/** deposit,withdraw,exchange */}
             <Box
                 p={1}
                 pb={5}
@@ -55,7 +135,7 @@ export default function Asset() {
                     height: '100%'
                 }}>
 
-                <Box sx={{ display: 'flex', justifyContent: 'space-around',marginBottom:1 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-around', marginBottom: 1 }}>
                     <Box>
                         <Box 
                             onClick={() => navigate('/deposit')}
@@ -67,33 +147,48 @@ export default function Asset() {
                                 alignItems: 'center'
                             }}
                         >
-                            <img src={deposit} width={50} />
+                            <img src={deposit} width={50} alt="deposit" />
                             <Typography variant="body" color='MenuText'>Deposit</Typography>
                         </Box>
                     </Box>
 
                     <Box>
-                        <a href="#" className="asset-a">
-                            <img src={withdraw} width={50} />
-                            <Typography variant="body" color='MenuText'>Withdrawl</Typography>
-                        </a>
+                        <Box
+                            onClick={() => navigate('/withdraw')}
+                            sx={{ 
+                                cursor: 'pointer',
+                                textDecoration: 'none',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center'
+                            }}
+                        >
+                            <img src={withdraw} width={50} alt="withdraw" />
+                            <Typography variant="body" color='MenuText'>Withdraw</Typography>
+                        </Box>
                     </Box>
 
                     <Box>
-                        <a href="#" className="asset-a">
-                            <img src={exchange} width={50} />
+                        <Box
+                            onClick={() => navigate('/exchange')}
+                            sx={{ 
+                                cursor: 'pointer',
+                                textDecoration: 'none',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center'
+                            }}
+                        >
+                            <img src={exchange} width={50} alt="exchange" />
                             <Typography variant="body" color='MenuText'>Exchange</Typography>
-                        </a>
+                        </Box>
                     </Box>
                 </Box>
             </Box>
 
-            {/** Navigation */}
-
-            {/** Account Asset  and Coin Asset*/}
-            {value === 0 ?
-                <AccountAsset />
-                : <CoinAsset />}
+            {assets && (value === 0 ? 
+                <AccountAsset assets={assets} showBalance={showBalance} /> 
+                : <CoinAsset assets={assets} showBalance={showBalance} />)}
 
         </Box>
     )
