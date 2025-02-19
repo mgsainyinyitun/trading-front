@@ -4,6 +4,8 @@ import axios from "axios";
 import { useInterval } from "react-use";
 import { useAppContext } from "../../../context/AppContext";
 import { toast, ToastContainer } from "react-toastify";
+import { useAppContext } from "../../../context/AppContext";
+import { toast, ToastContainer } from "react-toastify";
 
 const style = {
     position: 'absolute',
@@ -113,6 +115,7 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
                 }
             });
             const data = response.data.RAW[focusCoin].USDT;
+
             const price = data.PRICE;
             const change = data.CHANGEPCTHOUR;
 
@@ -183,7 +186,7 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
 
         try {
             const response = await axios.post(`${API_URL}/api/v1/trade-request`, {
-                currency: "USDT",
+                currency: focusCoin,
                 customerId: customer.id,
                 tradeType: tradeType.toUpperCase(),
                 period: selectedTime,

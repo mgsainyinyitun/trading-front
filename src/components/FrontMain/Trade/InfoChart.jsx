@@ -6,7 +6,11 @@ import { convertTimestampToLocalTime, formatNumber } from "../../../utils/utils"
 import { useInterval } from "react-use";
 
 
+<<<<<<< HEAD
 export default function InfoChart({ focusCoin, isDarkTheme, timeFrame }) {
+=======
+export default function InfoChart({ focusCoin, isDarkTheme }) {
+>>>>>>> f4c3b16 (general fix)
     const [data, setData] = useState([]);
     const [averageMA, setAverageMA] = useState({ ma5: 0, ma10: 0, ma20: 0 });
     const CustomLegend = () => {
@@ -21,7 +25,11 @@ export default function InfoChart({ focusCoin, isDarkTheme, timeFrame }) {
 
     const fetchData = async () => {
         try {
+<<<<<<< HEAD
             const API = `https://min-api.cryptocompare.com/data/v2/histominute?fsym=${focusCoin}&tsym=USD&limit=${timeFrame}`;
+=======
+            const API = `https://min-api.cryptocompare.com/data/v2/histominute?fsym=${focusCoin}&tsym=USD&limit=60`;
+>>>>>>> f4c3b16 (general fix)
             const response = await axios.get(API);
 
             let data = response.data.Data.Data;
