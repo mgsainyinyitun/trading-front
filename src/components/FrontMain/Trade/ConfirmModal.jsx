@@ -2,6 +2,8 @@ import { Box, Button, Card, Modal, TextField, Typography, Dialog, CircularProgre
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useInterval } from "react-use";
+import { useAppContext } from "../../../context/AppContext";
+import { toast, ToastContainer } from "react-toastify";
 
 const style = {
     position: 'absolute',
@@ -76,6 +78,11 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
     const [progress, setProgress] = useState(0);
     const [timeLeft, setTimeLeft] = useState(0);
     const [expectedOutcome, setExpectedOutcome] = useState(null);
+    const { customer } = useAppContext();
+    const [tradeRequest, setTradeRequest] = useState(null);
+    const [tradeFinished, setTradeFinished] = useState(false);
+    const [showResult, setShowResult] = useState(false);
+    const [tradeResult, setTradeResult] = useState(null);
 
     const handleModalClose = () => {
         handleClose();
@@ -106,8 +113,9 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
                 }
             });
             const data = response.data.RAW[focusCoin].USDT;
+
             const price = data.PRICE;
-            const change = data.CHANGEPCT24HOUR;
+            const change = data.CHANGEPCTHOUR;
 
             setCurrentPrice(price);
             setPriceChange(change);
@@ -127,28 +135,82 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
     }, [open, focusCoin]);
 
     useInterval(() => {
-        if (open) {
+        if (open) { // open is trade model
             fetchPrice();
         }
-        if (timeLeft > 0) {
-            setTimeLeft(prev => prev - 1);
-            setProgress((selectedTime - timeLeft) / selectedTime * 100);
-            const outcome = Math.random() > 0.5 ? 'win' : 'loss';
-            setExpectedOutcome({
-                type: outcome,
-                value: outcome === 'win' ? amount * (ration[selectedTime] / 100) : -amount
-            });
+
+        if (open && showProgress) {
+            if (timeLeft > 0) {
+                setTimeLeft(prev => prev - 1);
+                setProgress((selectedTime - timeLeft) / selectedTime * 100);
+                const outcome = Math.random() > 0.5 ? 'win' : 'lose';
+                setExpectedOutcome({
+                    type: outcome,
+                    value: outcome === 'win' ? parseFloat((amount * (ration[selectedTime] / 100)).toFixed(3)) : -amount
+                });
+            } else {
+                setTradeRequest(null);
+                setShowProgress(false);
+                const API_URL = process.env.REACT_APP_API_URL;
+                axios.post(`${API_URL}/api/v1/trade-success`, {
+                    tradeId: tradeRequest.id,
+                    customerId: customer.id,
+                    outcome:expectedOutcome.type
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        if (response.status === 200 || response.status === 201) {
+                            setTradeResult(expectedOutcome);
+                            setShowResult(true);
+                        } else {
+                            toast.error("Failed to record trade result");
+                            handleModalClose();
+                        }
+                    })
+                    .catch(err => {
+                        toast.error("Failed to record trade result");
+                        handleModalClose();
+                    });
+            }
         }
     }, 1000);
 
-    const handleConfirmOrder = () => {
-        setShowProgress(true);
-        setTimeLeft(selectedTime);
-        setProgress(0);
+    const handleConfirmOrder = async () => {
+        const API_URL = process.env.REACT_APP_API_URL;
+
+        try {
+            const response = await axios.post(`${API_URL}/api/v1/trade-request`, {
+                customerId: customer.id,
+                tradeType: tradeType.toUpperCase(),
+                period: selectedTime,
+                tradeQuantity: parseInt(amount)
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.status === 200 || response.status === 201) {
+                setTradeRequest(response.data);
+                setShowProgress(true);
+                setTimeLeft(selectedTime);
+                setProgress(0);
+            } else {
+                toast.error("Trade request failed, please try again later");
+            }
+        } catch (res) {
+            toast.error("Trade request failed  : " + res.response.data.error)
+        }
     };
 
     return (
         <>
+            <ToastContainer />
             <Modal
                 open={open && !showProgress}
                 onClose={handleModalClose}
@@ -218,7 +280,7 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
                 </Box>
             </Modal>
 
-            {/** here start other dialog */}
+            {/** Progress Dialog */}
             <Dialog
                 open={showProgress}
                 onClose={() => {
@@ -307,7 +369,7 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
                             <Typography sx={{
                                 color: priceChange >= 0 ? '#2e7d32' : '#d32f2f'
                             }}>
-                                Current Price: {currentPrice?.toFixed(2)} USDT
+                                Current Price: <span style={{color: priceChange >= 0 ? '#2e7d32' : '#d32f2f'}}>{currentPrice?.toFixed(2)}</span> USDT
                             </Typography>
                             <Typography sx={{
                                 color: priceChange >= 0 ? '#2e7d32' : '#d32f2f',
@@ -334,6 +396,38 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
                             }
                         </Typography>
                     </Box>
+                </Box>
+            </Dialog>
+
+            {/** Result Dialog */}
+            <Dialog
+                open={showResult}
+                onClose={() => {
+                    setShowResult(false);
+                    handleModalClose();
+                }}
+                PaperProps={{
+                    sx: { borderRadius: '10px', p: 3, minWidth: 300 }
+                }}
+            >
+                <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+                    <Typography variant="h4" color={tradeResult?.type === 'win' ? 'success.main' : 'error.main'}>
+                        {tradeResult?.type === 'win' ? 'You Won!' : 'You Lost'}
+                    </Typography>
+
+                    <Typography variant="h5" color={tradeResult?.type === 'win' ? 'success.main' : 'error.main'}>
+                        {tradeResult?.value} USDT
+                    </Typography>
+
+                    <Button
+                        variant="contained"
+                        onClick={() => {
+                            setShowResult(false);
+                            handleModalClose();
+                        }}
+                    >
+                        Close
+                    </Button>
                 </Box>
             </Dialog>
         </>
