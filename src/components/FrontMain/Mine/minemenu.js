@@ -31,7 +31,7 @@ export const minemenu = [
     },
     {
         id: 4,
-        name: 'Order Records',
+        name: 'Trading Records',
         status: null,
         icon: <AssignmentIcon style={{ color: '#616161', fontSize: 45 }} />,
     },

@@ -6,7 +6,7 @@ import { convertTimestampToLocalTime, formatNumber } from "../../../utils/utils"
 import { useInterval } from "react-use";
 
 
-export default function InfoChart({ focusCoin }) {
+export default function InfoChart({ focusCoin, isDarkTheme }) {
     const [data, setData] = useState([]);
     const [averageMA, setAverageMA] = useState({ ma5: 0, ma10: 0, ma20: 0 });
     const CustomLegend = () => {
@@ -21,7 +21,6 @@ export default function InfoChart({ focusCoin }) {
 
     const fetchData = async () => {
         try {
-            // const API = 'https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=24';
             const API = `https://min-api.cryptocompare.com/data/v2/histominute?fsym=${focusCoin}&tsym=USD&limit=60`;
             const response = await axios.get(API);
 
@@ -64,32 +63,36 @@ export default function InfoChart({ focusCoin }) {
     useEffect(() => {
         fetchData();
     }, []);
+    
+    const chartBackground = isDarkTheme ? '#1e1e1e' : 'white';
+    const gridStroke = isDarkTheme ? '#555' : '#ccc';
+    const lineColorMA5 = '#82ca9d';
+    const lineColorMA10 = '#ffc658';
+    const lineColorMA20 = '#ff7300';
+    const areaColor = isDarkTheme ? 'rgba(130, 202, 157, 0.8)' : 'rgba(130, 202, 157, 0.5)';
+
     return (
-        <Box display='flex' justifyContent='center' alignItems='center' sx={{ background: 'white' }} pb={3}>
+        <Box display='flex' justifyContent='center' alignItems='center' sx={{ background: chartBackground }} pb={3}>
             <Box sx={{ width: '90%', maxWidth: '100%', '@media (max-width: 600px)': { width: '100%' } }}>
                 <ResponsiveContainer width="100%" height={300}>
                     <ComposedChart data={data}>
                         <defs>
                             <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="55%" stopColor="#8884d8" stopOpacity={0.8} />
-                                <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+                                <stop offset="55%" stopColor={areaColor} stopOpacity={0.8} />
+                                <stop offset="95%" stopColor={areaColor} stopOpacity={0} />
                             </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="6 6" />
+                        <CartesianGrid strokeDasharray="6 6" stroke={gridStroke} />
                         <XAxis dataKey="time" />
                         <YAxis domain={[(dataMin) => dataMin - 50, 'dataMax']} orientation="right" tickFormatter={formatNumber} />
                         <Tooltip />
                         <Legend verticalAlign="top" align="left" />
-                        {/* <Line type="monotone" dataKey="open" stroke="#8884d8" strokeWidth={2} dot={false} />
-                        <Area type="monotone" dataKey="close" stroke="#82ca9d" fill="#c0ca33" />
-                        <Line type="monotone" dataKey="high" stroke="#8884d8" strokeWidth={2} dot={false} />
-                        <Line type="monotone" dataKey="low" stroke="#5084d8" strokeWidth={2} dot={false} /> */}
-
                         <Area type="monotone" dataKey="close" name="Closing Price" fillOpacity={1} fill="url(#colorUv)" />
-                        {data.length > 0 && <><Line type="monotone" dataKey="ma5" stroke="#82ca9d" name="MA5" strokeWidth={2} dot={false} />
-                            <Line type="monotone" dataKey="ma10" stroke="#ffc658" name="MA10" strokeWidth={2} dot={false} />
-                            <Line type="monotone" dataKey="ma20" stroke="#ff7300" name="MA20" strokeWidth={2} dot={false} /></>}
-
+                        {data.length > 0 && <>
+                            <Line type="monotone" dataKey="ma5" stroke={lineColorMA5} name="MA5" strokeWidth={2} dot={false} />
+                            <Line type="monotone" dataKey="ma10" stroke={lineColorMA10} name="MA10" strokeWidth={2} dot={false} />
+                            <Line type="monotone" dataKey="ma20" stroke={lineColorMA20} name="MA20" strokeWidth={2} dot={false} />
+                        </>}
                     </ComposedChart>
                 </ResponsiveContainer>
             </Box>

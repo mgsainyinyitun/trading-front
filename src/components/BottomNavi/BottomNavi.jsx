@@ -35,7 +35,7 @@ const BottomNavi = () => {
                     switch (newValue) {
                         case 0: navigate('/'); break;
                         case 1: navigate('/market'); break;
-                        case 2: navigate('/trade'); break;
+                        case 2: navigate('/trade/0'); break;
                         case 3: navigate('/asset'); break;
                         case 4: navigate('/mine'); break;
                         default: break;

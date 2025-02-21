@@ -19,10 +19,10 @@ export default function Asset() {
 
     const mockAssets = [
         {
-            accountNo: "DEFAULT_USD",
+            accountNo: "DEFAULT_USDC",
             balance: "0",
             inreview_balance: "0",
-            currency: "USD",
+            currency: "USDC",
             isActive: true
         },
         {
@@ -66,7 +66,7 @@ export default function Asset() {
                 }
 
                 // Add default crypto assets if not present
-                const cryptos = ['BTC', 'ETH', 'USDT'];
+                const cryptos = ['BTC', 'ETH', 'USDT', 'USDC'];
                 const allAssets = [...accounts];
                 
                 cryptos.forEach(crypto => {
@@ -82,9 +82,28 @@ export default function Asset() {
                 });
 
                 setAssets(allAssets);
-                const total = allAssets.reduce((sum, account) => 
-                    sum + parseFloat(account.balance), 0);
+
+                // Get crypto prices from CryptoCompare
+                const pricePromises = allAssets.map(async (account) => {
+                    if (['btc', 'eth', 'usdt', 'usdc'].includes(account.currency.toLowerCase())) {
+                        try {
+                            const priceResponse = await axios.get(
+                                `https://min-api.cryptocompare.com/data/price?fsym=${account.currency}&tsyms=USD`
+                            );
+                            const usdPrice = priceResponse.data.USD;
+                            return parseFloat(account.balance) * usdPrice;
+                        } catch (error) {
+                            console.error(`Error fetching price for ${account.currency}:`, error);
+                            return parseFloat(account.balance);
+                        }
+                    }
+                    return parseFloat(account.balance);
+                });
+
+                const usdValues = await Promise.all(pricePromises);
+                const total = usdValues.reduce((sum, value) => sum + value, 0);
                 setTotalBalance(total.toFixed(2));
+
             } catch (error) {
                 console.error('Error fetching assets:', error);
                 setAssets(mockAssets);
@@ -170,7 +189,9 @@ export default function Asset() {
 
                     <Box>
                         <Box
-                            onClick={() => navigate('/exchange')}
+                            onClick={() => {
+                                navigate('/trade/1');
+                            }}
                             sx={{ 
                                 cursor: 'pointer',
                                 textDecoration: 'none',

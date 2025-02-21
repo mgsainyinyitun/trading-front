@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Paper, Typography, Button } from '@mui/material';
+import { Box, Container, Grid, Paper, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import UsdtIcon from '../../../images/coin-icons/usdt.png';
 import UsdcIcon from '../../../images/coin-icons/usdc.png';
@@ -6,26 +6,19 @@ import EthIcon from '../../../images/coin-icons/ethereum-cryptocurrency.svg';
 import BtcIcon from '../../../images/coin-icons/bitcoin-cryptocurrency.svg';
 
 const coins = [
-    { id: 1, name: 'USDT', icon: UsdtIcon, network: 'TRC20' },
-    { id: 2, name: 'USDC', icon: UsdcIcon, network: 'ERC20' },
-    { id: 3, name: 'ETH', icon: EthIcon, network: 'ERC20' },
-    { id: 4, name: 'BTC', icon: BtcIcon, network: 'BTC' }
+    { id: 1, name: 'USDT', icon: UsdtIcon, network: 'TRC20', fee: '1 USDT' },
+    { id: 2, name: 'USDC', icon: UsdcIcon, network: 'ERC20', fee: '10 USDC' },
+    { id: 3, name: 'ETH', icon: EthIcon, network: 'ERC20', fee: '0.002 ETH' },
+    { id: 4, name: 'BTC', icon: BtcIcon, network: 'BTC', fee: '0.0001 BTC' }
 ];
 
-export default function Deposit() {
+export default function Withdraw() {
     const navigate = useNavigate();
 
     return (
         <Container maxWidth="sm" sx={{ mt: 2, mb: 2 }}>
-            <Button 
-                variant="outlined" 
-                onClick={() => navigate(-1)} 
-                sx={{ mb: 2 }}
-            >
-                Back
-            </Button>
             <Typography variant="h6" gutterBottom sx={{ pl: 1 }}>
-                Select Deposit Coin
+                Select Withdrawal Coin
             </Typography>
             <Grid container spacing={2}>
                 {coins.map((coin) => (
@@ -35,13 +28,14 @@ export default function Deposit() {
                             sx={{
                                 p: 2,
                                 cursor: 'pointer',
-                                transition: 'transform 0.2s',
+                                transition: 'all 0.2s',
                                 '&:hover': {
-                                    transform: 'scale(1.02)',
-                                    backgroundColor: 'rgba(0, 0, 0, 0.02)'
+                                    transform: 'translateY(-2px)',
+                                    backgroundColor: 'rgba(0, 0, 0, 0.02)',
+                                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
                                 }
                             }}
-                            onClick={() => navigate(`/deposit/${coin.name.toLowerCase()}`)}
+                            onClick={() => navigate(`/withdraw/${coin.name.toLowerCase()}`)}
                         >
                             <Box display="flex" alignItems="center" gap={1}>
                                 <img 
@@ -55,6 +49,9 @@ export default function Deposit() {
                                     </Typography>
                                     <Typography variant="caption" color="text.secondary">
                                         {coin.network}
+                                    </Typography>
+                                    <Typography variant="caption" color="error" display="block">
+                                        Fee: {coin.fee}
                                     </Typography>
                                 </Box>
                             </Box>

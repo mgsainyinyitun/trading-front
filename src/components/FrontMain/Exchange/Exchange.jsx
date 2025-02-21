@@ -44,6 +44,7 @@ export default function Exchange() {
     const [toCoin, setToCoin] = useState('USDT');
     const [amount, setAmount] = useState('');
     const [rate, setRate] = useState(null);
+    const [baseRate, setBaseRate] = useState(null); // Rate for 1 unit
     const [loading, setLoading] = useState(false);
     const [exchanges, setExchanges] = useState([]);
     const [coins, setCoins] = useState([]);
@@ -58,6 +59,7 @@ export default function Exchange() {
     useEffect(() => {
         if (fromCoin && toCoin) {
             fetchExchangeRate();
+            fetchBaseRate(); // Fetch rate for 1 unit
         }
     }, [fromCoin, toCoin, amount]);
 
@@ -77,6 +79,21 @@ export default function Exchange() {
             setCoins(coinList);
         } catch (error) {
             console.error('Error fetching coins:', error);
+        }
+    };
+
+    const fetchBaseRate = async () => {
+        try {
+            const response = await axios.get('https://min-api.cryptocompare.com/data/price', {
+                params: {
+                    fsym: fromCoin,
+                    tsyms: toCoin
+                }
+            });
+            const rate = response.data[toCoin];
+            setBaseRate(rate);
+        } catch (error) {
+            console.error('Error fetching base rate:', error);
         }
     };
 
@@ -151,7 +168,7 @@ export default function Exchange() {
     };
 
     return (
-        <Container maxWidth="md" sx={{ mb: 4, backgroundColor: 'white' }}>
+        <Container  sx={{ mb: 4, backgroundColor: 'white' }}>
             <ToastContainer />
 
             {/* Exchange Form */}
@@ -203,6 +220,17 @@ export default function Exchange() {
                         </FormControl>
                     </Box>
 
+                    {baseRate && (
+                        <Paper sx={{ p: 2, mt: 2, mb: 2, borderRadius: 2, background: 'rgba(0, 0, 0, 0.02)' }}>
+                            <Typography variant="body2" color="text.secondary">
+                                Current Exchange Rate
+                            </Typography>
+                            <Typography variant="h6" color="primary.main">
+                                1 {fromCoin} = {baseRate.toFixed(8)} {toCoin}
+                            </Typography>
+                        </Paper>
+                    )}
+
                     <TextField
                         fullWidth
                         label="Amount"
@@ -219,10 +247,10 @@ export default function Exchange() {
                     {rate && (
                         <Paper sx={{ p: 2, mb: 3, borderRadius: 2, background: 'rgba(0, 0, 0, 0.02)' }}>
                             <Typography variant="body2" color="text.secondary">
-                                Exchange Rate
+                                You Will Receive
                             </Typography>
                             <Typography variant="h6" color="primary.main">
-                                {amount} {fromCoin} = {rate.toFixed(8)} {toCoin}
+                                {rate.toFixed(8)} {toCoin}
                             </Typography>
                         </Paper>
                     )}

@@ -16,6 +16,7 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import back icon
 import { styled } from '@mui/material/styles';
 import { toast, ToastContainer } from 'react-toastify';
 import { QRCodeCanvas } from "qrcode.react";
@@ -106,6 +107,13 @@ export default function DepositDetail() {
         <Container maxWidth="xs" sx={{ mt: { xs: 1, sm: 2 }, mb: { xs: 2, sm: 4 } }}>
             <ToastContainer />
             <Paper elevation={3} sx={{ p: { xs: 2, sm: 3 }, borderRadius: 2 }}>
+                <Button
+                    startIcon={<ArrowBackIcon />}
+                    onClick={() => navigate('/deposit')} // Navigate back to deposit page
+                    sx={{ mb: 2 }}
+                >
+                    Back
+                </Button>
                 <Typography variant="h6" gutterBottom align="center" sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem' } }}>
                     Deposit {coin?.toUpperCase()} ✨
                 </Typography>

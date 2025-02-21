@@ -15,6 +15,9 @@ import DepositDetail from "../FrontMain/Deposit/DepositDetail";
 import TransactionList from "../Transaction/TransactionList";
 import MarketDetail from "../FrontMain/Market/MarketDetail";
 import HelpCenter from "../FrontMain/Help/HelpCenter";
+import TradeHistory from "../Trade/TradeHistory";
+import Withdraw from "../FrontMain/Withdraw/Withdraw";
+import WithdrawDetail from "../FrontMain/Withdraw/WithdrawDetail";
 
 export default function Main() {
     const location = useLocation();
@@ -24,11 +27,11 @@ export default function Main() {
         <Box sx={{ height: '100%', width: '100%', overflow: 'auto', marginTop: isAuthPage ? 0 : 5 }}>
             <Container sx={{ height: '100%', width: '100%',  background: '#eeeeee', padding: 0 }}>
                 {!isAuthPage && <TopBar />}
-                <Box sx={{ flexGrow: 1, background: "#eeeeee" , paddingBottom:1,maxWidth:'900px',margin:'0 auto'}}>
+                <Box sx={{ flexGrow: 1, background: "#eeeeee" , paddingBottom:1,margin:'0 auto'}}>
                     <Routes>
                         <Route path='/' element={<Home />} />
                         <Route path='/market' element={<Market />} />
-                        <Route path='/trade' element={<Trade />} />
+                        <Route path='/trade/:tabValue' element={<Trade />} />
                         <Route path='/asset' element={<Asset />} />
                         <Route path='/mine' element={<Mine />} />
                         <Route path='/trade-test' element={<TradeTest />} />
@@ -40,6 +43,9 @@ export default function Main() {
                         <Route path='/transactions' element={<TransactionList />} />
                         <Route path='/market/:coin' element={<MarketDetail />} />
                         <Route path='/help' element={<HelpCenter />} />
+                        <Route path='/trade-history' element={<TradeHistory />} />
+                        {/* <Route path='/withdraw' element={<Withdraw />} /> */}
+                        <Route path='/withdraw' element={<WithdrawDetail />} />
                     </Routes>
                 </Box>
             </Container>

@@ -14,17 +14,19 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ConfirmModal from "./ConfirmModal";
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import { useAppContext } from "../../../context/AppContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import LoginIcon from '@mui/icons-material/Login';
 import Exchange from "../Exchange/Exchange";
-const ControlChip = ({ label, ...props }) => (
+
+const ControlChip = ({ label, isSelected, ...props }) => (
     <Chip
         label={label}
         sx={{
             minWidth: 30,
             width: 60,
             marginRight: 1,
-            background: 'none',
+            background: isSelected ? '#2196f3' : 'none',
+            color: isSelected ? 'white' : 'black',
             '&:hover': {
                 borderRadius: '5px',
                 background: '#f7f7f7',
@@ -35,7 +37,8 @@ const ControlChip = ({ label, ...props }) => (
 );
 
 export default function Trade() {
-    const [value, setValue] = useState(0);
+    const { tabValue } = useParams();
+    const [value, setValue] = useState(parseInt(tabValue) || 0);
     const [data, setData] = useState([]);
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -48,6 +51,8 @@ export default function Trade() {
     const navigate = useNavigate();
 
     const [cryptoPairs, setCryptoPairs] = useState([]);
+    const [isDarkTheme, setIsDarkTheme] = useState(false); // New state for theme
+    const [timeFrame, setTimeFrame] = useState(1); // New state for timeframe
 
     const handleTradeClick = (type) => {
         if (!customer) {
@@ -92,7 +97,6 @@ export default function Trade() {
         }
     };
 
-
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
@@ -100,20 +104,20 @@ export default function Trade() {
         setDrawerOpen(open);
     };
 
-    const fetchData = async () => {
+    const fetchData = async (timeFrame) => {
         try {
-            const API = `https://min-api.cryptocompare.com/data/v2/histominute?fsym=${focusCoin}&tsym=USD&limit=2`;
+            const API = `https://min-api.cryptocompare.com/data/v2/histominute?fsym=${focusCoin}&tsym=USD&limit=${timeFrame}`;
             const response = await axios.get(API);
             let data = response.data.Data.Data;
             let finalData = {
-                time: convertTimestampToLocalTime(data[1].time),
-                open: data[1].open,
-                high: data[1].high,
-                low: data[1].low,
-                close: data[1].close,
-                volumn: data[1].volumeto,
-                increase: (data[1].open - data[0].open).toFixed(2),
-                increasePercent: (((data[1].open - data[0].open) / data[0].open) * 100).toFixed(2)
+                time: convertTimestampToLocalTime(data[data.length - 1].time),
+                open: data[data.length - 1].open,
+                high: data[data.length - 1].high,
+                low: data[data.length - 1].low,
+                close: data[data.length - 1].close,
+                volumn: data[data.length - 1].volumeto,
+                increase: (data[data.length - 1].open - data[data.length - 2].open).toFixed(2),
+                increasePercent: (((data[data.length - 1].open - data[data.length - 2].open) / data[data.length - 2].open) * 100).toFixed(2)
             }
             setData(finalData);
             setLoading(false);
@@ -124,25 +128,28 @@ export default function Trade() {
     };
 
     useInterval(() => {
-        fetchData();
+        fetchData(timeFrame); // Fetch data every 5 seconds for the last timeframe
     }, [5000])
 
     useEffect(() => {
         setLoading(true);
-        fetchData();
+        fetchData(timeFrame); // Fetch data for the last timeframe
         fetchCryptoPairs();
-    }, [focusCoin]);
+    }, [focusCoin, timeFrame]);
+
+    const toggleTheme = () => {
+        setIsDarkTheme(prev => !prev); // Toggle theme state
+    };
 
     return (
-        <Box>
+        <Box sx={{ background: isDarkTheme ? '#121212' : 'white', color: isDarkTheme ? 'white' : 'black' }}>
             {/** Navigation */}
             <Box pb={3} sx={{
                 overflow: 'hidden',
                 margin: 0,
-                background: 'white'
+                background: isDarkTheme ? '#1e1e1e' : 'white'
             }}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-
+                <Box sx={{ display: 'flex', alignItems: 'center' , background: isDarkTheme ? '#1e1e1e' : 'white' , color: isDarkTheme ? 'white' : 'black'}}>
 
                     {value === 0 && (
                         <IconButton onClick={toggleDrawer(true)}>
@@ -151,7 +158,7 @@ export default function Trade() {
                     )}
 
                     <BottomNavigation
-                        sx={{ padding: 1, margin: 0, flexGrow: 1 }}
+                        sx={{ padding: 1, margin: 0, flexGrow: 1, background: isDarkTheme ? '#1e1e1e' : 'white' , color: isDarkTheme ? 'white' : 'black'}}
                         showLabels
                         value={value}
                         onChange={(event, newValue) => {
@@ -159,12 +166,14 @@ export default function Trade() {
                         }}
                     >
                         <BottomNavigationAction label="Trade" sx={{
+                            color: isDarkTheme ? 'white' : 'black',
                             '&.Mui-selected': {
                                 borderBottom: '2px solid #2196f3',
                                 fontWeight: 'bold',
                             },
                         }} />
                         <BottomNavigationAction label="Exchange" sx={{
+                            color: isDarkTheme ? 'white' : 'black',
                             '&.Mui-selected': {
                                 borderBottom: '2px solid #2196f3',
                                 fontWeight: 'bold',
@@ -220,8 +229,8 @@ export default function Trade() {
                         </Box>
                     </Drawer>
                     {/** settings  */}
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', background: 'white' }}>
-                        <Box p={1} sx={{ background: 'white', width: '90%', maxWidth: '100%', '@media (max-width: 600px)': { width: '100%' } }} display='flex' justifyContent='space-between'>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', background: isDarkTheme ? '#1e1e1e' : 'white' }}>
+                        <Box p={1} sx={{ background: isDarkTheme ? '#1e1e1e' : 'white', width: '90%', maxWidth: '100%', '@media (max-width: 600px)': { width: '100%' } }} display='flex' justifyContent='space-between'>
                             <Box display='flex' alignItems='center' justifyContent='center'>
                                 <Typography variant="body1" color="primary" fontWeight="bold">
                                     <Box display="flex" alignItems="center">
@@ -231,7 +240,9 @@ export default function Trade() {
                                 </Typography>
                             </Box>
                             <Box display='flex' alignItems='center' justifyContent='center'>
-                                <Brightness4Icon color="primary" />
+                                <IconButton onClick={toggleTheme}>
+                                    <Brightness4Icon color="primary" />
+                                </IconButton>
                             </Box>
                             <Box display='flex' alignItems='center' justifyContent='center'>
                                 <AssignmentIcon color="primary" />
@@ -241,7 +252,7 @@ export default function Trade() {
                     </Box>
 
                     {/** info */}
-                    <Box sx={{ minHeight: 100, display: 'flex', justifyContent: 'center', alignItems: 'center', background: 'white' }}>
+                    <Box sx={{ minHeight: 100, display: 'flex', justifyContent: 'center', alignItems: 'center', background: isDarkTheme ? '#1e1e1e' : 'white' }}>
                         {loading ? (<CircularProgress />) : (
                             <Box sx={{ display: 'flex', width: '85%', maxWidth: '100%', '@media (max-width: 600px)': { width: '100%' } }} pt={2} pb={2}>
                                 <Box p={1} sx={{ flexGrow: 1 }}>
@@ -278,25 +289,23 @@ export default function Trade() {
                         overflow: 'auto',
                         margin: 'auto',
                         padding: 0,
-                        background: 'white',
+                        background: isDarkTheme ? '#1e1e1e' : 'white',
                         display: 'flex',
                         justifyContent: 'center',
                     }}>
                         <Box sx={{ borderRadius: '5px', background: 'rgba(0, 0, 0, 0.08)', marginBottom: 3, }}>
-                            <ControlChip label='Time' />
-                            <ControlChip label='1 M' />
-                            <ControlChip label='5 M' />
-                            <ControlChip label='15 M' />
-                            <ControlChip label='30 M' />
-                            <ControlChip label='1 H' />
-                            <ControlChip label='1 D' />
-                            <ControlChip label='7 D' />
+                            <ControlChip label='1 M' onClick={() => { setTimeFrame(1); fetchData(1); }} isSelected={timeFrame === 1} />
+                            <ControlChip label='5 M' onClick={() => { setTimeFrame(5); fetchData(5); }} isSelected={timeFrame === 5} />
+                            <ControlChip label='30 M' onClick={() => { setTimeFrame(30); fetchData(30); }} isSelected={timeFrame === 30} />
+                            <ControlChip label='1 H' onClick={() => { setTimeFrame(60); fetchData(60); }} isSelected={timeFrame === 60} />
+                            <ControlChip label='1 D' onClick={() => { setTimeFrame(1440); fetchData(1440); }} isSelected={timeFrame === 1440} />
+                            <ControlChip label='1 W' onClick={() => { setTimeFrame(10080); fetchData(10080); }} isSelected={timeFrame === 10080} />
                         </Box>
                     </Box>
 
                     {/** label for first */}
                     <Box sx={{
-                        display: 'flex', background: 'white', paddingLeft: {
+                        display: 'flex', background: isDarkTheme ? '#1e1e1e' : 'white', paddingLeft: {
                             xs: 2,
                             sm: 4,
                             md: 6,
@@ -310,18 +319,18 @@ export default function Trade() {
                         <Typography variant="body" sx={{ marginRight: 3 }} color='error'>L:{data ? data.low : ''}</Typography>
                     </Box>
 
-                    <InfoChart focusCoin={focusCoin} />
-                    <InfoHistChart focusCoin={focusCoin} />
-                    <InfoBarChart focusCoin={focusCoin} />
+                    <InfoChart focusCoin={focusCoin} isDarkTheme={isDarkTheme} />
+                    {/* <InfoHistChart focusCoin={focusCoin} />
+                    <InfoBarChart focusCoin={focusCoin} /> */}
 
                     <Box sx={{
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        background: 'white',
+                        background: isDarkTheme ? '#1e1e1e' : 'white',
                         width: '100%',
                     }}>
-                        <Box sx={{ background: 'white', display: 'flex', justifyContent: 'space-between', width: '90%', maxWidth: '100%', '@media (max-width: 600px)': { width: '100%' } }}>
+                        <Box sx={{ background: isDarkTheme ? '#1e1e1e' : 'white', display: 'flex', justifyContent: 'space-between', width: '90%', maxWidth: '100%', '@media (max-width: 600px)': { width: '100%' } }}>
                             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                 <Checkbox defaultChecked color="success" />
                                 <Typography variant="body2">Cancel self-selection</Typography>
@@ -337,7 +346,6 @@ export default function Trade() {
             {value === 1 && (
                 <Exchange />
             )}
-
 
             <ConfirmModal
                 focusCoin={focusCoin}

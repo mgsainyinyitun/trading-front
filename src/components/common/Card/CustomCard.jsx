@@ -2,7 +2,20 @@ import { Box, Button, Typography, Paper } from "@mui/material";
 
 export default function CustomCard({ data }) {
     return (
-        <Box sx={{ m: 1, p: 2}}>
+        <Box 
+            sx={{ 
+                m: 1, 
+                p: 2, 
+                cursor: 'pointer', 
+                transition: 'transform 0.2s, box-shadow 0.2s', 
+                '&:hover': { 
+                    borderRadius: '10px',
+                    transform: 'scale(1.02)', 
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)' 
+                } 
+            }} 
+            onClick={() => window.location.href = `/market/${data.name.toLowerCase()}`}
+        >
             <Box sx={{ 
                 display: 'flex', 
                 justifyContent: 'space-between',

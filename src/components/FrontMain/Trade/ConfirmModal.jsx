@@ -184,6 +184,7 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
 
         try {
             const response = await axios.post(`${API_URL}/api/v1/trade-request`, {
+                currency: focusCoin,
                 customerId: customer.id,
                 tradeType: tradeType.toUpperCase(),
                 period: selectedTime,
@@ -419,15 +420,26 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
                         {tradeResult?.value} USDT
                     </Typography>
 
-                    <Button
-                        variant="contained"
-                        onClick={() => {
-                            setShowResult(false);
-                            handleModalClose();
-                        }}
-                    >
-                        Close
-                    </Button>
+                    <Box display="flex" gap={2}>
+                        <Button
+                            variant="contained"
+                            onClick={() => {
+                                setShowResult(false);
+                                handleModalClose();
+                            }}
+                        >
+                            Close
+                        </Button>
+
+                        <Button
+                            variant="outlined"
+                            onClick={() => {
+                                window.location.href = '/trade-history';
+                            }}
+                        >
+                            View History
+                        </Button>
+                    </Box>
                 </Box>
             </Dialog>
         </>

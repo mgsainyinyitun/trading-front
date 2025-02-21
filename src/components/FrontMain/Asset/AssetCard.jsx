@@ -2,8 +2,13 @@ import { Box, Typography, Chip } from "@mui/material";
 import btcIcon from '../../../images/coin-icons/bitcoin-cryptocurrency.svg';
 import ethIcon from '../../../images/coin-icons/ethereum-cryptocurrency.svg';
 import usdtIcon from '../../../images/coin-icons/usdt.png';
+import usdcIcon from '../../../images/coin-icons/usdc.png';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export default function AssetCard({ data }) {
+    const [estimatedValue, setEstimatedValue] = useState('********');
+
     const getCoinIcon = (symbol) => {
         switch(symbol.toUpperCase()) {
             case 'BTC':
@@ -12,10 +17,34 @@ export default function AssetCard({ data }) {
                 return ethIcon;
             case 'USDT':
                 return usdtIcon;
+            case 'USDC':
+                return usdcIcon;
             default:
                 return null;
         }
     };
+
+    useEffect(() => {
+        const fetchEstimatedValue = async () => {
+            if (data.available && !isNaN(parseFloat(data.available))) {
+                try {
+                    const response = await axios.get('https://min-api.cryptocompare.com/data/price', {
+                        params: {
+                            fsym: data.name,
+                            tsyms: 'USD'
+                        }
+                    });
+                    const price = response.data.USD;
+                    const totalValue = (parseFloat(data.available) * price).toFixed(2);
+                    setEstimatedValue(`${totalValue} USD`);
+                } catch (error) {
+                    console.error('Error fetching estimated value:', error);
+                }
+            }
+        };
+
+        fetchEstimatedValue();
+    }, [data.available, data.name]);
 
     return (
         <Box display='flex' flexDirection='column' sx={{
@@ -103,7 +132,7 @@ export default function AssetCard({ data }) {
                         color="success.main"
                         sx={{ fontWeight: 600 }}
                     >
-                         {isNaN(parseFloat(data.available)) ? '********' : parseFloat(data.available)} USD
+                        {estimatedValue}
                     </Typography>
                 </Box>
             </Box>

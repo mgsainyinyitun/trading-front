@@ -47,6 +47,9 @@ export default function Mine() {
         if (menuId === 10) {
             navigate('/help');
         }
+        if (menuId === 4) {
+            navigate('/trade-history');
+        }
     };
 
     return (

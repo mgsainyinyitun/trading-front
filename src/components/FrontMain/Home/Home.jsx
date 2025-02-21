@@ -126,8 +126,26 @@ export default function Home() {
                         </Typography>
                     </Grid>
                     <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
-                        <AccountBalanceWalletIcon sx={{ fontSize: 50, color: '#1976d2', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.1)' } }} />
-                        <Typography variant="body1" component="div" sx={{ color: '#1976d2', fontWeight: 'bold' }}>
+                        <AccountBalanceWalletIcon 
+                            sx={{ 
+                                fontSize: 50, 
+                                color: '#1976d2', 
+                                transition: 'transform 0.3s', 
+                                cursor: 'pointer',
+                                '&:hover': { transform: 'scale(1.1)' } 
+                            }}
+                            onClick={() => navigate('/withdraw')}
+                        />
+                        <Typography 
+                            variant="body1" 
+                            component="div" 
+                            sx={{ 
+                                color: '#1976d2', 
+                                fontWeight: 'bold',
+                                cursor: 'pointer'
+                            }}
+                            onClick={() => navigate('/withdraw')}
+                        >
                             Withdraw 💎
                         </Typography>
                     </Grid>
