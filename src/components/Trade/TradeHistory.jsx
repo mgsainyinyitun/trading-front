@@ -18,6 +18,7 @@ import {
     FormControl,
     InputLabel,
     Button,
+    CircularProgress,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -25,6 +26,7 @@ import { format } from 'date-fns';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import * as XLSX from 'xlsx';
+import NoDataIcon from '@mui/icons-material/RemoveShoppingCart'; // Import an icon for no data
 
 const statusColors = {
     PENDING: 'warning',
@@ -115,9 +117,9 @@ export default function TradeHistory() {
     };
 
     return (
-        <Container maxWidth="md" sx={{ mt: { xs: 2, sm: 3 }, mb: 4 }}>
+        <Container maxWidth="md" sx={{ mt: { xs: 2, sm: 3 }, mb: 4, height: '100vh' }}>
             <ToastContainer />
-            <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden' }}>
+            <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden', height: '100%' }}>
                 <Box sx={{ p: 2, backgroundColor: '#f8f9fa' }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                         <Typography variant="h6" sx={{ color: 'primary.main' }}>
@@ -182,7 +184,7 @@ export default function TradeHistory() {
                     </Box>
                 </Box>
 
-                <TableContainer>
+                <TableContainer sx={{ minHeight: 'calc(100vh - 200px)' }}> {/* Adjust height as needed */}
                     <Table stickyHeader size="small">
                         <TableHead>
                             <TableRow>
@@ -196,61 +198,76 @@ export default function TradeHistory() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {filteredTrades.map((trade) => (
-                                <TableRow key={trade.id} hover>
-                                    <TableCell>
-                                        <Typography variant="body2">
-                                            {trade.account.accountNo}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Chip
-                                            label={trade.tradeType}
-                                            size="small"
-                                            sx={{
-                                                fontSize: '0.7rem',
-                                                backgroundColor: trade.tradeType === 'LONG' ? '#e8f5e9' : '#ffebee',
-                                                color: trade.tradeType === 'LONG' ? '#2e7d32' : '#d32f2f'
-                                            }}
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                                            {trade.tradeQuantity} USDT
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography variant="body2">
-                                            {trade.period}s
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Chip
-                                            label={trade.tradingStatus}
-                                            size="small"
-                                            color={statusColors[trade.tradingStatus]}
-                                            sx={{ fontSize: '0.7rem' }}
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        {trade.tradingStatus === 'FAILED' ? (
-                                            <Typography variant="body2">NO RESULT</Typography>
-                                        ) : trade.isSuccess !== null && (
-                                            <Chip
-                                                label={trade.isSuccess ? 'WIN' : 'LOSE'}
-                                                size="small"
-                                                color={trade.isSuccess ? 'success' : 'error'}
-                                                sx={{ fontSize: '0.7rem' }}
-                                            />
-                                        )}
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography variant="caption">
-                                            {formatDate(trade.createdAt)}
-                                        </Typography>
+                            {loading ? (
+                                <TableRow>
+                                    <TableCell colSpan={7} align="center">
+                                        <CircularProgress />
                                     </TableCell>
                                 </TableRow>
-                            ))}
+                            ) : filteredTrades.length === 0 ? (
+                                <TableRow>
+                                    <TableCell colSpan={7} align="center">
+                                        <NoDataIcon sx={{ fontSize: 40, color: 'grey.500' }} />
+                                        <Typography variant="body2" color="textSecondary">No trades found</Typography>
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                filteredTrades.map((trade) => (
+                                    <TableRow key={trade.id} hover>
+                                        <TableCell>
+                                            <Typography variant="body2">
+                                                {trade.account.accountNo}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Chip
+                                                label={trade.tradeType}
+                                                size="small"
+                                                sx={{
+                                                    fontSize: '0.7rem',
+                                                    backgroundColor: trade.tradeType === 'LONG' ? '#e8f5e9' : '#ffebee',
+                                                    color: trade.tradeType === 'LONG' ? '#2e7d32' : '#d32f2f'
+                                                }}
+                                            />
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                                                {trade.tradeQuantity} USDT
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography variant="body2">
+                                                {trade.period}s
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Chip
+                                                label={trade.tradingStatus}
+                                                size="small"
+                                                color={statusColors[trade.tradingStatus]}
+                                                sx={{ fontSize: '0.7rem' }}
+                                            />
+                                        </TableCell>
+                                        <TableCell>
+                                            {trade.tradingStatus === 'FAILED' ? (
+                                                <Typography variant="body2">NO RESULT</Typography>
+                                            ) : trade.isSuccess !== null && (
+                                                <Chip
+                                                    label={trade.isSuccess ? 'WIN' : 'LOSE'}
+                                                    size="small"
+                                                    color={trade.isSuccess ? 'success' : 'error'}
+                                                    sx={{ fontSize: '0.7rem' }}
+                                                />
+                                            )}
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography variant="caption">
+                                                {formatDate(trade.createdAt)}
+                                            </Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
                         </TableBody>
                     </Table>
                 </TableContainer>

@@ -113,7 +113,6 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
                 }
             });
             const data = response.data.RAW[focusCoin].USDT;
-
             const price = data.PRICE;
             const change = data.CHANGEPCTHOUR;
 
@@ -184,7 +183,7 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
 
         try {
             const response = await axios.post(`${API_URL}/api/v1/trade-request`, {
-                currency: focusCoin,
+                currency: "USDT",
                 customerId: customer.id,
                 tradeType: tradeType.toUpperCase(),
                 period: selectedTime,

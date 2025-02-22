@@ -7,7 +7,8 @@ import {
     Typography,
     Paper,
     InputAdornment,
-    IconButton
+    IconButton,
+    CircularProgress
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -26,6 +27,7 @@ export default function SignUp() {
         password: '',
         confirmPassword: ''
     });
+    const [loading, setLoading] = useState(false); // New loading state
 
     const handleChange = (e) => {
         setFormData({
@@ -45,6 +47,8 @@ export default function SignUp() {
         // get API_URL from .env
         const API_URL = process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : 'http://localhost:3001';
         console.log(API_URL);
+
+        setLoading(true); // Set loading to true when submitting
 
         try {
             const response = await axios.post(`${API_URL}/api/v1/customer/signup`, {
@@ -66,6 +70,8 @@ export default function SignUp() {
         } catch (error) {
             console.error('Signup failed:', error);
             toast.error('Signup failed : ' + error.response.data.error);
+        } finally {
+            setLoading(false); // Reset loading state
         }
     };
 
@@ -189,8 +195,9 @@ export default function SignUp() {
                         fullWidth
                         variant="contained"
                         sx={{ mt: 2, mb: 1 }}
+                        disabled={loading} // Disable button when loading
                     >
-                        Sign Up
+                        {loading ? <CircularProgress size={24} /> : 'Sign Up'} // Show loading spinner
                     </Button>
                     <Button
                         fullWidth

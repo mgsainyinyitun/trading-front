@@ -7,7 +7,8 @@ import {
     Typography, 
     Paper,
     InputAdornment,
-    IconButton
+    IconButton,
+    CircularProgress
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -22,6 +23,7 @@ export default function SignIn() {
         email: '',
         password: ''
     });
+    const [loading, setLoading] = useState(false); // New loading state
 
     const { login } = useAppContext();
 
@@ -34,6 +36,7 @@ export default function SignIn() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true); // Set loading to true when submitting
 
         const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
         console.log(API_URL);
@@ -61,6 +64,8 @@ export default function SignIn() {
         } catch (error) {
             console.error('Login failed:', error);
             toast.error('Login failed: ' + (error.response?.data?.error || 'Something went wrong'));
+        } finally {
+            setLoading(false); // Reset loading state after the request
         }
     };
 
@@ -121,8 +126,9 @@ export default function SignIn() {
                         fullWidth
                         variant="contained"
                         sx={{ mt: 2, mb: 1 }}
+                        disabled={loading} // Disable button when loading
                     >
-                        Sign In
+                        {loading ? <CircularProgress size={24} /> : 'Sign In'} {/* Show loading spinner */}
                     </Button>
                     <Button
                         fullWidth

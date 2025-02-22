@@ -17,6 +17,7 @@ import { useAppContext } from "../../../context/AppContext";
 import { useNavigate, useParams } from "react-router-dom";
 import LoginIcon from '@mui/icons-material/Login';
 import Exchange from "../Exchange/Exchange";
+import CandleChart from "./CandleChart";
 
 const ControlChip = ({ label, isSelected, ...props }) => (
     <Chip
@@ -52,7 +53,7 @@ export default function Trade() {
 
     const [cryptoPairs, setCryptoPairs] = useState([]);
     const [isDarkTheme, setIsDarkTheme] = useState(false); // New state for theme
-    const [timeFrame, setTimeFrame] = useState(1); // New state for timeframe
+    const [timeFrame, setTimeFrame] = useState(30); // New state for timeframe
 
     const handleTradeClick = (type) => {
         if (!customer) {
@@ -234,8 +235,10 @@ export default function Trade() {
                             <Box display='flex' alignItems='center' justifyContent='center'>
                                 <Typography variant="body1" color="primary" fontWeight="bold">
                                     <Box display="flex" alignItems="center">
-                                        <Avatar src={focusCoinImage} sx={{ width: 20, height: 20, marginRight: 1 }} />
-                                        {focusCoin} <CompareArrowsIcon sx={{ mx: 1 }} /> <Avatar src="https://www.cryptocompare.com/media/37746338/usdt.png" sx={{ width: 20, height: 20, marginRight: 1 }} /> USDT
+                                         <Avatar src="https://www.cryptocompare.com/media/37746338/usdt.png" sx={{ width: 20, height: 20, marginRight: 1 }} /> USDT
+                                         <CompareArrowsIcon sx={{ mx: 1 }} />
+                                         <Avatar src={focusCoinImage} sx={{ width: 20, height: 20, marginRight: 1 }} />
+                                         {focusCoin}
                                     </Box>
                                 </Typography>
                             </Box>
@@ -294,10 +297,13 @@ export default function Trade() {
                         justifyContent: 'center',
                     }}>
                         <Box sx={{ borderRadius: '5px', background: 'rgba(0, 0, 0, 0.08)', marginBottom: 3, }}>
-                            <ControlChip label='1 M' onClick={() => { setTimeFrame(1); fetchData(1); }} isSelected={timeFrame === 1} />
                             <ControlChip label='5 M' onClick={() => { setTimeFrame(5); fetchData(5); }} isSelected={timeFrame === 5} />
+                            <ControlChip label='10 M' onClick={() => { setTimeFrame(10); fetchData(10); }} isSelected={timeFrame === 10} />
+                            <ControlChip label='15 M' onClick={() => { setTimeFrame(15); fetchData(15); }} isSelected={timeFrame === 15} />
                             <ControlChip label='30 M' onClick={() => { setTimeFrame(30); fetchData(30); }} isSelected={timeFrame === 30} />
                             <ControlChip label='1 H' onClick={() => { setTimeFrame(60); fetchData(60); }} isSelected={timeFrame === 60} />
+                            <ControlChip label='2 H' onClick={() => { setTimeFrame(120); fetchData(120); }} isSelected={timeFrame === 120} />
+                            <ControlChip label='4 H' onClick={() => { setTimeFrame(240); fetchData(240); }} isSelected={timeFrame === 240} />
                             <ControlChip label='1 D' onClick={() => { setTimeFrame(1440); fetchData(1440); }} isSelected={timeFrame === 1440} />
                             <ControlChip label='1 W' onClick={() => { setTimeFrame(10080); fetchData(10080); }} isSelected={timeFrame === 10080} />
                         </Box>
@@ -319,7 +325,8 @@ export default function Trade() {
                         <Typography variant="body" sx={{ marginRight: 3 }} color='error'>L:{data ? data.low : ''}</Typography>
                     </Box>
 
-                    <InfoChart focusCoin={focusCoin} isDarkTheme={isDarkTheme} />
+                    {/* <InfoChart focusCoin={focusCoin} isDarkTheme={isDarkTheme} timeFrame={timeFrame} /> */}
+                    <CandleChart focusCoin={focusCoin} isDarkTheme={isDarkTheme} timeFrame={timeFrame} />
                     {/* <InfoHistChart focusCoin={focusCoin} />
                     <InfoBarChart focusCoin={focusCoin} /> */}
 
@@ -388,3 +395,6 @@ export default function Trade() {
         </Box>
     )
 }
+
+
+// ## mysql://avnadmin:AVNS_jafwrLQ1H9kfBzrBlWu@mysql-bookscribe-bookscribe.f.aivencloud.com:11886/defaultdb?ssl-mode=REQUIRED

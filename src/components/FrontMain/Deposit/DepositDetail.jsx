@@ -11,7 +11,8 @@ import {
     Dialog,
     DialogTitle,
     DialogContent,
-    Chip
+    Chip,
+    CircularProgress // Import CircularProgress for loading indicator
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -207,7 +208,7 @@ export default function DepositDetail() {
                         disabled={!amount || !file || loading}
                         onClick={handleSubmit}
                     >
-                        {loading ? '⏳ Processing...' : '✨ Submit Deposit'}
+                        {loading ? <CircularProgress size={24} color="inherit" /> : '✨ Submit Deposit'}
                     </Button>
                 </Box>
             </Paper>

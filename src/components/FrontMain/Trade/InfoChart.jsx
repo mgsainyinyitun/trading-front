@@ -6,7 +6,7 @@ import { convertTimestampToLocalTime, formatNumber } from "../../../utils/utils"
 import { useInterval } from "react-use";
 
 
-export default function InfoChart({ focusCoin, isDarkTheme }) {
+export default function InfoChart({ focusCoin, isDarkTheme, timeFrame }) {
     const [data, setData] = useState([]);
     const [averageMA, setAverageMA] = useState({ ma5: 0, ma10: 0, ma20: 0 });
     const CustomLegend = () => {
@@ -21,7 +21,7 @@ export default function InfoChart({ focusCoin, isDarkTheme }) {
 
     const fetchData = async () => {
         try {
-            const API = `https://min-api.cryptocompare.com/data/v2/histominute?fsym=${focusCoin}&tsym=USD&limit=60`;
+            const API = `https://min-api.cryptocompare.com/data/v2/histominute?fsym=${focusCoin}&tsym=USD&limit=${timeFrame}`;
             const response = await axios.get(API);
 
             let data = response.data.Data.Data;
@@ -34,6 +34,7 @@ export default function InfoChart({ focusCoin, isDarkTheme }) {
                     close: item.close,
                 };
             });
+            
             // Calculate moving averages
             const dataWithMA = data.map((item, index, array) => {
                 const closePrices = array.slice(Math.max(index - 19, 0), index + 1).map(i => i.close);
