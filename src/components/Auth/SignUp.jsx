@@ -197,7 +197,7 @@ export default function SignUp() {
                         sx={{ mt: 2, mb: 1 }}
                         disabled={loading} // Disable button when loading
                     >
-                        {loading ? <CircularProgress size={24} /> : 'Sign Up'} // Show loading spinner
+                        {loading ? <CircularProgress size={24} /> : 'Sign Up'}
                     </Button>
                     <Button
                         fullWidth
