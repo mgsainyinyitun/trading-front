@@ -16,10 +16,12 @@ import {
     Select,
     MenuItem,
     FormControl,
-    InputLabel
+    InputLabel,
+    Chip
 } from '@mui/material';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 export default function WithdrawDetail() {
     const [coin, setCoin] = useState('usdt');
@@ -29,6 +31,8 @@ export default function WithdrawDetail() {
     const [rate, setRate] = useState(null);
     const [loading, setLoading] = useState(false);
     const [confirmOpen, setConfirmOpen] = useState(false);
+    const [transactionDetails, setTransactionDetails] = useState(null);
+    const navigate = useNavigate();
 
     const coins = [
         { value: 'usdt', label: 'USDT' },
@@ -75,10 +79,11 @@ export default function WithdrawDetail() {
         setLoading(true);
         try {
             const API_URL = process.env.REACT_APP_API_URL;
-            await axios.post(`${API_URL}/api/v1/withdraw`, {
-                coin: coin.toUpperCase(),
-                amount,
-                address
+            const response = await axios.post(`${API_URL}/api/v1/transactions/withdrawal`, {
+                address,
+                currency: coin.toUpperCase(),
+                amount: parseFloat(amount),
+                description: "Withdrawal for savings"
             }, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -86,6 +91,7 @@ export default function WithdrawDetail() {
                 }
             });
             toast.success('Withdrawal request submitted');
+            setTransactionDetails(response.data.transaction);
             setConfirmOpen(false);
             setAddress('');
             setAmount('');
@@ -219,6 +225,37 @@ export default function WithdrawDetail() {
                     </Button>
                 </DialogActions>
             </Dialog>
+
+            {transactionDetails && (
+                <Dialog open={true} onClose={() => setTransactionDetails(null)}>
+                    <DialogTitle>Transaction Successful</DialogTitle>
+                    <DialogContent>
+                        <Typography variant="body1">Message: {transactionDetails.message}</Typography>
+                        <Typography variant="body1">Transaction ID: {transactionDetails.transactionId}</Typography>
+                        <Typography variant="body1">Amount: {transactionDetails.amount} {transactionDetails.currency}</Typography>
+                        <Box display="flex" alignItems="center">
+                            <Chip label={transactionDetails.status} style={{ backgroundColor: transactionDetails.status === 'PENDING' ? 'gray' : undefined }}
+                             color={transactionDetails.status === 'PENDING' ? 'white' : 'error'} />
+                        </Box>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={() => setTransactionDetails(null)}
+                            variant="outlined"
+                            color="secondary"
+                        >
+                            Close
+                        </Button>
+                        <Button
+                            onClick={() => navigate('/transactions')}
+                            variant="contained"
+                            color="primary"
+                        >
+                            View Transactions
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            )}
         </Container>
     );
 }
