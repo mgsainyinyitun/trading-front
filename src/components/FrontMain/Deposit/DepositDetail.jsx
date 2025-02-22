@@ -85,7 +85,7 @@ export default function DepositDetail() {
             formData.append('currency', coin);
 
             const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
-            const response = await axios.post(`${API_URL}/api/v1/transactions/deposit-request`, formData, {
+            const response = await axios.post(`${API_URL}/api/v2/transactions/deposit-request`, formData, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     'Content-Type': 'multipart/form-data'
