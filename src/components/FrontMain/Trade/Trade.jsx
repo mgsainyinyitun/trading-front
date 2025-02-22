@@ -395,6 +395,3 @@ export default function Trade() {
         </Box>
     )
 }
-
-
-// ## mysql://avnadmin:AVNS_jafwrLQ1H9kfBzrBlWu@mysql-bookscribe-bookscribe.f.aivencloud.com:11886/defaultdb?ssl-mode=REQUIRED
