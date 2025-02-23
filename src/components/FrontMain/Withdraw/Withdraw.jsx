@@ -14,7 +14,6 @@ const coins = [
 
 export default function Withdraw() {
     const navigate = useNavigate();
-
     return (
         <Container maxWidth="sm" sx={{ mt: 2, mb: 2 }}>
             <Typography variant="h6" gutterBottom sx={{ pl: 1 }}>

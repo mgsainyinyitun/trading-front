@@ -18,6 +18,7 @@ import HelpCenter from "../FrontMain/Help/HelpCenter";
 import TradeHistory from "../Trade/TradeHistory";
 import Withdraw from "../FrontMain/Withdraw/Withdraw";
 import WithdrawDetail from "../FrontMain/Withdraw/WithdrawDetail";
+import ExchangeHistory from "../Exchange/ExchangeHistory";
 
 export default function Main() {
     const location = useLocation();
@@ -46,6 +47,7 @@ export default function Main() {
                         <Route path='/trade-history' element={<TradeHistory />} />
                         {/* <Route path='/withdraw' element={<Withdraw />} /> */}
                         <Route path='/withdraw' element={<WithdrawDetail />} />
+                        <Route path='/exchange-history' element={<ExchangeHistory />} />
                     </Routes>
                 </Box>
             </Container>

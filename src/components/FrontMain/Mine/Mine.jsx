@@ -22,7 +22,7 @@ export default function Mine() {
                         'Content-Type': 'application/json'
                     }
                 });
-                
+
                 if (response.data.success) {
                     setProfileData({
                         name: response.data.data.name,
@@ -40,15 +40,14 @@ export default function Mine() {
     const handleClick = (menuId, menuName) => {
         if (menuId === 3) {
             navigate('/transactions');
-        }
-        if (menuId === 9 && menuName === 'Online Customer Service') {
+        } else if (menuId === 9 && menuName === 'Online Customer Service') {
             window.open('https://t.me/support', '_blank');
-        }
-        if (menuId === 10) {
+        } else if (menuId === 10) {
             navigate('/help');
-        }
-        if (menuId === 4) {
+        } else if (menuId === 4) {
             navigate('/trade-history');
+        } else if (menuId === 5) {
+            navigate('/exchange-history');
         }
     };
 
@@ -59,15 +58,15 @@ export default function Mine() {
                     backgroundImage: `url(${background})`,
                     backgroundSize: 'cover',
                     height: '20vh',
-                    borderRadius:'10px',
-                    overflow:'hidden',
+                    borderRadius: '10px',
+                    overflow: 'hidden',
                     padding: 1.5,
                     margin: '0 auto',
                 }}
             >
                 <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: "100%" }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
-                        <Avatar 
+                        <Avatar
                             sx={{ width: 50, height: 50, border: '2px solid white' }}
                             src="https://placekitten.com/200/200"
                         />

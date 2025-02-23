@@ -22,7 +22,8 @@ import {
     Dialog,
     DialogTitle,
     DialogContent,
-    DialogActions
+    DialogActions,
+    Snackbar
 } from '@mui/material';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import { toast, ToastContainer } from 'react-toastify';
@@ -40,8 +41,8 @@ const statusColors = {
 };
 
 export default function Exchange() {
-    const [fromCoin, setFromCoin] = useState('BTC');
-    const [toCoin, setToCoin] = useState('USDT');
+    const [fromCoin, setFromCoin] = useState('USDT');
+    const [toCoin, setToCoin] = useState('BTC');
     const [amount, setAmount] = useState('');
     const [rate, setRate] = useState(null);
     const [baseRate, setBaseRate] = useState(null); // Rate for 1 unit
@@ -49,12 +50,33 @@ export default function Exchange() {
     const [exchanges, setExchanges] = useState([]);
     const [coins, setCoins] = useState([]);
     const [loginDialogOpen, setLoginDialogOpen] = useState(false);
+    const [exchangeDialogOpen, setExchangeDialogOpen] = useState(false);
+    const [exchangeData, setExchangeData] = useState(null);
+    const [exchangeHistory, setExchangeHistory] = useState([]);
+
     const navigate = useNavigate();
 
     useEffect(() => {
         fetchCoins();
         fetchExchanges();
+        fetchExchangeHistory();
     }, []);
+
+    const fetchExchangeHistory = async () => {
+        try {
+            const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+            const response = await axios.get(`${API_URL}/api/v1/exchanges`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            console.log("response", response.data);
+            setExchangeHistory(response.data || []);
+        } catch (error) {
+            console.error('Error fetching exchanges:', error);
+        }
+    };
 
     useEffect(() => {
         if (fromCoin && toCoin) {
@@ -147,17 +169,25 @@ export default function Exchange() {
         setLoading(true);
         try {
             const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
-            await axios.post(`${API_URL}/api/v1/exchanges`, {
+            const response = await axios.post(`${API_URL}/api/v1/exchange-request`, {
                 fromCurrency: fromCoin,
                 toCurrency: toCoin,
-                amount: amount
+                amount: parseFloat(amount)
             }, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
                 }
             });
 
-            toast.success('Exchange request submitted successfully');
+            if (response.data.success) {
+                setExchangeData(response.data.exchange);
+                setExchangeDialogOpen(true);
+                fetchExchangeHistory();
+            } else {
+                toast.error('Exchange request failed');
+            }
+
             setAmount('');
             fetchExchanges();
         } catch (error) {
@@ -168,7 +198,7 @@ export default function Exchange() {
     };
 
     return (
-        <Container  sx={{ mb: 4, backgroundColor: 'white' }}>
+        <Container sx={{ mb: 4, backgroundColor: 'white' }}>
             <ToastContainer />
 
             {/* Exchange Form */}
@@ -291,12 +321,14 @@ export default function Exchange() {
                                 <TableCell>From</TableCell>
                                 <TableCell>To</TableCell>
                                 <TableCell>Amount</TableCell>
+                                <TableCell>Exchanged Amount</TableCell>
+                                <TableCell>Exchange Rate</TableCell>
                                 <TableCell>Status</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {exchanges.length > 0 ? (
-                                exchanges.map((exchange) => (
+                            {exchangeHistory.length > 0 ? (
+                                exchangeHistory.map((exchange) => (
                                     <TableRow key={exchange.id} hover>
                                         <TableCell>
                                             <Typography variant="caption">
@@ -304,29 +336,35 @@ export default function Exchange() {
                                             </Typography>
                                         </TableCell>
                                         <TableCell>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                                <Typography variant="body2">
-                                                    {exchange.fromAmount} {exchange.fromCurrency}
-                                                </Typography>
-                                            </Box>
+                                            <Typography variant="body2">
+                                                {exchange.amount} {exchange.fromCurrency}
+                                            </Typography>
                                         </TableCell>
                                         <TableCell>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                                <Typography variant="body2">
-                                                    {exchange.toAmount} {exchange.toCurrency}
-                                                </Typography>
-                                            </Box>
+                                            <Typography variant="body2">
+                                                {exchange.exchangedAmount} {exchange.toCurrency}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography variant="body2">
+                                                {exchange.exchangedAmount} {exchange.amount}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography variant="body2">
+                                                {exchange.exchangedAmount} {exchange.exchangedAmount}
+                                            </Typography>
                                         </TableCell>
                                         <TableCell>
                                             <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                                                {exchange.rate}
+                                                {exchange.exchangeRate}
                                             </Typography>
                                         </TableCell>
                                         <TableCell>
                                             <Chip
-                                                label={exchange.status}
+                                                label={exchange.exchangeStatus}
                                                 size="small"
-                                                color={statusColors[exchange.status]}
+                                                color={statusColors[exchange.exchangeStatus]}
                                                 sx={{ fontSize: '0.7rem' }}
                                             />
                                         </TableCell>
@@ -334,7 +372,7 @@ export default function Exchange() {
                                 ))
                             ) : (
                                 <TableRow>
-                                    <TableCell colSpan={5} align="center" sx={{ py: 8 }}>
+                                    <TableCell colSpan={6} align="center" sx={{ py: 8 }}>
                                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
                                             <AssignmentIcon sx={{ fontSize: 50, color: 'text.disabled' }} />
                                             <Typography variant="h6" color="text.secondary">
@@ -351,6 +389,14 @@ export default function Exchange() {
                     </Table>
                 </TableContainer>
             </Paper>
+
+            <Button
+                variant="outlined"
+                onClick={() => navigate('/exchange-history')}
+                sx={{ mt: 2 }}
+            >
+                View Exchange History
+            </Button>
 
             <Dialog
                 open={loginDialogOpen}
@@ -387,6 +433,50 @@ export default function Exchange() {
                         sx={{ borderRadius: '20px' }}
                     >
                         Sign In
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            {/* Exchange Success Dialog */}
+            <Dialog
+                open={exchangeDialogOpen}
+                onClose={() => setExchangeDialogOpen(false)}
+                PaperProps={{
+                    sx: {
+                        borderRadius: '15px',
+                        padding: '20px',
+                        backgroundColor: '#f0f4ff'
+                    }
+                }}
+            >
+                <DialogTitle sx={{ textAlign: 'center', color: 'primary.main' }}>
+                    Exchange Successful! 🎉
+                </DialogTitle>
+                <DialogContent>
+                    {exchangeData && (
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                            <Typography variant="body1" color="text.secondary">
+                                You exchanged:
+                            </Typography>
+                            <Typography variant="h6" color="primary.main">
+                                {exchangeData.amount} {exchangeData.fromCurrency} for {exchangeData.exchangedAmount} {exchangeData.toCurrency}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                Exchange Rate: {exchangeData.exchangeRate}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                Status: <Chip label={exchangeData.exchangeStatus} color={statusColors[exchangeData.exchangeStatus]} />
+                            </Typography>
+                        </Box>
+                    )}
+                </DialogContent>
+                <DialogActions sx={{ justifyContent: 'center', pb: 3 }}>
+                    <Button
+                        onClick={() => setExchangeDialogOpen(false)}
+                        variant="contained"
+                        sx={{ borderRadius: '20px' }}
+                    >
+                        Close
                     </Button>
                 </DialogActions>
             </Dialog>

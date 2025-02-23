@@ -8,6 +8,7 @@ import ScreenShareIcon from '@mui/icons-material/ScreenShare';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import QuizIcon from '@mui/icons-material/Quiz';
 import { Avatar } from '@mui/material';
+import { CurrencyExchange } from '@mui/icons-material';
 
 export const minemenu = [
     {
@@ -34,6 +35,12 @@ export const minemenu = [
         name: 'Trading Records',
         status: null,
         icon: <AssignmentIcon style={{ color: '#616161', fontSize: 45 }} />,
+    },
+    {
+        id: 5,
+        name: 'Exchange Records',
+        status: null,
+        icon: <CurrencyExchange style={{ color: '#616161', fontSize: 45 }} />,
     },
     {
         id: 7,
