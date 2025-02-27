@@ -26,6 +26,7 @@ import { format } from 'date-fns';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import * as XLSX from 'xlsx';
+import { useAppContext } from '../../context/AppContext';
 
 const statusColors = {
     PENDING: 'warning',
@@ -39,7 +40,6 @@ const formatDate = (dateString) => {
         return format(new Date(dateString), 'PP');
     } catch (error) {
         console.log(dateString);
-        // return dateString.split('T')[0]; 
         return dateString;
     }
 };
@@ -53,6 +53,7 @@ export default function TransactionList() {
         type: 'ALL',
         status: 'ALL'
     });
+    const { theme } = useAppContext();
 
     useEffect(() => {
         fetchTransactions();
@@ -71,7 +72,6 @@ export default function TransactionList() {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            console.log(response.data.allTransactions);
             setTransactions(response.data.allTransactions);
         } catch (error) {
             toast.error('Failed to load transactions');
@@ -83,17 +83,14 @@ export default function TransactionList() {
     const filterTransactions = () => {
         let filtered = [...transactions];
 
-        // Apply type filter
         if (filter.type !== 'ALL') {
             filtered = filtered.filter(tx => tx.type === filter.type);
         }
 
-        // Apply status filter
         if (filter.status !== 'ALL') {
             filtered = filtered.filter(tx => tx.status === filter.status);
         }
 
-        // Apply search
         if (search) {
             filtered = filtered.filter(tx =>
                 tx.transactionId.toLowerCase().includes(search.toLowerCase()) ||
@@ -123,10 +120,10 @@ export default function TransactionList() {
     return (
         <Container maxWidth="md" sx={{ mt: { xs: 2, sm: 3 }, mb: 4, height: 'calc(100vh - 100px)', display: 'flex', flexDirection: 'column' }}>
             <ToastContainer />
-            <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <Box sx={{ p: 2, backgroundColor: '#f8f9fa' }}>
+            <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden', flex: 1, display: 'flex', flexDirection: 'column', backgroundColor: theme === 'dark' ? '#2c2c2c' : 'white' }}>
+                <Box sx={{ p: 2, backgroundColor: theme === 'dark' ? '#1e1e1e' : '#f8f9fa' }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                        <Typography variant="h6" sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem' } }}>
+                        <Typography variant="h6" sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem' }, color: theme === 'dark' ? 'white' : 'black' }}>
                             Transaction History 📊
                         </Typography>
                         <Button
@@ -134,6 +131,7 @@ export default function TransactionList() {
                             startIcon={<DownloadIcon />}
                             size="small"
                             onClick={downloadExcel}
+                            sx={{ borderColor: theme === 'dark' ? 'white' : 'black', color: theme === 'dark' ? 'white' : 'black' }}
                         >
                             Export Excel
                         </Button>
@@ -150,7 +148,7 @@ export default function TransactionList() {
                             placeholder="Search transactions..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            sx={{ flexGrow: 1 }}
+                            sx={{ flexGrow: 1, backgroundColor: theme === 'dark' ? '#3c3c3c' : 'white' }}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
@@ -161,11 +159,12 @@ export default function TransactionList() {
                         />
                         <Box sx={{ display: 'flex', gap: 1 }}>
                             <FormControl size="small" sx={{ minWidth: 120 }}>
-                                <InputLabel>Type</InputLabel>
+                                <InputLabel sx={{ color: theme === 'dark' ? 'white' : 'black' }}>Type</InputLabel>
                                 <Select
                                     value={filter.type}
                                     label="Type"
                                     onChange={(e) => setFilter({ ...filter, type: e.target.value })}
+                                    sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : 'white' }}
                                 >
                                     <MenuItem value="ALL">All</MenuItem>
                                     <MenuItem value="DEPOSIT">Deposit</MenuItem>
@@ -173,11 +172,12 @@ export default function TransactionList() {
                                 </Select>
                             </FormControl>
                             <FormControl size="small" sx={{ minWidth: 120 }}>
-                                <InputLabel>Status</InputLabel>
+                                <InputLabel sx={{ color: theme === 'dark' ? 'white' : 'black' }}>Status</InputLabel>
                                 <Select
                                     value={filter.status}
                                     label="Status"
                                     onChange={(e) => setFilter({ ...filter, status: e.target.value })}
+                                    sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : 'white' }}
                                 >
                                     <MenuItem value="ALL">All</MenuItem>
                                     <MenuItem value="PENDING">Pending</MenuItem>
@@ -193,22 +193,21 @@ export default function TransactionList() {
                     <Table stickyHeader size="small">
                         <TableHead>
                             <TableRow>
-                                <TableCell>ID</TableCell>
-                                <TableCell>Type</TableCell>
-                                <TableCell>Amount</TableCell>
-                                <TableCell>Status</TableCell>
-                                <TableCell>Date</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5' }}>ID</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5' }}>Type</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5' }}>Amount</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5' }}>Status</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5' }}>Date</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {filteredTransactions.map((transaction) => (
                                 <TableRow key={transaction.transactionId} hover>
                                     <TableCell>
-                                        <Typography variant="body2" sx={{ fontSize: '0.8rem' }}>
-                                            {console.log("transaction", transaction)}
+                                        <Typography variant="body2" sx={{ fontSize: '0.8rem', color: theme === 'dark' ? 'white' : 'black' }}>
                                             {transaction.transactionId}
                                         </Typography>
-                                        <Typography variant="caption" color="text.secondary">
+                                        <Typography variant="caption" color="text.secondary" sx={{ color: theme === 'dark' ? 'grey' : 'black' }}>
                                             {transaction.description}
                                         </Typography>
                                     </TableCell>
@@ -218,12 +217,13 @@ export default function TransactionList() {
                                             size="small"
                                             sx={{
                                                 fontSize: '0.7rem',
-                                                backgroundColor: transaction.type === 'DEPOSIT' ? '#e3f2fd' : '#fff3e0'
+                                                backgroundColor: transaction.type === 'DEPOSIT' ? '#1e88e5' : '#ffb74d',
+                                                color: 'white'
                                             }}
                                         />
                                     </TableCell>
                                     <TableCell>
-                                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                                        <Typography variant="body2" sx={{ fontWeight: 500, color: theme === 'dark' ? 'white' : 'black' }}>
                                             {transaction.amount}
                                         </Typography>
                                     </TableCell>
@@ -236,7 +236,7 @@ export default function TransactionList() {
                                         />
                                     </TableCell>
                                     <TableCell>
-                                        <Typography variant="caption">
+                                        <Typography variant="caption" sx={{ color: theme === 'dark' ? 'white' : 'black' }}>
                                             {formatDate(transaction.createdAt)}
                                         </Typography>
                                     </TableCell>

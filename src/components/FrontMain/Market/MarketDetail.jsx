@@ -24,16 +24,16 @@ import {
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import TimelineIcon from '@mui/icons-material/Timeline';
+import { useAppContext } from '../../../context/AppContext';
 
 export default function MarketDetail() {
     const { coin } = useParams();
     const [marketData, setMarketData] = useState(null);
     const [historicalData, setHistoricalData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const themeUi = useTheme();
+    const isMobile = useMediaQuery(themeUi.breakpoints.down('sm'));
+    const { theme } = useAppContext();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -93,7 +93,7 @@ export default function MarketDetail() {
 
     return (
         <Container maxWidth="lg" sx={{ mt: 1, mb: 2 }}>
-            <Paper elevation={2} sx={{ p: 2, borderRadius: 3, background: 'linear-gradient(145deg, #ffffff 0%, #f5f5f5 100%)' }}>
+            <Paper elevation={2} sx={{ p: 2, borderRadius: 3, background: theme === 'dark' ? 'linear-gradient(145deg, #1e1e1e 0%, #2c2c2c 100%)' : 'linear-gradient(145deg, #ffffff 0%, #f5f5f5 100%)' }}>
                 {/* Header Section */}
                 <Grid container spacing={1} alignItems="center" sx={{ mb: 2 }}>
                     <Grid item xs={12} sm={6}>
@@ -103,18 +103,18 @@ export default function MarketDetail() {
                                 alt={coin}
                                 style={{ width: 32, height: 32, borderRadius: '50%' }}
                             />
-                            <Typography variant="h5" sx={{ textTransform: 'uppercase', color: '#2c3e50', fontWeight: 600 }}>
+                            <Typography variant="h5" sx={{ textTransform: 'uppercase', color: theme === 'dark' ? 'white' : '#2c3e50', fontWeight: 600 }}>
                                 {coin}/USDT <ShowChartIcon sx={{ fontSize: 20, color: '#7c4dff', verticalAlign: 'middle' }} />
                             </Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <Box display="flex" flexDirection="column" alignItems={{ xs: 'start', sm: 'end' }}>
-                            <Typography variant="h4" sx={{ fontWeight: 700, color: '#1a237e', fontSize: { xs: '1.5rem', sm: '2rem' } }}>
+                            <Typography variant="h4" sx={{ fontWeight: 700, color: theme === 'dark' ? '#ffffff' : '#1a237e', fontSize: { xs: '1.5rem', sm: '2rem' } }}>
                                 ${marketData.price}
                             </Typography>
                             <Chip
-                                icon={parseFloat(marketData.change24h) >= 0 ? <TrendingUpIcon /> : <TrendingDownIcon />}
+                                icon={parseFloat(marketData.change24h) >= 0 ? <TrendingUpIcon sx={{ color: 'success.main' }} /> : <TrendingDownIcon sx={{ color: 'error.main' }} />}
                                 label={`${marketData.change24h}%`}
                                 color={parseFloat(marketData.change24h) >= 0 ? 'success' : 'error'}
                                 size="small"
@@ -129,22 +129,22 @@ export default function MarketDetail() {
                 </Grid>
 
                 {/* Chart Section */}
-                <Paper elevation={1} sx={{ p: 1, mb: 2, borderRadius: 2, height: 300, background: '#ffffff' }}>
+                <Paper elevation={1} sx={{ p: 1, mb: 2, borderRadius: 2, height: 300, background: theme === 'dark' ? '#2c2c2c' : '#ffffff' }}>
                     <ResponsiveContainer width="100%" height="100%">
                         <AreaChart data={historicalData}>
-                            <CartesianGrid strokeDasharray="2 2" stroke="#f0f0f0" />
+                            <CartesianGrid strokeDasharray="2 2" stroke={theme === 'dark' ? '#444' : '#f0f0f0'} />
                             <XAxis 
                                 dataKey="time" 
-                                tick={{ fontSize: 10, fill: '#666' }}
+                                tick={{ fontSize: 10, fill: theme === 'dark' ? '#ffffff' : '#666' }}
                                 interval={isMobile ? 6 : 2}
                             />
                             <YAxis 
-                                tick={{ fontSize: 10, fill: '#666' }}
+                                tick={{ fontSize: 10, fill: theme === 'dark' ? '#ffffff' : '#666' }}
                                 domain={['auto', 'auto']}
                             />
                             <Tooltip 
                                 contentStyle={{ 
-                                    background: 'rgba(255, 255, 255, 0.9)',
+                                    background: theme === 'dark' ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)',
                                     border: 'none',
                                     borderRadius: '8px',
                                     boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
@@ -182,11 +182,12 @@ export default function MarketDetail() {
                                 borderRadius: 2,
                                 height: '100%',
                                 transition: 'transform 0.2s',
+                                background: theme === 'dark' ? '#3c3c3c' : '#ffffff',
                                 '&:hover': {
                                     transform: 'translateY(-2px)'
                                 }
                             }}>
-                                <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.7rem' }}>
+                                <Typography variant="caption" sx={{ color: theme === 'dark' ? '#ffffff' : 'text.secondary', fontSize: '0.7rem' }}>
                                     {stat.label}
                                 </Typography>
                                 <Typography variant="body2" sx={{ 

@@ -6,7 +6,7 @@ import usdcIcon from '../../../images/coin-icons/usdc.png';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-export default function AssetCard({ data }) {
+export default function AssetCard({ data, theme }) {
     const [estimatedValue, setEstimatedValue] = useState('********');
 
     const getCoinIcon = (symbol) => {
@@ -48,15 +48,15 @@ export default function AssetCard({ data }) {
 
     return (
         <Box display='flex' flexDirection='column' sx={{
-            background: 'white',
+            background: theme === 'dark' ? '#1e1e1e' : 'white',
             borderRadius: '10px',
             marginBottom: 2,
             padding: 2,
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+            boxShadow: theme === 'dark' ? '0 2px 8px rgba(255, 255, 255, 0.1)' : '0 2px 8px rgba(0,0,0,0.05)',
             transition: 'transform 0.2s',
             '&:hover': {
                 transform: 'translateY(-2px)',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                boxShadow: theme === 'dark' ? '0 4px 12px rgba(255, 255, 255, 0.2)' : '0 4px 12px rgba(0,0,0,0.1)'
             }
         }}>
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
@@ -70,7 +70,7 @@ export default function AssetCard({ data }) {
                     )}
                     <Typography 
                         variant="h6" 
-                        color='primary'
+                        color={theme === 'dark' ? 'white' : 'primary'}
                         sx={{ fontWeight: 600 }}
                     >
                         {data.name}
@@ -88,14 +88,14 @@ export default function AssetCard({ data }) {
                 <Box sx={{ flex: 1 }}>
                     <Typography 
                         variant="caption" 
-                        color="text.secondary"
+                        color={theme === 'dark' ? 'grey.400' : 'text.secondary'}
                         sx={{ mb: 0.5, display: 'block' }}
                     >
                         Available Balance
                     </Typography>
                     <Typography 
                         variant="body1" 
-                        color="primary.main"
+                        color={theme === 'dark' ? 'white' : 'primary.main'}
                         sx={{ fontWeight: 600 }}
                     >
                         {data.available} {data.name}
@@ -105,7 +105,7 @@ export default function AssetCard({ data }) {
                 <Box sx={{ flex: 1 }}>
                     <Typography 
                         variant="caption" 
-                        color="text.secondary"
+                        color={theme === 'dark' ? 'grey.400' : 'text.secondary'}
                         sx={{ mb: 0.5, display: 'block' }}
                     >
                         In Review
@@ -122,7 +122,7 @@ export default function AssetCard({ data }) {
                 <Box sx={{ flex: 1 }}>
                     <Typography 
                         variant="caption" 
-                        color="text.secondary"
+                        color={theme === 'dark' ? 'grey.400' : 'text.secondary'}
                         sx={{ mb: 0.5, display: 'block' }}
                     >
                         Estimated (USD)

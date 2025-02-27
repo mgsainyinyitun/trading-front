@@ -7,12 +7,14 @@ import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
 import HomeIcon from '@mui/icons-material/Home';
+import Brightness4Icon from '@mui/icons-material/Brightness4'; // Import icon for theme toggle
+import Brightness7Icon from '@mui/icons-material/Brightness7'; // Import icon for theme toggle
 
 export default function TopBar() {
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState(null);
     const { customer, logout } = useAppContext();
-
+    const { theme, setTheme } = useAppContext();
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -32,14 +34,22 @@ export default function TopBar() {
         navigate('/signin');
     };
 
+    const toggleTheme = () => {
+        if (typeof setTheme === 'function') {
+            setTheme(theme === 'light' ? 'dark' : 'light'); // Toggle theme
+        } else {
+            console.error('setTheme is not a function');
+        }
+    };
+
     return (
-        <AppBar position="fixed" sx={{ background: '#fff', color: 'primary.main', height: '48px', boxShadow: 'none', borderBottom: '1px solid #b3e5fc' }}>
+        <AppBar position="fixed" sx={{ background: theme === 'dark' ? '#333' : '#fff', color: theme === 'dark' ? '#fff' : 'primary.main', height: '48px', boxShadow: 'none', borderBottom: theme === 'dark' ? '1px solid #555' : '1px solid #b3e5fc' }}>
             <Toolbar sx={{ minHeight: '48px !important' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
                     <IconButton
                         size="large"
                         onClick={() => navigate('/')}
-                        color="primary"
+                        color="inherit"
                         sx={{ mr: 1 }}
                     >
                         <HomeIcon fontSize="small" />
@@ -51,12 +61,24 @@ export default function TopBar() {
                 <div>
                     <IconButton
                         size="small"
+                        onClick={toggleTheme} // Add onClick for theme toggle
+                        color="inherit"
+                    >
+                        {theme === 'light' ? <Brightness4Icon /> : <Brightness7Icon />} {/* Change icon based on theme */}
+                    </IconButton>
+                    <IconButton
+                        size="small"
                         onClick={handleMenu}
-                        color="primary"
+                        color="inherit"
                     >
                         <AccountCircle fontSize="small" />
                     </IconButton>
                     <Menu
+                        sx={{
+                            '& .MuiPaper-root': {
+                                backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white'
+                            }
+                        }}
                         anchorEl={anchorEl}
                         open={Boolean(anchorEl)}
                         onClose={handleClose}
@@ -71,18 +93,18 @@ export default function TopBar() {
                     >
                         {customer ? (
                             <>
-                                <MenuItem onClick={handleProfile} sx={{ color: 'primary.main' }}>
-                                    <PersonIcon sx={{ mr: 1 }} fontSize="small" />
+                                <MenuItem onClick={handleProfile} sx={{ color: theme === 'dark' ? '#fff' : 'primary.main' }}>
+                                    <PersonIcon sx={{ mr: 1 , color: theme === 'dark' ? '#fff' : 'primary.main'}} fontSize="small" />
                                     Profile
                                 </MenuItem>
-                                <MenuItem onClick={handleSignOut} sx={{ color: 'primary.main' }}>
-                                    <LogoutIcon sx={{ mr: 1 }} fontSize="small" />
+                                <MenuItem onClick={handleSignOut} sx={{ color: theme === 'dark' ? '#fff' : 'primary.main' }}>
+                                    <LogoutIcon sx={{ mr: 1 , color: theme === 'dark' ? '#fff' : 'primary.main'}} fontSize="small" />
                                     Sign Out
                                 </MenuItem>
                             </>
                         ) : (
-                            <MenuItem onClick={() => navigate('/signin')} sx={{ color: 'primary.main' }}>
-                                <LoginIcon sx={{ mr: 1 }} fontSize="small" />
+                            <MenuItem onClick={() => navigate('/signin')} sx={{ color: theme === 'dark' ? '#fff' : 'primary.main' }}>
+                                <LoginIcon sx={{ mr: 1 , color: theme === 'dark' ? '#fff' : 'primary.main'}} fontSize="small" />
                                 Sign In
                             </MenuItem>
                         )}

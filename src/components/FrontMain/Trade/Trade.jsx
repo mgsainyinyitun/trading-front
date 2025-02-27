@@ -52,7 +52,7 @@ export default function Trade() {
     const navigate = useNavigate();
 
     const [cryptoPairs, setCryptoPairs] = useState([]);
-    const [isDarkTheme, setIsDarkTheme] = useState(false); // New state for theme
+    const { theme, setTheme } = useAppContext();
     const [timeFrame, setTimeFrame] = useState(30); // New state for timeframe
 
     const handleTradeClick = (type) => {
@@ -139,27 +139,27 @@ export default function Trade() {
     }, [focusCoin, timeFrame]);
 
     const toggleTheme = () => {
-        setIsDarkTheme(prev => !prev); // Toggle theme state
+        setTheme(prev => prev === 'dark' ? 'light' : 'dark'); // Toggle theme state
     };
 
     return (
-        <Box sx={{ background: isDarkTheme ? '#121212' : 'white', color: isDarkTheme ? 'white' : 'black' }}>
+        <Box sx={{ background: theme==='dark' ? '#121212' : 'white', color: theme==='dark' ? 'white' : 'black' }}>
             {/** Navigation */}
             <Box pb={3} sx={{
                 overflow: 'hidden',
                 margin: 0,
-                background: isDarkTheme ? '#1e1e1e' : 'white'
+                background: theme === 'dark' ? '#1e1e1e' : 'white'
             }}>
-                <Box sx={{ display: 'flex', alignItems: 'center' , background: isDarkTheme ? '#1e1e1e' : 'white' , color: isDarkTheme ? 'white' : 'black'}}>
+                <Box sx={{ display: 'flex', alignItems: 'center' , background: theme === 'dark' ? '#1e1e1e' : 'white' , color: theme === 'dark' ? 'white' : 'black'}}>
 
                     {value === 0 && (
                         <IconButton onClick={toggleDrawer(true)}>
-                            <MenuIcon />
+                            <MenuIcon sx={{ color: theme === 'dark' ? 'white' : 'black' }} />
                         </IconButton>
                     )}
 
                     <BottomNavigation
-                        sx={{ padding: 1, margin: 0, flexGrow: 1, background: isDarkTheme ? '#1e1e1e' : 'white' , color: isDarkTheme ? 'white' : 'black'}}
+                        sx={{ padding: 1, margin: 0, flexGrow: 1, background: theme === 'dark' ? '#1e1e1e' : 'white' , color: theme === 'dark' ? 'white' : 'black'}}
                         showLabels
                         value={value}
                         onChange={(event, newValue) => {
@@ -167,14 +167,14 @@ export default function Trade() {
                         }}
                     >
                         <BottomNavigationAction label="Trade" sx={{
-                            color: isDarkTheme ? 'white' : 'black',
+                            color: theme === 'dark' ? 'white' : 'black',
                             '&.Mui-selected': {
                                 borderBottom: '2px solid #2196f3',
                                 fontWeight: 'bold',
                             },
                         }} />
                         <BottomNavigationAction label="Exchange" sx={{
-                            color: isDarkTheme ? 'white' : 'black',
+                            color: theme === 'dark' ? 'white' : 'black',
                             '&.Mui-selected': {
                                 borderBottom: '2px solid #2196f3',
                                 fontWeight: 'bold',
@@ -217,7 +217,7 @@ export default function Trade() {
                                                 primary={item.pair}
                                                 secondary={item.price}
                                                 primaryTypographyProps={{
-                                                    style: { fontWeight: 'bold' }
+                                                    style: { fontWeight: 'bold', color: theme === 'dark' ? 'white' : 'black' }
                                                 }}
                                                 secondaryTypographyProps={{
                                                     style: { color: '#2196f3' }
@@ -230,8 +230,8 @@ export default function Trade() {
                         </Box>
                     </Drawer>
                     {/** settings  */}
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', background: isDarkTheme ? '#1e1e1e' : 'white' }}>
-                        <Box p={1} sx={{ background: isDarkTheme ? '#1e1e1e' : 'white', width: '90%', maxWidth: '100%', '@media (max-width: 600px)': { width: '100%' } }} display='flex' justifyContent='space-between'>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', background: theme === 'dark' ? '#1e1e1e' : 'white' }}>
+                        <Box p={1} sx={{ background: theme === 'dark' ? '#1e1e1e' : 'white', width: '90%', maxWidth: '100%', '@media (max-width: 600px)': { width: '100%' } }} display='flex' justifyContent='space-between'>
                             <Box display='flex' alignItems='center' justifyContent='center'>
                                 <Typography variant="body1" color="primary" fontWeight="bold">
                                     <Box display="flex" alignItems="center">
@@ -249,13 +249,13 @@ export default function Trade() {
                             </Box>
                             <Box display='flex' alignItems='center' justifyContent='center'>
                                 <AssignmentIcon color="primary" />
-                                <Typography variant="body" color='grey'>Position</Typography>
+                                <Typography variant="body" color={theme === 'dark' ? 'white' : 'grey'}>Position</Typography>
                             </Box>
                         </Box>
                     </Box>
 
                     {/** info */}
-                    <Box sx={{ minHeight: 100, display: 'flex', justifyContent: 'center', alignItems: 'center', background: isDarkTheme ? '#1e1e1e' : 'white' }}>
+                    <Box sx={{ minHeight: 100, display: 'flex', justifyContent: 'center', alignItems: 'center', background: theme === 'dark' ? '#1e1e1e' : 'white' }}>
                         {loading ? (<CircularProgress />) : (
                             <Box sx={{ display: 'flex', width: '85%', maxWidth: '100%', '@media (max-width: 600px)': { width: '100%' } }} pt={2} pb={2}>
                                 <Box p={1} sx={{ flexGrow: 1 }}>
@@ -292,26 +292,26 @@ export default function Trade() {
                         overflow: 'auto',
                         margin: 'auto',
                         padding: 0,
-                        background: isDarkTheme ? '#1e1e1e' : 'white',
+                        background: theme === 'dark' ? '#1e1e1e' : 'white',
                         display: 'flex',
                         justifyContent: 'center',
                     }}>
                         <Box sx={{ borderRadius: '5px', background: 'rgba(0, 0, 0, 0.08)', marginBottom: 3, }}>
-                            <ControlChip label='5 M' onClick={() => { setTimeFrame(5); fetchData(5); }} isSelected={timeFrame === 5} />
-                            <ControlChip label='10 M' onClick={() => { setTimeFrame(10); fetchData(10); }} isSelected={timeFrame === 10} />
-                            <ControlChip label='15 M' onClick={() => { setTimeFrame(15); fetchData(15); }} isSelected={timeFrame === 15} />
-                            <ControlChip label='30 M' onClick={() => { setTimeFrame(30); fetchData(30); }} isSelected={timeFrame === 30} />
-                            <ControlChip label='1 H' onClick={() => { setTimeFrame(60); fetchData(60); }} isSelected={timeFrame === 60} />
-                            <ControlChip label='2 H' onClick={() => { setTimeFrame(120); fetchData(120); }} isSelected={timeFrame === 120} />
-                            <ControlChip label='4 H' onClick={() => { setTimeFrame(240); fetchData(240); }} isSelected={timeFrame === 240} />
-                            <ControlChip label='1 D' onClick={() => { setTimeFrame(1440); fetchData(1440); }} isSelected={timeFrame === 1440} />
-                            <ControlChip label='1 W' onClick={() => { setTimeFrame(10080); fetchData(10080); }} isSelected={timeFrame === 10080} />
+                            <ControlChip sx={{ color: theme === 'dark' ? 'white' : 'black' }} label='5 M' onClick={() => { setTimeFrame(5); fetchData(5); }} isSelected={timeFrame === 5} />
+                            <ControlChip sx={{ color: theme === 'dark' ? 'white' : 'black' }} label='10 M' onClick={() => { setTimeFrame(10); fetchData(10); }} isSelected={timeFrame === 10} />
+                            <ControlChip sx={{ color: theme === 'dark' ? 'white' : 'black' }} label='15 M' onClick={() => { setTimeFrame(15); fetchData(15); }} isSelected={timeFrame === 15} />
+                            <ControlChip sx={{ color: theme === 'dark' ? 'white' : 'black' }} label='30 M' onClick={() => { setTimeFrame(30); fetchData(30); }} isSelected={timeFrame === 30} />
+                            <ControlChip sx={{ color: theme === 'dark' ? 'white' : 'black' }} label='1 H' onClick={() => { setTimeFrame(60); fetchData(60); }} isSelected={timeFrame === 60} />
+                            <ControlChip sx={{ color: theme === 'dark' ? 'white' : 'black' }} label='2 H' onClick={() => { setTimeFrame(120); fetchData(120); }} isSelected={timeFrame === 120} />
+                            <ControlChip sx={{ color: theme === 'dark' ? 'white' : 'black' }} label='4 H' onClick={() => { setTimeFrame(240); fetchData(240); }} isSelected={timeFrame === 240} />
+                            <ControlChip sx={{ color: theme === 'dark' ? 'white' : 'black' }} label='1 D' onClick={() => { setTimeFrame(1440); fetchData(1440); }} isSelected={timeFrame === 1440} />
+                            <ControlChip sx={{ color: theme === 'dark' ? 'white' : 'black' }} label='1 W' onClick={() => { setTimeFrame(10080); fetchData(10080); }} isSelected={timeFrame === 10080} />
                         </Box>
                     </Box>
 
                     {/** label for first */}
                     <Box sx={{
-                        display: 'flex', background: isDarkTheme ? '#1e1e1e' : 'white', paddingLeft: {
+                        display: 'flex', background: theme === 'dark' ? '#1e1e1e' : 'white', paddingLeft: {
                             xs: 2,
                             sm: 4,
                             md: 6,
@@ -326,7 +326,9 @@ export default function Trade() {
                     </Box>
 
                     {/* <InfoChart focusCoin={focusCoin} isDarkTheme={isDarkTheme} timeFrame={timeFrame} /> */}
-                    <CandleChart focusCoin={focusCoin} isDarkTheme={isDarkTheme} timeFrame={timeFrame} />
+                    <Box sx={{padding: '20px' , background: theme === 'dark' ? '#1e1e1e' : 'white'}}>
+                        <CandleChart focusCoin={focusCoin} isDarkTheme={theme === 'dark'} timeFrame={timeFrame} />
+                    </Box>
                     {/* <InfoHistChart focusCoin={focusCoin} />
                     <InfoBarChart focusCoin={focusCoin} /> */}
 
@@ -334,13 +336,13 @@ export default function Trade() {
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        background: isDarkTheme ? '#1e1e1e' : 'white',
+                        background: theme === 'dark' ? '#1e1e1e' : 'white',
                         width: '100%',
                     }}>
-                        <Box sx={{ background: isDarkTheme ? '#1e1e1e' : 'white', display: 'flex', justifyContent: 'space-between', width: '90%', maxWidth: '100%', '@media (max-width: 600px)': { width: '100%' } }}>
+                        <Box sx={{ background: theme === 'dark' ? '#1e1e1e' : 'white', display: 'flex', justifyContent: 'space-between', width: '90%', maxWidth: '100%', '@media (max-width: 600px)': { width: '100%' } }}>
                             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                 <Checkbox defaultChecked color="success" />
-                                <Typography variant="body2">Cancel self-selection</Typography>
+                                <Typography variant="body2" color={theme === 'dark' ? 'white' : 'black'}>Cancel self-selection</Typography>
                             </Box>
                             <Box>
                                 <Button onClick={() => handleTradeClick('long')} variant="contained" color="success" sx={{ borderRadius: '20px', marginRight: 1 }}>Long</Button>

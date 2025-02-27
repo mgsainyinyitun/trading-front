@@ -8,11 +8,13 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
 import PersonIcon from '@mui/icons-material/Person'
 import { Box } from '@mui/material'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useAppContext } from '../../context/AppContext'
 
 const BottomNavi = () => {
     const [value, setValue] = useState(0);
     const navigate = useNavigate();
     const location = useLocation();
+    const { theme } = useAppContext();
 
     useEffect(() => {
         switch (location.pathname) {
@@ -26,7 +28,7 @@ const BottomNavi = () => {
     }, [location.pathname]);
 
     return (
-        <Box sx={{ alignSelf: 'flex-end', width: '100%',borderTop:'1px solid #b3e5fc'}}>
+        <Box sx={{ alignSelf: 'flex-end', width: '100%', borderTop: theme === 'dark' ? '1px solid #424242' : '1px solid #b3e5fc' }}>
             <BottomNavigation
                 showLabels
                 value={value}
@@ -41,12 +43,13 @@ const BottomNavi = () => {
                         default: break;
                     }
                 }}
+                sx={{ backgroundColor: theme === 'dark' ? '#303030' : '#ffffff', color: theme === 'dark' ? '#ffffff' : '#000000' }}
             >
-                <BottomNavigationAction label="Home" icon={<HomeIcon />} />
-                <BottomNavigationAction label="Market" icon={<StorefrontIcon />} />
-                <BottomNavigationAction label="Trade" icon={<SwapVertIcon />} />
-                <BottomNavigationAction label="Wallet" icon={<AccountBalanceWalletIcon />} />
-                <BottomNavigationAction label="Mine" icon={<PersonIcon />} />
+                <BottomNavigationAction sx={{color:theme==='dark'?'#ffffff':'#000000'}} label="Home" icon={<HomeIcon sx={{ color: theme === 'dark' ? '#ffffff' : '#000000' }} />} />
+                <BottomNavigationAction sx={{color:theme==='dark'?'#ffffff':'#000000'}} label="Market" icon={<StorefrontIcon sx={{ color: theme === 'dark' ? '#ffffff' : '#000000' }} />} />
+                <BottomNavigationAction sx={{color:theme==='dark'?'#ffffff':'#000000'}} label="Trade" icon={<SwapVertIcon sx={{ color: theme === 'dark' ? '#ffffff' : '#000000' }} />} />
+                <BottomNavigationAction sx={{color:theme==='dark'?'#ffffff':'#000000'}} label="Wallet" icon={<AccountBalanceWalletIcon sx={{ color: theme === 'dark' ? '#ffffff' : '#000000' }} />} />
+                <BottomNavigationAction sx={{color:theme==='dark'?'#ffffff':'#000000'}} label="Mine" icon={<PersonIcon sx={{ color: theme === 'dark' ? '#ffffff' : '#000000' }} />} />
             </BottomNavigation>
         </Box>
     )

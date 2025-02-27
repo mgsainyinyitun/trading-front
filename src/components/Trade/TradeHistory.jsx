@@ -27,6 +27,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import * as XLSX from 'xlsx';
 import NoDataIcon from '@mui/icons-material/RemoveShoppingCart'; // Import an icon for no data
+import { useAppContext } from '../../context/AppContext';
 
 const statusColors = {
     PENDING: 'warning',
@@ -52,7 +53,8 @@ export default function TradeHistory() {
     const [filter, setFilter] = useState({
         type: 'ALL',
         status: 'ALL'
-    });
+    });	
+    const { theme } = useAppContext();
 
     useEffect(() => {
         fetchTrades();
@@ -117,12 +119,12 @@ export default function TradeHistory() {
     };
 
     return (
-        <Container maxWidth="md" sx={{ mt: { xs: 2, sm: 3 }, mb: 4, height: '100vh' }}>
+        <Container maxWidth="md" sx={{ mt: { xs: 2, sm: 3 }, mb: 4, height: '100vh', backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white' }}>
             <ToastContainer />
-            <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden', height: '100%' }}>
-                <Box sx={{ p: 2, backgroundColor: '#f8f9fa' }}>
+            <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden', height: '100%', backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white' }}>
+                <Box sx={{ p: 2, backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f8f9fa' }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                        <Typography variant="h6" sx={{ color: 'primary.main' }}>
+                        <Typography variant="h6" sx={{ color: theme === 'dark' ? 'white' : 'primary.main' }}>
                             Trade History 📈
                         </Typography>
                         <Button
@@ -130,6 +132,7 @@ export default function TradeHistory() {
                             startIcon={<DownloadIcon />}
                             size="small"
                             onClick={downloadExcel}
+                            sx={{ color: theme === 'dark' ? 'white' : 'black', borderColor: theme === 'dark' ? 'white' : 'black' }}
                         >
                             Export Excel
                         </Button>
@@ -146,7 +149,7 @@ export default function TradeHistory() {
                             placeholder="Search by account..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            sx={{ flexGrow: 1 }}
+                            sx={{ flexGrow: 1, backgroundColor: theme === 'dark' ? '#3c3c3c' : 'white' }}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
@@ -157,11 +160,12 @@ export default function TradeHistory() {
                         />
                         <Box sx={{ display: 'flex', gap: 1 }}>
                             <FormControl size="small" sx={{ minWidth: 120 }}>
-                                <InputLabel>Type</InputLabel>
+                                <InputLabel sx={{ color: theme === 'dark' ? 'white' : 'black' }}>Type</InputLabel>
                                 <Select
                                     value={filter.type}
                                     label="Type"
                                     onChange={(e) => setFilter({ ...filter, type: e.target.value })}
+                                    sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : 'white' }}
                                 >
                                     <MenuItem value="ALL">All</MenuItem>
                                     <MenuItem value="LONG">Long</MenuItem>
@@ -169,11 +173,12 @@ export default function TradeHistory() {
                                 </Select>
                             </FormControl>
                             <FormControl size="small" sx={{ minWidth: 120 }}>
-                                <InputLabel>Status</InputLabel>
+                                <InputLabel sx={{ color: theme === 'dark' ? 'white' : 'black' }}>Status</InputLabel>
                                 <Select
                                     value={filter.status}
                                     label="Status"
                                     onChange={(e) => setFilter({ ...filter, status: e.target.value })}
+                                    sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : 'white' }}
                                 >
                                     <MenuItem value="ALL">All</MenuItem>
                                     <MenuItem value="PENDING">Pending</MenuItem>
@@ -184,17 +189,17 @@ export default function TradeHistory() {
                     </Box>
                 </Box>
 
-                <TableContainer sx={{ minHeight: 'calc(100vh - 200px)' }}> {/* Adjust height as needed */}
+                <TableContainer sx={{ minHeight: 'calc(100vh - 200px)', backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white' }}>
                     <Table stickyHeader size="small">
                         <TableHead>
                             <TableRow>
-                                <TableCell>Account</TableCell>
-                                <TableCell>Type</TableCell>
-                                <TableCell>Amount</TableCell>
-                                <TableCell>Period</TableCell>
-                                <TableCell>Status</TableCell>
-                                <TableCell>Result</TableCell>
-                                <TableCell>Date</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' }}>Account</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' }}>Type</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' }}>Amount</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' }}>Period</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' }}>Status</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' }}>Result</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' }}>Date</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -215,7 +220,7 @@ export default function TradeHistory() {
                                 filteredTrades.map((trade) => (
                                     <TableRow key={trade.id} hover>
                                         <TableCell>
-                                            <Typography variant="body2">
+                                            <Typography variant="body2" sx={{ color: theme === 'dark' ? 'white' : 'black' }}>
                                                 {trade.account.accountNo}
                                             </Typography>
                                         </TableCell>
@@ -231,12 +236,12 @@ export default function TradeHistory() {
                                             />
                                         </TableCell>
                                         <TableCell>
-                                            <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                                            <Typography variant="body2" sx={{ fontWeight: 500, color: theme === 'dark' ? 'white' : 'black' }}>
                                                 {trade.tradeQuantity} USDT
                                             </Typography>
                                         </TableCell>
                                         <TableCell>
-                                            <Typography variant="body2">
+                                            <Typography variant="body2" sx={{ color: theme === 'dark' ? 'white' : 'black' }}>
                                                 {trade.period}s
                                             </Typography>
                                         </TableCell>
@@ -250,7 +255,7 @@ export default function TradeHistory() {
                                         </TableCell>
                                         <TableCell>
                                             {trade.tradingStatus === 'FAILED' ? (
-                                                <Typography variant="body2">NO RESULT</Typography>
+                                                <Typography variant="body2" sx={{ color: theme === 'dark' ? 'white' : 'black' }}>NO RESULT</Typography>
                                             ) : trade.isSuccess !== null && (
                                                 <Chip
                                                     label={trade.isSuccess ? 'WIN' : 'LOSE'}
@@ -261,7 +266,7 @@ export default function TradeHistory() {
                                             )}
                                         </TableCell>
                                         <TableCell>
-                                            <Typography variant="caption">
+                                            <Typography variant="caption" sx={{ color: theme === 'dark' ? 'white' : 'black' }}>
                                                 {formatDate(trade.createdAt)}
                                             </Typography>
                                         </TableCell>

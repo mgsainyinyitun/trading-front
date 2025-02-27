@@ -26,6 +26,7 @@ import { format } from 'date-fns';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import * as XLSX from 'xlsx';
+import { useAppContext } from '../../context/AppContext';
 
 const statusColors = {
     PENDING: 'warning',
@@ -49,6 +50,7 @@ export default function ExchangeHistory() {
     const [filter, setFilter] = useState({
         status: 'ALL'
     });
+    const { theme } = useAppContext();
 
     useEffect(() => {
         fetchExchanges();
@@ -110,12 +112,12 @@ export default function ExchangeHistory() {
     };
 
     return (
-        <Container maxWidth="md" sx={{ mt: { xs: 2, sm: 3 }, mb: 4 }}>
+        <Container maxWidth="md" sx={{ mt: { xs: 2, sm: 3 }, mb: 4, backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white' }}>
             <ToastContainer />
-            <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden' }}>
-                <Box sx={{ p: 2, backgroundColor: '#f8f9fa' }}>
+            <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden', backgroundColor: theme === 'dark' ? '#2c2c2c' : 'white' }}>
+                <Box sx={{ p: 2, backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f8f9fa' }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                        <Typography variant="h6" sx={{ color: 'primary.main' }}>
+                        <Typography variant="h6" sx={{ color: theme === 'dark' ? 'white' : 'primary.main' }}>
                             Exchange History 📊
                         </Typography>
                         <Button
@@ -123,6 +125,7 @@ export default function ExchangeHistory() {
                             startIcon={<DownloadIcon />}
                             size="small"
                             onClick={downloadExcel}
+                            sx={{ color: theme === 'dark' ? 'white' : 'black', borderColor: theme === 'dark' ? 'white' : 'black' }}
                         >
                             Export Excel
                         </Button>
@@ -139,7 +142,7 @@ export default function ExchangeHistory() {
                             placeholder="Search by currency..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            sx={{ flexGrow: 1 }}
+                            sx={{ flexGrow: 1, backgroundColor: theme === 'dark' ? '#3c3c3c' : 'white' }}
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
@@ -149,11 +152,12 @@ export default function ExchangeHistory() {
                             }}
                         />
                         <FormControl size="small" sx={{ minWidth: 120 }}>
-                            <InputLabel>Status</InputLabel>
+                            <InputLabel sx={{ color: theme === 'dark' ? 'white' : 'black' }}>Status</InputLabel>
                             <Select
                                 value={filter.status}
                                 label="Status"
                                 onChange={(e) => setFilter({ ...filter, status: e.target.value })}
+                                sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : 'white' }}
                             >
                                 <MenuItem value="ALL">All</MenuItem>
                                 <MenuItem value="PENDING">Pending</MenuItem>
@@ -168,13 +172,13 @@ export default function ExchangeHistory() {
                     <Table stickyHeader size="small">
                         <TableHead>
                             <TableRow>
-                                <TableCell>Date</TableCell>
-                                <TableCell>From</TableCell>
-                                <TableCell>To</TableCell>
-                                <TableCell>Amount</TableCell>
-                                <TableCell>Exchanged Amount</TableCell>
-                                <TableCell>Exchange Rate</TableCell>
-                                <TableCell>Status</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5' }}>Date</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5' }}>From</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5' }}>To</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5' }}>Amount</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5' }}>Exchanged Amount</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5' }}>Exchange Rate</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5' }}>Status</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -194,32 +198,32 @@ export default function ExchangeHistory() {
                                 filteredExchanges.map((exchange) => (
                                     <TableRow key={exchange.id} hover>
                                         <TableCell>
-                                            <Typography variant="caption">
+                                            <Typography variant="caption" sx={{ color: theme === 'dark' ? 'white' : 'black' }}>
                                                 {format(new Date(exchange.createdAt), 'PP')}
                                             </Typography>
                                         </TableCell>
                                         <TableCell>
-                                            <Typography variant="body2">
+                                            <Typography variant="body2" sx={{ color: theme === 'dark' ? 'white' : 'black' }}>
                                                 {exchange.amount} {exchange.fromCurrency}
                                             </Typography>
                                         </TableCell>
                                         <TableCell>
-                                            <Typography variant="body2">
+                                            <Typography variant="body2" sx={{ color: theme === 'dark' ? 'white' : 'black' }}>
                                                 {exchange.exchangedAmount} {exchange.toCurrency}
                                             </Typography>
                                         </TableCell>
                                         <TableCell>
-                                            <Typography variant="body2">
+                                            <Typography variant="body2" sx={{ color: theme === 'dark' ? 'white' : 'black' }}>
                                                 {exchange.amount}
                                             </Typography>
                                         </TableCell>
                                         <TableCell>
-                                            <Typography variant="body2">
+                                            <Typography variant="body2" sx={{ color: theme === 'dark' ? 'white' : 'black' }}>
                                                 {exchange.exchangedAmount}
                                             </Typography>
                                         </TableCell>
                                         <TableCell>
-                                            <Typography variant="body2">
+                                            <Typography variant="body2" sx={{ color: theme === 'dark' ? 'white' : 'black' }}>
                                                 {exchange.exchangeRate}
                                             </Typography>
                                         </TableCell>

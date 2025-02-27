@@ -33,6 +33,7 @@ import { format } from 'date-fns';
 import LoginIcon from '@mui/icons-material/Login';
 import { useNavigate } from 'react-router-dom';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import { useAppContext } from '../../../context/AppContext';
 
 const statusColors = {
     PENDING: 'warning',
@@ -53,7 +54,7 @@ export default function Exchange() {
     const [exchangeDialogOpen, setExchangeDialogOpen] = useState(false);
     const [exchangeData, setExchangeData] = useState(null);
     const [exchangeHistory, setExchangeHistory] = useState([]);
-
+    const { theme } = useAppContext();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -198,12 +199,12 @@ export default function Exchange() {
     };
 
     return (
-        <Container sx={{ mb: 4, backgroundColor: 'white' }}>
+        <Container sx={{ mb: 4, backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white'  }}>
             <ToastContainer />
 
             {/* Exchange Form */}
-            <Paper elevation={3} sx={{ p: 3, borderRadius: 2, mb: 3, background: 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)' }}>
-                <Typography variant="h6" gutterBottom sx={{ color: 'primary.main', fontWeight: 600 }}>
+            <Paper elevation={3} sx={{ p: 3, borderRadius: 2, mb: 3, background: theme === 'dark' ? '#1e1e1e' : 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)' }}>
+                <Typography variant="h6" gutterBottom sx={{ color: theme === 'dark' ? 'white' : 'primary.main', fontWeight: 600 }}>
                     Exchange Coins ✨
                 </Typography>
 
@@ -213,7 +214,7 @@ export default function Exchange() {
                             <Select
                                 value={fromCoin}
                                 onChange={(e) => setFromCoin(e.target.value)}
-                                sx={{ borderRadius: 2 }}
+                                sx={{ borderRadius: 2, backgroundColor: theme === 'dark' ? '#333' : 'white' }}
                                 size="small"
                             >
                                 {coins.map((coin) => (
@@ -235,7 +236,7 @@ export default function Exchange() {
                             <Select
                                 value={toCoin}
                                 onChange={(e) => setToCoin(e.target.value)}
-                                sx={{ borderRadius: 2 }}
+                                sx={{ borderRadius: 2, backgroundColor: theme === 'dark' ? '#333' : 'white' }}
                                 size="small"
                             >
                                 {coins.map((coin) => (
@@ -251,8 +252,8 @@ export default function Exchange() {
                     </Box>
 
                     {baseRate && (
-                        <Paper sx={{ p: 2, mt: 2, mb: 2, borderRadius: 2, background: 'rgba(0, 0, 0, 0.02)' }}>
-                            <Typography variant="body2" color="text.secondary">
+                        <Paper sx={{ p: 2, mt: 2, mb: 2, borderRadius: 2, background: theme === 'dark' ? '#424242' : 'rgba(0, 0, 0, 0.02)' }}>
+                            <Typography variant="body2" color={theme === 'dark' ? 'white' : 'text.secondary'}>
                                 Current Exchange Rate
                             </Typography>
                             <Typography variant="h6" color="primary.main">
@@ -270,13 +271,13 @@ export default function Exchange() {
                         sx={{ mt: 3, mb: 2 }}
                         size="small"
                         InputProps={{
-                            endAdornment: <Typography color="text.secondary">{fromCoin}</Typography>
+                            endAdornment: <Typography color={theme === 'dark' ? 'white' : 'text.secondary'}>{fromCoin}</Typography>
                         }}
                     />
 
                     {rate && (
-                        <Paper sx={{ p: 2, mb: 3, borderRadius: 2, background: 'rgba(0, 0, 0, 0.02)' }}>
-                            <Typography variant="body2" color="text.secondary">
+                        <Paper sx={{ p: 2, mb: 3, borderRadius: 2, background: theme === 'dark' ? '#424242' : 'rgba(0, 0, 0, 0.02)' }}>
+                            <Typography variant="body2" color={theme === 'dark' ? 'white' : 'text.secondary'}>
                                 You Will Receive
                             </Typography>
                             <Typography variant="h6" color="primary.main">
@@ -294,9 +295,9 @@ export default function Exchange() {
                         sx={{
                             borderRadius: 2,
                             py: 1.5,
-                            background: 'linear-gradient(45deg, #7c4dff 30%, #448aff 90%)',
+                            background: theme === 'dark' ? 'linear-gradient(45deg, #7c4dff 30%, #448aff 90%)' : 'linear-gradient(45deg, #7c4dff 30%, #448aff 90%)',
                             '&:hover': {
-                                background: 'linear-gradient(45deg, #673ab7 30%, #2196f3 90%)',
+                                background: theme === 'dark' ? 'linear-gradient(45deg, #673ab7 30%, #2196f3 90%)' : 'linear-gradient(45deg, #673ab7 30%, #2196f3 90%)',
                             }
                         }}
                     >
@@ -306,9 +307,9 @@ export default function Exchange() {
             </Paper>
 
             {/* Exchange History */}
-            <Paper elevation={2} sx={{ borderRadius: 2, overflow: 'hidden' }}>
-                <Box sx={{ p: 2, backgroundColor: '#f8f9fa' }}>
-                    <Typography variant="h6" sx={{ color: 'primary.main' }}>
+            <Paper elevation={2} sx={{ borderRadius: 2, overflow: 'hidden', backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white' }}>
+                <Box sx={{ p: 2, backgroundColor: theme === 'dark' ? '#333' : '#f8f9fa' }}>
+                    <Typography variant="h6" sx={{ color: theme === 'dark' ? 'white' : 'primary.main' }}>
                         Exchange History 📊
                     </Typography>
                 </Box>
@@ -317,13 +318,13 @@ export default function Exchange() {
                     <Table stickyHeader size="small">
                         <TableHead>
                             <TableRow>
-                                <TableCell>Date</TableCell>
-                                <TableCell>From</TableCell>
-                                <TableCell>To</TableCell>
-                                <TableCell>Amount</TableCell>
-                                <TableCell>Exchanged Amount</TableCell>
-                                <TableCell>Exchange Rate</TableCell>
-                                <TableCell>Status</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#424242' : 'white' }}>Date</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#424242' : 'white' }}>From</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#424242' : 'white' }}>To</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#424242' : 'white' }}>Amount</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#424242' : 'white' }}>Exchanged Amount</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#424242' : 'white' }}>Exchange Rate</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#424242' : 'white' }}>Status</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -331,32 +332,32 @@ export default function Exchange() {
                                 exchangeHistory.map((exchange) => (
                                     <TableRow key={exchange.id} hover>
                                         <TableCell>
-                                            <Typography variant="caption">
+                                            <Typography variant="caption" color={theme === 'dark' ? 'white' : 'text.primary'}>
                                                 {format(new Date(exchange.createdAt), 'PP')}
                                             </Typography>
                                         </TableCell>
                                         <TableCell>
-                                            <Typography variant="body2">
+                                            <Typography variant="body2" color={theme === 'dark' ? 'white' : 'text.primary'}>
                                                 {exchange.amount} {exchange.fromCurrency}
                                             </Typography>
                                         </TableCell>
                                         <TableCell>
-                                            <Typography variant="body2">
+                                            <Typography variant="body2" color={theme === 'dark' ? 'white' : 'text.primary'}>
                                                 {exchange.exchangedAmount} {exchange.toCurrency}
                                             </Typography>
                                         </TableCell>
                                         <TableCell>
-                                            <Typography variant="body2">
+                                            <Typography variant="body2" color={theme === 'dark' ? 'white' : 'text.primary'}>
                                                 {exchange.exchangedAmount} {exchange.amount}
                                             </Typography>
                                         </TableCell>
                                         <TableCell>
-                                            <Typography variant="body2">
+                                            <Typography variant="body2" color={theme === 'dark' ? 'white' : 'text.primary'}>
                                                 {exchange.exchangedAmount} {exchange.exchangedAmount}
                                             </Typography>
                                         </TableCell>
                                         <TableCell>
-                                            <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                                            <Typography variant="body2" sx={{ fontWeight: 500, color: theme === 'dark' ? 'white' : 'text.primary' }}>
                                                 {exchange.exchangeRate}
                                             </Typography>
                                         </TableCell>
@@ -374,11 +375,11 @@ export default function Exchange() {
                                 <TableRow>
                                     <TableCell colSpan={6} align="center" sx={{ py: 8 }}>
                                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-                                            <AssignmentIcon sx={{ fontSize: 50, color: 'text.disabled' }} />
-                                            <Typography variant="h6" color="text.secondary">
+                                            <AssignmentIcon sx={{ fontSize: 50, color: theme === 'dark' ? 'white' : 'text.disabled' }} />
+                                            <Typography variant="h6" color={theme === 'dark' ? 'white' : 'text.secondary'}>
                                                 No Exchange History
                                             </Typography>
-                                            <Typography variant="body2" color="text.disabled">
+                                            <Typography variant="body2" color={theme === 'dark' ? 'white' : 'text.disabled'}>
                                                 Your exchange transactions will appear here
                                             </Typography>
                                         </Box>
@@ -393,7 +394,7 @@ export default function Exchange() {
             <Button
                 variant="outlined"
                 onClick={() => navigate('/exchange-history')}
-                sx={{ mt: 2 }}
+                sx={{ mt: 2, color: theme === 'dark' ? 'white' : 'inherit', borderColor: theme === 'dark' ? 'white' : 'inherit' }}
             >
                 View Exchange History
             </Button>
@@ -404,17 +405,18 @@ export default function Exchange() {
                 PaperProps={{
                     sx: {
                         borderRadius: '15px',
-                        padding: '10px'
+                        padding: '10px',
+                        backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white'
                     }
                 }}
             >
-                <DialogTitle sx={{ textAlign: 'center', color: 'primary.main' }}>
+                <DialogTitle sx={{ textAlign: 'center', color: theme === 'dark' ? 'white' : 'primary.main' }}>
                     Sign In Required
                 </DialogTitle>
                 <DialogContent>
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 2 }}>
-                        <LoginIcon sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
-                        <Typography variant="body1" sx={{ textAlign: 'center', mb: 2 }}>
+                        <LoginIcon sx={{ fontSize: 60, color: theme === 'dark' ? 'white' : 'primary.main', mb: 2 }} />
+                        <Typography variant="body1" sx={{ textAlign: 'center', mb: 2, color: theme === 'dark' ? 'white' : 'inherit' }}>
                             Please sign in to exchange coins
                         </Typography>
                     </Box>
@@ -423,7 +425,7 @@ export default function Exchange() {
                     <Button
                         onClick={() => setLoginDialogOpen(false)}
                         variant="outlined"
-                        sx={{ borderRadius: '20px', mr: 1 }}
+                        sx={{ borderRadius: '20px', mr: 1, color: theme === 'dark' ? 'white' : 'inherit', borderColor: theme === 'dark' ? 'white' : 'inherit' }}
                     >
                         Cancel
                     </Button>
@@ -445,26 +447,26 @@ export default function Exchange() {
                     sx: {
                         borderRadius: '15px',
                         padding: '20px',
-                        backgroundColor: '#f0f4ff'
+                        backgroundColor: theme === 'dark' ? '#1e1e1e' : '#f0f4ff'
                     }
                 }}
             >
-                <DialogTitle sx={{ textAlign: 'center', color: 'primary.main' }}>
+                <DialogTitle sx={{ textAlign: 'center', color: theme === 'dark' ? 'white' : 'primary.main' }}>
                     Exchange Successful! 🎉
                 </DialogTitle>
                 <DialogContent>
                     {exchangeData && (
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-                            <Typography variant="body1" color="text.secondary">
+                            <Typography variant="body1" color={theme === 'dark' ? 'white' : 'text.secondary'}>
                                 You exchanged:
                             </Typography>
                             <Typography variant="h6" color="primary.main">
                                 {exchangeData.amount} {exchangeData.fromCurrency} for {exchangeData.exchangedAmount} {exchangeData.toCurrency}
                             </Typography>
-                            <Typography variant="body2" color="text.secondary">
+                            <Typography variant="body2" color={theme === 'dark' ? 'white' : 'text.secondary'}>
                                 Exchange Rate: {exchangeData.exchangeRate}
                             </Typography>
-                            <Typography variant="body2" color="text.secondary">
+                            <Typography variant="body2" color={theme === 'dark' ? 'white' : 'text.secondary'}>
                                 Status: <Chip label={exchangeData.exchangeStatus} color={statusColors[exchangeData.exchangeStatus]} />
                             </Typography>
                         </Box>

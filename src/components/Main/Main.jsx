@@ -19,16 +19,18 @@ import TradeHistory from "../Trade/TradeHistory";
 import Withdraw from "../FrontMain/Withdraw/Withdraw";
 import WithdrawDetail from "../FrontMain/Withdraw/WithdrawDetail";
 import ExchangeHistory from "../Exchange/ExchangeHistory";
+import { useAppContext } from '../../context/AppContext'; // Importing context to access theme
 
 export default function Main() {
     const location = useLocation();
     const isAuthPage = ['/signup', '/signin'].includes(location.pathname);
+    const { theme } = useAppContext(); // Accessing theme from context
 
     return (
-        <Box sx={{ height: '100%', width: '100%', overflow: 'auto', marginTop: isAuthPage ? 0 : 5 }}>
-            <Container sx={{ height: '100%', width: '100%',  background: '#eeeeee', padding: 0 }}>
+        <Box sx={{ height: '100%', width: '100%', overflow: 'auto', marginTop: isAuthPage ? 0 : 5, background: theme === 'dark' ? '#121212' : '' }}>
+            <Container sx={{  width: '100%', background: theme === 'dark' ? '#1e1e1e' : '#eeeeee', padding: 0 }}>
                 {!isAuthPage && <TopBar />}
-                <Box sx={{ flexGrow: 1, background: "#eeeeee" , paddingBottom:1,margin:'0 auto'}}>
+                <Box sx={{ flexGrow: 1, background: theme === 'dark' ? '#1e1e1e' : '#eeeeee', paddingBottom: 1, margin: '0 auto' }}>
                     <Routes>
                         <Route path='/' element={<Home />} />
                         <Route path='/market' element={<Market />} />

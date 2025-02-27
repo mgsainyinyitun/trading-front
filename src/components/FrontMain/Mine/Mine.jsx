@@ -5,6 +5,7 @@ import { minemenu } from "./minemenu";
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useAppContext } from "../../../context/AppContext";
 
 export default function Mine() {
     const navigate = useNavigate();
@@ -12,7 +13,7 @@ export default function Mine() {
         name: '',
         loginId: ''
     });
-
+    const { theme } = useAppContext();
     useEffect(() => {
         const fetchProfile = async () => {
             try {
@@ -83,7 +84,7 @@ export default function Mine() {
             </Box>
 
             <Box sx={{
-                background: 'white',
+                background: theme === 'dark' ? '#1e1e1e' : 'white',
                 borderTopRightRadius: '10px',
                 borderTopLeftRadius: '10px',
                 position: 'relative',
@@ -97,10 +98,10 @@ export default function Mine() {
                             return (
                                 <Box pl={2} pr={2} key={menu.id}>
                                     <ListItem
-                                        sx={{ padding: 0.5 }}
+                                        sx={{ padding: 0.5, background: theme === 'dark' ? '#2c2c2c' : 'transparent' }}
                                         secondaryAction={
                                             <IconButton edge="end" aria-label="comments" size="small">
-                                                <ArrowForwardIosIcon sx={{ fontSize: '0.9rem' }} />
+                                                <ArrowForwardIosIcon sx={{ fontSize: '0.9rem', color: theme === 'dark' ? 'white' : 'black' }} />
                                             </IconButton>
                                         }
                                         disablePadding
@@ -109,12 +110,12 @@ export default function Mine() {
                                             <ListItemIcon sx={{ minWidth: 40 }}>
                                                 {menu.icon}
                                             </ListItemIcon>
-                                            <ListItemText id={menu.id} primary={<Typography variant="body1" color={"InfoText"}>{menu.name}</Typography>} />
+                                            <ListItemText id={menu.id} primary={<Typography variant="body1" color={theme === 'dark' ? 'white' : 'InfoText'}>{menu.name}</Typography>} />
                                         </ListItemButton>
                                     </ListItem>
 
                                     {
-                                        i !== minemenu.length - 1 && <Divider />
+                                        i !== minemenu.length - 1 && <Divider sx={{ background: theme === 'dark' ? '#555' : '#ccc' }} />
                                     }
                                 </Box>
                             )

@@ -4,12 +4,14 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getCoinStringList } from '../../../utils/utils';
 import MarketBTC from './MarketBTC';
+import { useAppContext } from '../../../context/AppContext';
 
 export default function Market() {
     const [value, setValue] = useState(0);
     const [currencyData, setCurrencyData] = useState([]);
     const [selectedCurrency, setSelectedCurrency] = useState('USDT');
     const [loading, setLoading] = useState(false);
+    const { theme } = useAppContext();
 
     const fetchCryptoPairs = async () => {
         try {
@@ -76,20 +78,20 @@ export default function Market() {
         <Box sx={{
             alignSelf: 'flex-end',
             width: '100%',
-            background: 'linear-gradient(135deg, #f5f7ff 0%, #f0f8ff 100%)',
+            background: theme === 'dark' ? 'linear-gradient(135deg, #121212 0%, #1e1e1e 100%)' : 'linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%)',
             minHeight: '100vh'
         }}>
             <Box display='flex' justifyContent='center' sx={{
-                background: 'rgba(255, 255, 255, 0.9)',
+                background: theme === 'dark' ? 'rgba(30, 30, 30, 0.9)' : 'rgba(240, 240, 240, 0.9)',
                 backdropFilter: 'blur(10px)',
-                boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                boxShadow: '0 4px 6px rgba(0,0,0,0.5)',
                 borderRadius: '0 0 20px 20px'
             }}>
                 <Typography variant="h5" sx={{
                     margin: 2,
-                    color: '#7c4dff',
+                    color: theme === 'dark' ? '#bb86fc' : '#6200ea',
                     fontWeight: 'bold',
-                    textShadow: '2px 2px 4px rgba(124,77,255,0.1)'
+                    textShadow: theme === 'dark' ? '2px 2px 4px rgba(187,134,252,0.1)' : 'none'
                 }}>
                     Market Overview ✨
                 </Typography>
@@ -102,9 +104,9 @@ export default function Market() {
                 }}>
                     <Box sx={{
                         minWidth: 250,
-                        background: 'rgba(255, 255, 255, 0.95)',
+                        background: theme === 'dark' ? 'rgba(40, 40, 40, 0.95)' : 'rgba(255, 255, 255, 0.95)',
                         borderRadius: '15px',
-                        boxShadow: '0 4px 15px rgba(124,77,255,0.15)',
+                        boxShadow: '0 4px 15px rgba(187,134,252,0.15)',
                         transition: 'transform 0.2s',
                         '&:hover': {
                             transform: 'translateY(-2px)'
@@ -116,10 +118,10 @@ export default function Market() {
                             style={{
                                 width: '100%',
                                 padding: '12px 20px',
-                                border: '2px solid #e0e7ff',
+                                border: '2px solid #3a3a3a',
                                 borderRadius: '15px',
                                 fontSize: '16px',
-                                color: '#7c4dff',
+                                color: '#bb86fc',
                                 cursor: 'pointer',
                                 outline: 'none',
                                 background: 'transparent',
@@ -137,7 +139,7 @@ export default function Market() {
             </Box>
             {loading ? (
                 <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
-                    <CircularProgress sx={{ color: '#7c4dff' }} />
+                    <CircularProgress sx={{ color: '#bb86fc' }} />
                 </Box>
             ) : (
                 <MarketBTC data={currencyData} />

@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import axios from 'axios';
+import { useAppContext } from "../../../context/AppContext";
+
 
 export default function Asset() {
     const [value, setValue] = useState(0);
@@ -16,6 +18,7 @@ export default function Asset() {
     const [assets, setAssets] = useState(null);
     const [totalBalance, setTotalBalance] = useState(0);
     const navigate = useNavigate();
+    const { theme } = useAppContext();
 
     const mockAssets = [
         {
@@ -123,7 +126,7 @@ export default function Asset() {
             <Box
                 sx={{
                     backgroundSize: 'cover',
-                    backgroundColor: '#0091ea',
+                    backgroundColor: theme === 'dark' ? '#1e1e1e' : '#0091ea',
                     backgroundPosition: 'center',
                     height: '20vh',
                     overflow: 'hidden'
@@ -146,7 +149,7 @@ export default function Asset() {
                 p={1}
                 pb={5}
                 sx={{
-                    background: 'white',
+                    background: theme === 'dark' ? '#2c2c2c' : 'white',
                     borderTopRightRadius: '10px',
                     borderTopLeftRadius: '10px',
                     position: 'relative',
@@ -167,7 +170,7 @@ export default function Asset() {
                             }}
                         >
                             <img src={deposit} width={50} alt="deposit" />
-                            <Typography variant="body" color='MenuText'>Deposit</Typography>
+                            <Typography variant="body" color={theme === 'dark' ? 'white' : 'MenuText'}>Deposit</Typography>
                         </Box>
                     </Box>
 
@@ -183,7 +186,7 @@ export default function Asset() {
                             }}
                         >
                             <img src={withdraw} width={50} alt="withdraw" />
-                            <Typography variant="body" color='MenuText'>Withdraw</Typography>
+                            <Typography variant="body" color={theme === 'dark' ? 'white' : 'MenuText'}>Withdraw</Typography>
                         </Box>
                     </Box>
 
@@ -201,15 +204,15 @@ export default function Asset() {
                             }}
                         >
                             <img src={exchange} width={50} alt="exchange" />
-                            <Typography variant="body" color='MenuText'>Exchange</Typography>
+                            <Typography variant="body" color={theme === 'dark' ? 'white' : 'MenuText'}>Exchange</Typography>
                         </Box>
                     </Box>
                 </Box>
             </Box>
 
             {assets && (value === 0 ? 
-                <AccountAsset assets={assets} showBalance={showBalance} /> 
-                : <CoinAsset assets={assets} showBalance={showBalance} />)}
+                <AccountAsset assets={assets} showBalance={showBalance} theme={theme} /> 
+                : <CoinAsset assets={assets} showBalance={showBalance} theme={theme} />)}
 
         </Box>
     )

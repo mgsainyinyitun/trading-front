@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import HelpIcon from '@mui/icons-material/Help';
+import { useAppContext } from '../../../context/AppContext';
 
 const helpTopics = [
     {
@@ -67,21 +68,22 @@ const helpTopics = [
 ];
 
 export default function HelpCenter() {
+    const { theme } = useAppContext();
     return (
         <Container maxWidth="md" sx={{ mt: 2, mb: 4 }}>
             <Paper elevation={2} sx={{ 
                 p: 3, 
                 borderRadius: 2,
-                background: 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)'
+                background: theme === 'dark' ? 'linear-gradient(145deg, #1e1e1e 0%, #2c2c2c 100%)' : 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)'
             }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
                     <HelpIcon color="primary" />
-                    <Typography variant="h5" component="h1" sx={{ fontWeight: 600 }}>
+                    <Typography variant="h5" component="h1" sx={{ fontWeight: 600, color: theme === 'dark' ? 'white' : 'black' }}>
                         Help Center
                     </Typography>
                 </Box>
 
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                <Typography variant="body2" color={theme === 'dark' ? 'grey.300' : 'text.secondary'} sx={{ mb: 3 }}>
                     Find answers to common questions and learn how to use our platform effectively.
                 </Typography>
 
@@ -91,7 +93,7 @@ export default function HelpCenter() {
                             variant="h6" 
                             sx={{ 
                                 mb: 2,
-                                color: 'primary.main',
+                                color: theme === 'dark' ? 'lightblue' : 'primary.main',
                                 fontWeight: 500
                             }}
                         >
@@ -105,9 +107,9 @@ export default function HelpCenter() {
                                 sx={{ 
                                     mb: 1,
                                     '&:before': { display: 'none' },
-                                    background: 'transparent',
+                                    background: theme === 'dark' ? '#2c2c2c' : 'transparent',
                                     border: '1px solid',
-                                    borderColor: 'divider',
+                                    borderColor: theme === 'dark' ? 'grey.700' : 'divider',
                                     borderRadius: '8px !important',
                                     '&:not(:last-child)': { mb: 1 },
                                 }}
@@ -116,15 +118,15 @@ export default function HelpCenter() {
                                     expandIcon={<ExpandMoreIcon />}
                                     sx={{ 
                                         borderRadius: '8px',
-                                        '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.02)' }
+                                        '&:hover': { backgroundColor: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.02)' }
                                     }}
                                 >
-                                    <Typography sx={{ fontWeight: 500 }}>
+                                    <Typography sx={{ fontWeight: 500, color: theme === 'dark' ? 'white' : 'black' }}>
                                         {item.question}
                                     </Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>
-                                    <Typography color="text.secondary">
+                                    <Typography color={theme === 'dark' ? 'grey.300' : 'text.secondary'}>
                                         {item.answer}
                                     </Typography>
                                 </AccordionDetails>

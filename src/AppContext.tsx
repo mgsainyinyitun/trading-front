@@ -14,6 +14,8 @@ interface AuthContextType {
     customer: Customer | null;
     login: (newToken: string, newCustomer: Customer) => void;
     logout: () => void;
+    theme: 'light' | 'dark'; // Added theme property
+    setTheme: (theme: 'light' | 'dark') => void; // Added setTheme function
 }
 
 const AppContext = createContext<AuthContextType>({
@@ -22,6 +24,8 @@ const AppContext = createContext<AuthContextType>({
     customer: null,
     login: () => { },
     logout: () => { },
+    theme: 'light', // Default theme
+    setTheme: (theme: 'light' | 'dark') => { }, // Default setTheme function
 });
 
 interface ProviderProps {
@@ -34,6 +38,14 @@ function CtxProvider({ children }: ProviderProps) {
         const savedCustomer = localStorage.getItem('customer');
         return savedCustomer ? JSON.parse(savedCustomer) : null;
     });
+    const [theme, setTheme] = useState<'light' | 'dark'>(
+        () => (localStorage.getItem('theme') as 'light' | 'dark') || 'light'
+    );
+
+    const updateTheme = (newTheme: 'light' | 'dark') => {
+        setTheme(newTheme);
+        localStorage.setItem('theme', newTheme);
+    };
 
     const login = (newToken: string, newCustomer: Customer) => {
         setToken(newToken);
@@ -57,6 +69,8 @@ function CtxProvider({ children }: ProviderProps) {
                 customer,
                 login,
                 logout,
+                theme, // Provide theme
+                setTheme: updateTheme,
             }}
         >
             {children}

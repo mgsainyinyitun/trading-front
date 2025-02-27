@@ -10,8 +10,13 @@ export const AppProvider = ({ children }) => {
         const savedCustomer = localStorage.getItem('customer');
         return savedCustomer ? JSON.parse(savedCustomer) : null;
     });
+    const [theme, setTheme] = useState(() => (localStorage.getItem('theme') || 'light'));
 
-    // Function to toggle theme safely
+    const updateTheme = (newTheme) => {
+        setTheme(newTheme);
+        localStorage.setItem('theme', newTheme);
+    };
+
     const login = (newToken, newCustomer) => {
         setToken(newToken);
         setCustomer(newCustomer);
@@ -27,7 +32,7 @@ export const AppProvider = ({ children }) => {
     };
 
     return (
-        <AppContext.Provider value={{ token, customer, login, logout }}>
+        <AppContext.Provider value={{ token, customer, login, logout, theme, setTheme: updateTheme }}>
             {children}
         </AppContext.Provider>
     );
