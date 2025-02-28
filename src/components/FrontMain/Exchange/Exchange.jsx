@@ -54,6 +54,7 @@ export default function Exchange() {
     const [exchangeDialogOpen, setExchangeDialogOpen] = useState(false);
     const [exchangeData, setExchangeData] = useState(null);
     const [exchangeHistory, setExchangeHistory] = useState([]);
+    const [userBalance, setUserBalance] = useState(0); // New state for user balance
     const { theme } = useAppContext();
     const navigate = useNavigate();
 
@@ -61,7 +62,22 @@ export default function Exchange() {
         fetchCoins();
         fetchExchanges();
         fetchExchangeHistory();
+        fetchUserBalance(); // Fetch user balance on component mount
     }, []);
+
+    const fetchUserBalance = async () => {
+        try {
+            const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+            const response = await axios.get(`${API_URL}/api/v1/balance`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            setUserBalance(response.data.balance || 0); // Set user balance
+        } catch (error) {
+            console.error('Error fetching user balance:', error);
+        }
+    };
 
     const fetchExchangeHistory = async () => {
         try {
@@ -198,6 +214,15 @@ export default function Exchange() {
         }
     };
 
+    const handleExchangeAll = () => {
+        if (userBalance > 0) {
+            setAmount(userBalance); // Set amount to user balance
+            handleExchange(); // Call exchange
+        } else {
+            toast.error('Insufficient balance');
+        }
+    };
+
     return (
         <Container sx={{ mb: 4, backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white'  }}>
             <ToastContainer />
@@ -205,7 +230,7 @@ export default function Exchange() {
             {/* Exchange Form */}
             <Paper elevation={3} sx={{ p: 3, borderRadius: 2, mb: 3, background: theme === 'dark' ? '#1e1e1e' : 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)' }}>
                 <Typography variant="h6" gutterBottom sx={{ color: theme === 'dark' ? 'white' : 'primary.main', fontWeight: 600 }}>
-                    Exchange Coins ✨
+                    Exchange Coins
                 </Typography>
 
                 <Box sx={{ mt: 3 }}>
@@ -303,6 +328,17 @@ export default function Exchange() {
                     >
                         {loading ? <CircularProgress size={24} /> : 'Exchange'}
                     </Button>
+
+                    <Button
+                        fullWidth
+                        variant="outlined"
+                        onClick={handleExchangeAll}
+                        disabled={loading}
+                        size="small"
+                        sx={{ mt: 2, borderRadius: 2 }}
+                    >
+                        Exchange All ({userBalance} {fromCoin})
+                    </Button>
                 </Box>
             </Paper>
 
@@ -310,7 +346,7 @@ export default function Exchange() {
             <Paper elevation={2} sx={{ borderRadius: 2, overflow: 'hidden', backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white' }}>
                 <Box sx={{ p: 2, backgroundColor: theme === 'dark' ? '#333' : '#f8f9fa' }}>
                     <Typography variant="h6" sx={{ color: theme === 'dark' ? 'white' : 'primary.main' }}>
-                        Exchange History 📊
+                        Exchange History
                     </Typography>
                 </Box>
 
@@ -452,7 +488,7 @@ export default function Exchange() {
                 }}
             >
                 <DialogTitle sx={{ textAlign: 'center', color: theme === 'dark' ? 'white' : 'primary.main' }}>
-                    Exchange Successful! 🎉
+                    Exchange Successful!
                 </DialogTitle>
                 <DialogContent>
                     {exchangeData && (

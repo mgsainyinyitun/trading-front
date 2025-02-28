@@ -93,7 +93,7 @@ export default function Market() {
                     fontWeight: 'bold',
                     textShadow: theme === 'dark' ? '2px 2px 4px rgba(187,134,252,0.1)' : 'none'
                 }}>
-                    Market Overview ✨
+                    Market Overview
                 </Typography>
             </Box>
             <Box sx={{ overflow: 'hidden', margin: 0, padding: 3 }}>
@@ -129,10 +129,10 @@ export default function Market() {
                                 transition: 'all 0.2s'
                             }}
                         >
-                            <option value="USDT">USDT 💵</option>
-                            <option value="USDC">USDC 💲</option>
-                            <option value="ETH">ETH ⟠</option>
-                            <option value="BTC">BTC ₿</option>
+                            <option value="USDT">USDT</option>
+                            <option value="USDC">USDC</option>
+                            <option value="ETH">ETH</option>
+                            <option value="BTC">BTC</option>
                         </select>
                     </Box>
                 </Box>

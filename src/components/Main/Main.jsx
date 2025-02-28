@@ -19,6 +19,7 @@ import TradeHistory from "../Trade/TradeHistory";
 import Withdraw from "../FrontMain/Withdraw/Withdraw";
 import WithdrawDetail from "../FrontMain/Withdraw/WithdrawDetail";
 import ExchangeHistory from "../Exchange/ExchangeHistory";
+import ChangePassword from "../Auth/ChangePassword";
 import { useAppContext } from '../../context/AppContext'; // Importing context to access theme
 
 export default function Main() {
@@ -50,6 +51,7 @@ export default function Main() {
                         {/* <Route path='/withdraw' element={<Withdraw />} /> */}
                         <Route path='/withdraw' element={<WithdrawDetail />} />
                         <Route path='/exchange-history' element={<ExchangeHistory />} />
+                        <Route path='/change-password' element={<ChangePassword />} />
                     </Routes>
                 </Box>
             </Container>
