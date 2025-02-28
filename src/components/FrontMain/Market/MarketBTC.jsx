@@ -29,7 +29,7 @@ export default function MarketBTC({data}) {
                             display: 'flex',
                             alignItems: 'center'
                         }}>
-                            <span role="img" aria-label="coin" style={{marginRight: '4px'}}>💰</span>
+                            <span role="img" aria-label="coin" style={{marginRight: '4px'}}></span>
                             Asset Name
                         </Typography>
                     </Box>
@@ -40,7 +40,7 @@ export default function MarketBTC({data}) {
                             display: 'flex',
                             alignItems: 'center'
                         }}>
-                            <span role="img" aria-label="price" style={{marginRight: '4px'}}>💎</span>
+                            <span role="img" aria-label="price" style={{marginRight: '4px'}}></span>
                             Price
                         </Typography>
                     </Box>
@@ -51,7 +51,7 @@ export default function MarketBTC({data}) {
                             display: 'flex',
                             alignItems: 'center'
                         }}>
-                            Changes <span role="img" aria-label="chart" style={{marginLeft: '4px'}}>📊</span>
+                            Changes <span role="img" aria-label="chart" style={{marginLeft: '4px'}}></span>
                         </Typography>
                     </Box>
                 </Box>

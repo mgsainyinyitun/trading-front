@@ -33,7 +33,7 @@ export default function Home() {
                         tsyms: 'USDT'
                     }
                 });
-                const rawData = response.data.RAW;
+                const rawData = response.data.RAW; 
 
                 const formattedData = Object.entries(rawData).map(([symbol, data]) => ({
                     name: symbol,
@@ -126,7 +126,7 @@ export default function Home() {
                             sx={{ cursor: 'pointer', color: isDarkTheme ? '#bb86fc' : '#6a1b9a', fontWeight: 'bold', '&:hover': { color: '#9c27b0' } }}
                             onClick={() => navigate('/deposit')}
                         >
-                            Payment 💰
+                            Payment
                         </Typography>
                     </Grid>
                     <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
@@ -150,31 +150,31 @@ export default function Home() {
                             }}
                             onClick={() => navigate('/withdraw')}
                         >
-                            Withdraw 💎
+                            Withdraw
                         </Typography>
                     </Grid>
                     <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
                         <SupportAgentRoundedIcon sx={{ fontSize: 50, color: isDarkTheme ? '#4caf50' : '#388e3c', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.1)' } }} />
                         <Typography variant="body1" component="div" sx={{ color: isDarkTheme ? '#4caf50' : '#388e3c', fontWeight: 'bold' }}>
-                            Support 🎧
+                            Support
                         </Typography>
                     </Grid>
                     <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
                         <GTranslateRoundedIcon sx={{ fontSize: 50, color: isDarkTheme ? '#f44336' : '#d32f2f', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.1)' } }} />
                         <Typography variant="body1" component="div" sx={{ color: isDarkTheme ? '#f44336' : '#d32f2f', fontWeight: 'bold' }}>
-                            Language 🌍
+                            Language
                         </Typography>
                     </Grid>
                     <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
                         <DescriptionIcon sx={{ fontSize: 50, color: isDarkTheme ? '#ff9800' : '#f57c00', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.1)' } }} />
                         <Typography variant="body1" component="div" sx={{ color: isDarkTheme ? '#ff9800' : '#f57c00', fontWeight: 'bold' }}>
-                            Contract 📝
+                            Contract
                         </Typography>
                     </Grid>
                     <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
                         <GetAppIcon sx={{ fontSize: 50, color: isDarkTheme ? '#00bcd4' : '#0097a7', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.1)' } }} />
                         <Typography variant="body1" component="div" sx={{ color: isDarkTheme ? '#00bcd4' : '#0097a7', fontWeight: 'bold' }}>
-                            Download 📱
+                            Download
                         </Typography>
                     </Grid>
                 </Grid>
@@ -212,7 +212,7 @@ export default function Home() {
                                     <img src={FutureTrading} width={70} style={{ borderRadius: '10px' }} />
                                 </Box>
                                 <Typography variant="h6" color={isDarkTheme ? '#03a9f4' : '#1976d2'}>
-                                    Future Trading 📈
+                                    Future Trading
                                 </Typography>
                             </Box>
                         </CardContent>
@@ -224,7 +224,7 @@ export default function Home() {
                                     <img src={HelpCenter} width={70} style={{ borderRadius: '10px' }} />
                                 </Box>
                                 <Typography variant="h6" color={isDarkTheme ? '#f44336' : '#d32f2f'}>
-                                    Help Center 💁‍♂️
+                                    Help Center
                                 </Typography>
                             </Box>
                         </CardContent>
@@ -246,7 +246,7 @@ export default function Home() {
                         textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
                     }}>
                         <Typography variant="h4" sx={{ color: '#7c4dff', fontWeight: 'bold' }}>
-                            LOCK-UP MINING 🌟
+                            LOCK-UP MINING
                             <Typography variant="h6" sx={{
                                 color: '#4caf50',
                                 fontSize: '1.1rem',
@@ -265,12 +265,12 @@ export default function Home() {
                 <Box display='flex' justifyContent='space-around' p={2} sx={{ background: isDarkTheme ? 'rgba(50, 50, 50, 0.9)' : 'rgba(255,255,255,0.9)' }}>
                     <Box>
                         <a className="main-a" href="#" style={{ color: '#7c4dff', fontWeight: 'bold', textDecoration: 'none' }}>
-                            Running List 📋
+                            Running List
                         </a>
                     </Box>
                     <Box>
                         <a className="main-a" href="#" style={{ color: '#7c4dff', fontWeight: 'bold', textDecoration: 'none' }}>
-                            Volume 📊
+                            Volume
                         </a>
                     </Box>
                 </Box>
@@ -280,13 +280,13 @@ export default function Home() {
             <Box sx={{ background: isDarkTheme ? 'rgba(50, 50, 50, 0.9)' : 'rgba(255,255,255,0.9)', borderRadius: '15px', mt: 2, p: 2, boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: 1 }}>
                     <Box sx={{ minWidth: '20%' }}>
-                        <Typography variant="body2" sx={{ color: isDarkTheme ? 'lightgray' : '#666', fontWeight: 'bold' }}>Name 💎</Typography>
+                        <Typography variant="body2" sx={{ color: isDarkTheme ? 'lightgray' : '#666', fontWeight: 'bold' }}>Name</Typography>
                     </Box>
                     <Box sx={{ minWidth: '20%' }}>
-                        <Typography variant="body2" sx={{ color: isDarkTheme ? 'lightgray' : '#666', fontWeight: 'bold' }}>Last Price 💰</Typography>
+                        <Typography variant="body2" sx={{ color: isDarkTheme ? 'lightgray' : '#666', fontWeight: 'bold' }}>Last Price</Typography>
                     </Box>
                     <Box sx={{ minWidth: '20%', display: 'flex', justifyContent: 'flex-end' }}>
-                        <Typography variant="body2" sx={{ color: isDarkTheme ? 'lightgray' : '#666', fontWeight: 'bold' }}>Ups and Downs 📈</Typography>
+                        <Typography variant="body2" sx={{ color: isDarkTheme ? 'lightgray' : '#666', fontWeight: 'bold' }}>Ups and Downs</Typography>
                     </Box>
                 </Box>
             </Box>

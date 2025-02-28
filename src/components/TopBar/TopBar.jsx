@@ -6,9 +6,13 @@ import { useAppContext } from '../../context/AppContext';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
-import HomeIcon from '@mui/icons-material/Home';
+import LanguageIcon from '@mui/icons-material/Language'; // Changed HomeIcon to LanguageIcon
 import Brightness4Icon from '@mui/icons-material/Brightness4'; // Import icon for theme toggle
 import Brightness7Icon from '@mui/icons-material/Brightness7'; // Import icon for theme toggle
+import VpnKeyIcon from '@mui/icons-material/VpnKey'; // Import icon for change password
+import BadgeIcon from '@mui/icons-material/Badge'; // Import icon for ID
+import HelpIcon from '@mui/icons-material/Help'; // Import icon for help center
+import ChangePasswordIcon from '@mui/icons-material/VpnKey'; // Import icon for change password
 
 export default function TopBar() {
     const navigate = useNavigate();
@@ -28,10 +32,20 @@ export default function TopBar() {
         navigate('/profile');
     };
 
+    const handleChangePassword = () => {
+        handleClose();
+        navigate('/change-password'); // Navigate to change password page
+    };
+
     const handleSignOut = () => {
         handleClose();
         logout();
         navigate('/signin');
+    };
+
+    const handleHelpCenter = () => {
+        handleClose();
+        navigate('/help'); // Navigate to help page
     };
 
     const toggleTheme = () => {
@@ -44,30 +58,11 @@ export default function TopBar() {
 
     return (
         <AppBar position="fixed" sx={{ background: theme === 'dark' ? '#333' : '#fff', color: theme === 'dark' ? '#fff' : 'primary.main', height: '48px', boxShadow: 'none', borderBottom: theme === 'dark' ? '1px solid #555' : '1px solid #b3e5fc' }}>
-            <Toolbar sx={{ minHeight: '48px !important' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+            <Toolbar sx={{ minHeight: '48px !important', display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+
+                <Box>
                     <IconButton
                         size="large"
-                        onClick={() => navigate('/')}
-                        color="inherit"
-                        sx={{ mr: 1 }}
-                    >
-                        <HomeIcon fontSize="small" />
-                    </IconButton>
-                    <Typography variant="subtitle1" component="div">
-                        Welcome ! {customer ? customer.name : 'Guest'}
-                    </Typography>
-                </Box>
-                <div>
-                    <IconButton
-                        size="small"
-                        onClick={toggleTheme} // Add onClick for theme toggle
-                        color="inherit"
-                    >
-                        {theme === 'light' ? <Brightness4Icon /> : <Brightness7Icon />} {/* Change icon based on theme */}
-                    </IconButton>
-                    <IconButton
-                        size="small"
                         onClick={handleMenu}
                         color="inherit"
                     >
@@ -94,22 +89,52 @@ export default function TopBar() {
                         {customer ? (
                             <>
                                 <MenuItem onClick={handleProfile} sx={{ color: theme === 'dark' ? '#fff' : 'primary.main' }}>
-                                    <PersonIcon sx={{ mr: 1 , color: theme === 'dark' ? '#fff' : 'primary.main'}} fontSize="small" />
+                                    <PersonIcon sx={{ mr: 1, color: theme === 'dark' ? '#fff' : 'primary.main' }} fontSize="small" />
                                     Profile
                                 </MenuItem>
+                                <MenuItem sx={{ color: theme === 'dark' ? '#fff' : 'primary.main' }}>
+                                    <BadgeIcon sx={{ mr: 1, color: theme === 'dark' ? '#fff' : 'primary.main' }} fontSize="small" />
+                                    ID: {String(customer.id).padStart(8, '0')} {/* Display customer ID padded to 8 digits */}
+                                </MenuItem>
+                                <MenuItem onClick={handleChangePassword} sx={{ color: theme === 'dark' ? '#fff' : 'primary.main' }}>
+                                    <ChangePasswordIcon sx={{ mr: 1, color: theme === 'dark' ? '#fff' : 'primary.main' }} fontSize="small" />
+                                    Change Password
+                                </MenuItem>
                                 <MenuItem onClick={handleSignOut} sx={{ color: theme === 'dark' ? '#fff' : 'primary.main' }}>
-                                    <LogoutIcon sx={{ mr: 1 , color: theme === 'dark' ? '#fff' : 'primary.main'}} fontSize="small" />
+                                    <LogoutIcon sx={{ mr: 1, color: theme === 'dark' ? '#fff' : 'primary.main' }} fontSize="small" />
                                     Sign Out
+                                </MenuItem>
+                                <MenuItem onClick={handleHelpCenter} sx={{ color: theme === 'dark' ? '#fff' : 'primary.main' }}>
+                                    <HelpIcon sx={{ mr: 1, color: theme === 'dark' ? '#fff' : 'primary.main' }} fontSize="small" />
+                                    Help Center
                                 </MenuItem>
                             </>
                         ) : (
                             <MenuItem onClick={() => navigate('/signin')} sx={{ color: theme === 'dark' ? '#fff' : 'primary.main' }}>
-                                <LoginIcon sx={{ mr: 1 , color: theme === 'dark' ? '#fff' : 'primary.main'}} fontSize="small" />
+                                <LoginIcon sx={{ mr: 1, color: theme === 'dark' ? '#fff' : 'primary.main' }} fontSize="small" />
                                 Sign In
                             </MenuItem>
                         )}
                     </Menu>
-                </div>
+                </Box>
+
+                <IconButton
+                    size="small"
+                    onClick={toggleTheme} // Add onClick for theme toggle
+                    color="inherit"
+                >
+                    {theme === 'light' ? <Brightness4Icon /> : <Brightness7Icon />} {/* Change icon based on theme */}
+                </IconButton>
+
+                <Box mr={5}>
+                    <IconButton
+                        size="small"
+                        color="inherit"
+                        sx={{ mr: 1 }}
+                    >
+                        <LanguageIcon fontSize="small" /> {/* Changed HomeIcon to LanguageIcon */}
+                    </IconButton>
+                </Box>
             </Toolbar>
         </AppBar>
     );

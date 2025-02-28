@@ -17,11 +17,12 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import back icon
 import { styled } from '@mui/material/styles';
 import { toast, ToastContainer } from 'react-toastify';
 import { QRCodeCanvas } from "qrcode.react";
 import axios from 'axios';
+import { useAppContext } from '../../../context/AppContext';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 
 const VisuallyHiddenInput = styled('input')`
     clip: rect(0 0 0 0);
@@ -48,13 +49,14 @@ export default function DepositDetail() {
     const [loading, setLoading] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
     const [transaction, setTransaction] = useState(null);
+    const { theme } = useAppContext();
 
     const address = dummyAddresses[coin];
     const navigate = useNavigate();
 
     const handleCopy = () => {
         navigator.clipboard.writeText(address);
-        toast.success('Address copied! 📋');
+        toast.success('Address copied!');
     };
 
     const handleFileChange = (event) => {
@@ -62,9 +64,9 @@ export default function DepositDetail() {
         if (file) {
             if (file.type.startsWith('image/')) {
                 setFile(file);
-                toast.success('Screenshot uploaded! 📸');
+                toast.success('Screenshot uploaded!');
             } else {
-                toast.error('Please upload an image file 🖼️');
+                toast.error('Please upload an image file');
             }
         }
     };
@@ -98,47 +100,44 @@ export default function DepositDetail() {
             setDescription('');
             setFile(null);
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Oops! Deposit failed 😢');
+            toast.error(error.response?.data?.message || 'Oops! Deposit failed');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <Container maxWidth="xs" sx={{ mt: { xs: 1, sm: 2 }, mb: { xs: 2, sm: 4 } }}>
+        <Container maxWidth="sm" sx={{ mt: { xs: 1, sm: 2 }, mb: { xs: 2, sm: 4 } }}>
             <ToastContainer />
-            <Paper elevation={3} sx={{ p: { xs: 2, sm: 3 }, borderRadius: 2 }}>
-                <Button
-                    startIcon={<ArrowBackIcon />}
+            <Paper elevation={3} sx={{ p: { xs: 2, sm: 3 }, borderRadius: 2, backgroundColor: theme === 'dark' ? '#2a2a2a' : '#ffffff' }}>
+                <IconButton
                     onClick={() => navigate('/deposit')} // Navigate back to deposit page
-                    sx={{ mb: 2 }}
+                    sx={{ mb: 2, color: theme === 'dark' ? '#ffffff' : '#000000' }}
                 >
-                    Back
-                </Button>
-                <Typography variant="h6" gutterBottom align="center" sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem' } }}>
-                    Deposit {coin?.toUpperCase()} ✨
+                    <KeyboardArrowLeftIcon />
+                </IconButton>
+                <Typography variant="h6" gutterBottom align="center" sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem' }, color: theme === 'dark' ? '#ffffff' : '#000000' }}>
+                    Deposit {coin?.toUpperCase()}
                 </Typography>
 
-                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-                    <QRCodeCanvas value={address} size={120} level="H" />
+                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3, mt:6}}>
+                    <QRCodeCanvas value={address} size={140} level="H" />
                 </Box>
 
                 <Box sx={{
                     display: 'flex',
+                    flexDirection: 'column',
                     alignItems: 'center',
                     gap: 1,
-                    mb: 2,
+                    mb: 6,
                     p: 1.5,
-                    backgroundColor: '#f8f9fa',
-                    borderRadius: 2,
-                    border: '1px solid #e0e0e0'
                 }}>
-                    <Typography variant="body2" sx={{ flexGrow: 1, wordBreak: 'break-all', fontSize: '0.8rem' }}>
+                    <Typography variant="body2" sx={{ flexGrow: 1, wordBreak: 'break-all', fontSize: '1rem', color: theme === 'dark' ? '#ffffff' : '#000000', textAlign: 'center' }}>
                         {address}
                     </Typography>
-                    <IconButton onClick={handleCopy} size="small" color="primary" sx={{ p: 0.5 }}>
-                        <ContentCopyIcon fontSize="small" />
-                    </IconButton>
+                    <Button variant="outlined" onClick={handleCopy} size="small" color="primary" sx={{ p: 0.5, px: 2 }} startIcon={<ContentCopyIcon fontSize="small" />}>
+                        COPY
+                    </Button>
                 </Box>
 
                 <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
@@ -149,31 +148,40 @@ export default function DepositDetail() {
                         onChange={(e) => setAmount(e.target.value)}
                         size="small"
                         required
-                        sx={{ '& .MuiInputBase-input': { fontSize: '0.9rem' } }}
+                        sx={{
+                            borderRadius: 2,
+                            border: '1px solid #bdbdbd',
+                            '& .MuiInputLabel-root': {
+                                color: theme === 'dark' ? '#ffffff' : '#000000'
+                            },
+                            '& .MuiInputBase-input': {
+                                color: theme === 'dark' ? '#ffffff' : '#000000' // Added input color
+                            }
+                        }}
                     />
 
-                    <TextField
+                    {/* <TextField
                         label="Description"
                         multiline
                         rows={2}
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         size="small"
-                        sx={{ '& .MuiInputBase-input': { fontSize: '0.9rem' } }}
-                    />
+                        sx={{ '& .MuiInputBase-input': { fontSize: '0.9rem', backgroundColor: theme === 'dark' ? 'white' : '#ffffff', color: theme === 'dark' ? '#ffffff' : '#000000' } }}
+                    /> */}
 
                     <Box sx={{
                         border: '1px dashed #bdbdbd',
                         borderRadius: 2,
                         p: 1.5,
                         textAlign: 'center',
-                        backgroundColor: '#fafafa'
+                        backgroundColor: theme === 'dark' ? '#2c2c2c' : '#fafafa'
                     }}>
                         <Button
                             component="label"
                             startIcon={<PhotoCamera />}
                             size="small"
-                            sx={{ mb: 0.5 }}
+                            sx={{ mb: 0.5, color: theme === 'dark' ? '#ffffff' : '#000000' }}
                         >
                             Upload Screenshot
                             <VisuallyHiddenInput
@@ -182,7 +190,7 @@ export default function DepositDetail() {
                                 onChange={handleFileChange}
                             />
                         </Button>
-                        <Typography variant="caption" display="block" color="text.secondary" sx={{ fontSize: '0.7rem' }}>
+                        <Typography variant="caption" display="block" color="text.secondary" sx={{ fontSize: '0.7rem', color: theme === 'dark' ? '#ffffff' : '#000000' }}>
                             {file ? `📎 ${file.name}` : 'No file selected'}
                         </Typography>
                     </Box>
@@ -190,10 +198,12 @@ export default function DepositDetail() {
                     <Alert severity="warning" sx={{ 
                         mt: 1, 
                         '& .MuiAlert-message': { 
-                            fontSize: '0.8rem' 
-                        } 
+                            fontSize: '0.8rem', 
+                            color: theme === 'dark' ? '#ffffff' : '#000000' 
+                        },
+                        backgroundColor: theme === 'dark' ? '#333333' : '#f8f9fa'
                     }}>
-                        Please ensure you're sending {coin?.toUpperCase()} on the correct network 🚨
+                        Please ensure you're sending {coin?.toUpperCase()} on the correct network
                     </Alert>
 
                     <Button
@@ -203,12 +213,17 @@ export default function DepositDetail() {
                             mt: 1,
                             borderRadius: 2,
                             textTransform: 'none',
-                            fontSize: '0.9rem'
+                            fontSize: '0.9rem',
+                            backgroundColor: theme === 'dark' ? '#bb86fc' : '#6200ea',
+                            color: '#ffffff',
+                            '&:disabled': {
+                                color: theme === 'dark' ? '#ffffff' : '#000000'
+                            }
                         }}
                         disabled={!amount || !file || loading}
                         onClick={handleSubmit}
                     >
-                        {loading ? <CircularProgress size={24} color="inherit" /> : '✨ Submit Deposit'}
+                        {loading ? <CircularProgress size={24} color="inherit" /> : 'Submit Deposit'}
                     </Button>
                 </Box>
             </Paper>
@@ -218,10 +233,10 @@ export default function DepositDetail() {
                 onClose={() => setOpenDialog(false)} 
                 maxWidth="xs" 
                 fullWidth
-                PaperProps={{ sx: { borderRadius: 2 } }}
+                PaperProps={{ sx: { borderRadius: 2, backgroundColor: theme === 'dark' ? '#1e1e1e' : '#ffffff' } }}
             >
-                <DialogTitle sx={{ textAlign: 'center', pb: 1, fontSize: '1.1rem' }}>
-                    Deposit Submitted Successfully! 🎉
+                <DialogTitle sx={{ textAlign: 'center', pb: 1, fontSize: '1.1rem', color: theme === 'dark' ? '#ffffff' : '#000000' }}>
+                    Deposit Submitted Successfully!
                 </DialogTitle>
                 <DialogContent>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, py: 1 }}>
@@ -235,24 +250,24 @@ export default function DepositDetail() {
                             />
                         </Box>
 
-                        <Typography variant="body2" sx={{ textAlign: 'center', fontWeight: 500 }}>
+                        <Typography variant="body2" sx={{ textAlign: 'center', fontWeight: 500, color: theme === 'dark' ? '#ffffff' : '#000000' }}>
                             ID: {transaction?.transactionId}
                         </Typography>
 
                         <Box sx={{
-                            backgroundColor: '#f8f9fa',
+                            backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f8f9fa',
                             p: 1.5,
                             borderRadius: 2,
                             fontSize: '0.8rem'
                         }}>
-                            <Typography variant="body2" sx={{ mb: 0.5 }}>
-                                💰 {transaction?.amount} {coin?.toUpperCase()}
+                            <Typography variant="body2" sx={{ mb: 0.5, color: theme === 'dark' ? '#ffffff' : '#000000' }}>
+                                 {transaction?.amount} {coin?.toUpperCase()}
                             </Typography>
-                            <Typography variant="body2" sx={{ mb: 0.5 }}>
-                                📝 {transaction?.description}
+                            <Typography variant="body2" sx={{ mb: 0.5, color: theme === 'dark' ? '#ffffff' : '#000000' }}>
+                                 {transaction?.description}
                             </Typography>
-                            <Typography variant="body2">
-                                🕒 {new Date(transaction?.createdAt).toLocaleString()}
+                            <Typography variant="body2" sx={{ color: theme === 'dark' ? '#ffffff' : '#000000' }}>
+                                 {new Date(transaction?.createdAt).toLocaleString()}
                             </Typography>
                         </Box>
 
@@ -261,7 +276,7 @@ export default function DepositDetail() {
                                 variant="outlined"
                                 onClick={() => setOpenDialog(false)}
                                 size="small"
-                                sx={{ borderRadius: 2, textTransform: 'none' }}
+                                sx={{ borderRadius: 2, textTransform: 'none', color: theme === 'dark' ? '#ffffff' : '#000000' }}
                             >
                                 Close
                             </Button>
@@ -269,7 +284,7 @@ export default function DepositDetail() {
                                 variant="contained"
                                 onClick={() => navigate('/transactions')}
                                 size="small"
-                                sx={{ borderRadius: 2, textTransform: 'none' }}
+                                sx={{ borderRadius: 2, textTransform: 'none', backgroundColor: theme === 'dark' ? '#bb86fc' : '#6200ea', color: theme === 'dark' ? 'white' : '#000000' }}
                             >
                                 View Transactions
                             </Button>
