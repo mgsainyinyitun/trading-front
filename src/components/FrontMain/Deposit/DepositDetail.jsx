@@ -17,7 +17,6 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import back icon
 import { styled } from '@mui/material/styles';
 import { toast, ToastContainer } from 'react-toastify';
 import { QRCodeCanvas } from "qrcode.react";
