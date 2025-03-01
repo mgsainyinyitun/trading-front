@@ -18,9 +18,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import LoginIcon from '@mui/icons-material/Login';
 import Exchange from "../Exchange/Exchange";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import CandleChart from "./CandleChart";
 =======
 >>>>>>> f4c3b16 (general fix)
+=======
+import CandleChart from "./CandleChart";
+>>>>>>> ec72901 (general fix)
 
 const ControlChip = ({ label, isSelected, ...props }) => (
     <Chip
@@ -60,8 +64,12 @@ export default function Trade() {
     const [timeFrame, setTimeFrame] = useState(30); // New state for timeframe
 =======
     const [isDarkTheme, setIsDarkTheme] = useState(false); // New state for theme
+<<<<<<< HEAD
     const [timeFrame, setTimeFrame] = useState(1); // New state for timeframe
 >>>>>>> f4c3b16 (general fix)
+=======
+    const [timeFrame, setTimeFrame] = useState(30); // New state for timeframe
+>>>>>>> ec72901 (general fix)
 
     const handleTradeClick = (type) => {
         if (!customer) {
@@ -345,6 +353,7 @@ export default function Trade() {
                     }}>
                         <Box sx={{ borderRadius: '5px', background: 'rgba(0, 0, 0, 0.08)', marginBottom: 3, }}>
 <<<<<<< HEAD
+<<<<<<< HEAD
                             <ControlChip sx={{ color: theme === 'dark' ? 'white' : 'black' }} label='5 M' onClick={() => { setTimeFrame(5); fetchData(5); }} isSelected={timeFrame === 5} />
                             <ControlChip sx={{ color: theme === 'dark' ? 'white' : 'black' }} label='10 M' onClick={() => { setTimeFrame(10); fetchData(10); }} isSelected={timeFrame === 10} />
                             <ControlChip sx={{ color: theme === 'dark' ? 'white' : 'black' }} label='15 M' onClick={() => { setTimeFrame(15); fetchData(15); }} isSelected={timeFrame === 15} />
@@ -356,9 +365,15 @@ export default function Trade() {
                             <ControlChip sx={{ color: theme === 'dark' ? 'white' : 'black' }} label='1 W' onClick={() => { setTimeFrame(10080); fetchData(10080); }} isSelected={timeFrame === 10080} />
 =======
                             <ControlChip label='1 M' onClick={() => { setTimeFrame(1); fetchData(1); }} isSelected={timeFrame === 1} />
+=======
+>>>>>>> ec72901 (general fix)
                             <ControlChip label='5 M' onClick={() => { setTimeFrame(5); fetchData(5); }} isSelected={timeFrame === 5} />
+                            <ControlChip label='10 M' onClick={() => { setTimeFrame(10); fetchData(10); }} isSelected={timeFrame === 10} />
+                            <ControlChip label='15 M' onClick={() => { setTimeFrame(15); fetchData(15); }} isSelected={timeFrame === 15} />
                             <ControlChip label='30 M' onClick={() => { setTimeFrame(30); fetchData(30); }} isSelected={timeFrame === 30} />
                             <ControlChip label='1 H' onClick={() => { setTimeFrame(60); fetchData(60); }} isSelected={timeFrame === 60} />
+                            <ControlChip label='2 H' onClick={() => { setTimeFrame(120); fetchData(120); }} isSelected={timeFrame === 120} />
+                            <ControlChip label='4 H' onClick={() => { setTimeFrame(240); fetchData(240); }} isSelected={timeFrame === 240} />
                             <ControlChip label='1 D' onClick={() => { setTimeFrame(1440); fetchData(1440); }} isSelected={timeFrame === 1440} />
                             <ControlChip label='1 W' onClick={() => { setTimeFrame(10080); fetchData(10080); }} isSelected={timeFrame === 10080} />
 >>>>>>> f4c3b16 (general fix)
@@ -386,6 +401,7 @@ export default function Trade() {
                     </Box>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
                     {/* <InfoChart focusCoin={focusCoin} isDarkTheme={isDarkTheme} timeFrame={timeFrame} /> */}
                     <Box sx={{padding: '20px' , background: theme === 'dark' ? '#1e1e1e' : 'white'}}>
                         <CandleChart focusCoin={focusCoin} isDarkTheme={theme === 'dark'} timeFrame={timeFrame} />
@@ -393,6 +409,10 @@ export default function Trade() {
 =======
                     <InfoChart focusCoin={focusCoin} isDarkTheme={isDarkTheme} />
 >>>>>>> f4c3b16 (general fix)
+=======
+                    {/* <InfoChart focusCoin={focusCoin} isDarkTheme={isDarkTheme} timeFrame={timeFrame} /> */}
+                    <CandleChart focusCoin={focusCoin} isDarkTheme={isDarkTheme} timeFrame={timeFrame} />
+>>>>>>> ec72901 (general fix)
                     {/* <InfoHistChart focusCoin={focusCoin} />
                     <InfoBarChart focusCoin={focusCoin} /> */}
 
@@ -468,3 +488,9 @@ export default function Trade() {
         </Box>
     )
 }
+<<<<<<< HEAD
+=======
+
+
+// ## mysql://avnadmin:AVNS_jafwrLQ1H9kfBzrBlWu@mysql-bookscribe-bookscribe.f.aivencloud.com:11886/defaultdb?ssl-mode=REQUIRED
+>>>>>>> ec72901 (general fix)

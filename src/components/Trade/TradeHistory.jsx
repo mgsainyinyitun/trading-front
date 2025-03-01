@@ -27,7 +27,10 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import * as XLSX from 'xlsx';
 import NoDataIcon from '@mui/icons-material/RemoveShoppingCart'; // Import an icon for no data
+<<<<<<< HEAD
 import { useAppContext } from '../../context/AppContext';
+=======
+>>>>>>> ec72901 (general fix)
 
 const statusColors = {
     PENDING: 'warning',
@@ -119,10 +122,17 @@ export default function TradeHistory() {
     };
 
     return (
+<<<<<<< HEAD
         <Container maxWidth="md" sx={{ mt: { xs: 2, sm: 3 }, mb: 4, height: '100vh', backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white' }}>
             <ToastContainer />
             <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden', height: '100%', backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white' }}>
                 <Box sx={{ p: 2, backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f8f9fa' }}>
+=======
+        <Container maxWidth="md" sx={{ mt: { xs: 2, sm: 3 }, mb: 4, height: '100vh' }}>
+            <ToastContainer />
+            <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden', height: '100%' }}>
+                <Box sx={{ p: 2, backgroundColor: '#f8f9fa' }}>
+>>>>>>> ec72901 (general fix)
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                         <Typography variant="h6" sx={{ color: theme === 'dark' ? 'white' : 'primary.main' }}>
                             Trade History 📈
@@ -189,7 +199,11 @@ export default function TradeHistory() {
                     </Box>
                 </Box>
 
+<<<<<<< HEAD
                 <TableContainer sx={{ minHeight: 'calc(100vh - 200px)', backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white' }}>
+=======
+                <TableContainer sx={{ minHeight: 'calc(100vh - 200px)' }}> {/* Adjust height as needed */}
+>>>>>>> ec72901 (general fix)
                     <Table stickyHeader size="small">
                         <TableHead>
                             <TableRow>
@@ -220,7 +234,11 @@ export default function TradeHistory() {
                                 filteredTrades.map((trade) => (
                                     <TableRow key={trade.id} hover>
                                         <TableCell>
+<<<<<<< HEAD
                                             <Typography variant="body2" sx={{ color: theme === 'dark' ? 'white' : 'black' }}>
+=======
+                                            <Typography variant="body2">
+>>>>>>> ec72901 (general fix)
                                                 {trade.account.accountNo}
                                             </Typography>
                                         </TableCell>
@@ -236,12 +254,20 @@ export default function TradeHistory() {
                                             />
                                         </TableCell>
                                         <TableCell>
+<<<<<<< HEAD
                                             <Typography variant="body2" sx={{ fontWeight: 500, color: theme === 'dark' ? 'white' : 'black' }}>
+=======
+                                            <Typography variant="body2" sx={{ fontWeight: 500 }}>
+>>>>>>> ec72901 (general fix)
                                                 {trade.tradeQuantity} USDT
                                             </Typography>
                                         </TableCell>
                                         <TableCell>
+<<<<<<< HEAD
                                             <Typography variant="body2" sx={{ color: theme === 'dark' ? 'white' : 'black' }}>
+=======
+                                            <Typography variant="body2">
+>>>>>>> ec72901 (general fix)
                                                 {trade.period}s
                                             </Typography>
                                         </TableCell>
@@ -255,7 +281,11 @@ export default function TradeHistory() {
                                         </TableCell>
                                         <TableCell>
                                             {trade.tradingStatus === 'FAILED' ? (
+<<<<<<< HEAD
                                                 <Typography variant="body2" sx={{ color: theme === 'dark' ? 'white' : 'black' }}>NO RESULT</Typography>
+=======
+                                                <Typography variant="body2">NO RESULT</Typography>
+>>>>>>> ec72901 (general fix)
                                             ) : trade.isSuccess !== null && (
                                                 <Chip
                                                     label={trade.isSuccess ? 'WIN' : 'LOSE'}
@@ -266,7 +296,11 @@ export default function TradeHistory() {
                                             )}
                                         </TableCell>
                                         <TableCell>
+<<<<<<< HEAD
                                             <Typography variant="caption" sx={{ color: theme === 'dark' ? 'white' : 'black' }}>
+=======
+                                            <Typography variant="caption">
+>>>>>>> ec72901 (general fix)
                                                 {formatDate(trade.createdAt)}
                                             </Typography>
                                         </TableCell>

@@ -9,7 +9,7 @@ import { useInterval } from "react-use";
 <<<<<<< HEAD
 export default function InfoChart({ focusCoin, isDarkTheme, timeFrame }) {
 =======
-export default function InfoChart({ focusCoin, isDarkTheme }) {
+export default function InfoChart({ focusCoin, isDarkTheme, timeFrame }) {
 >>>>>>> f4c3b16 (general fix)
     const [data, setData] = useState([]);
     const [averageMA, setAverageMA] = useState({ ma5: 0, ma10: 0, ma20: 0 });
