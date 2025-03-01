@@ -490,7 +490,3 @@ export default function Trade() {
 }
 <<<<<<< HEAD
 =======
-
-
-// ## mysql://avnadmin:AVNS_jafwrLQ1H9kfBzrBlWu@mysql-bookscribe-bookscribe.f.aivencloud.com:11886/defaultdb?ssl-mode=REQUIRED
->>>>>>> ec72901 (general fix)
