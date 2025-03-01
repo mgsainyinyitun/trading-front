@@ -16,19 +16,12 @@ import {
     Select,
     MenuItem,
     FormControl,
-<<<<<<< HEAD
     InputLabel,
     Chip
 } from '@mui/material';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-=======
-    InputLabel
-} from '@mui/material';
-import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
->>>>>>> f4c3b16 (general fix)
 
 export default function WithdrawDetail() {
     const [coin, setCoin] = useState('usdt');
@@ -38,11 +31,8 @@ export default function WithdrawDetail() {
     const [rate, setRate] = useState(null);
     const [loading, setLoading] = useState(false);
     const [confirmOpen, setConfirmOpen] = useState(false);
-<<<<<<< HEAD
     const [transactionDetails, setTransactionDetails] = useState(null);
     const navigate = useNavigate();
-=======
->>>>>>> f4c3b16 (general fix)
 
     const coins = [
         { value: 'usdt', label: 'USDT' },
@@ -89,18 +79,11 @@ export default function WithdrawDetail() {
         setLoading(true);
         try {
             const API_URL = process.env.REACT_APP_API_URL;
-<<<<<<< HEAD
             const response = await axios.post(`${API_URL}/api/v1/transactions/withdrawal`, {
                 address,
                 currency: coin.toUpperCase(),
                 amount: parseFloat(amount),
                 description: "Withdrawal for savings"
-=======
-            await axios.post(`${API_URL}/api/v1/withdraw`, {
-                coin: coin.toUpperCase(),
-                amount,
-                address
->>>>>>> f4c3b16 (general fix)
             }, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -108,10 +91,7 @@ export default function WithdrawDetail() {
                 }
             });
             toast.success('Withdrawal request submitted');
-<<<<<<< HEAD
             setTransactionDetails(response.data.transaction);
-=======
->>>>>>> f4c3b16 (general fix)
             setConfirmOpen(false);
             setAddress('');
             setAmount('');
@@ -245,7 +225,6 @@ export default function WithdrawDetail() {
                     </Button>
                 </DialogActions>
             </Dialog>
-<<<<<<< HEAD
 
             {transactionDetails && (
                 <Dialog open={true} onClose={() => setTransactionDetails(null)}>
@@ -277,8 +256,6 @@ export default function WithdrawDetail() {
                     </DialogActions>
                 </Dialog>
             )}
-=======
->>>>>>> f4c3b16 (general fix)
         </Container>
     );
 }

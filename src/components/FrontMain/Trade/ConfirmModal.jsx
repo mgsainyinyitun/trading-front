@@ -4,8 +4,6 @@ import axios from "axios";
 import { useInterval } from "react-use";
 import { useAppContext } from "../../../context/AppContext";
 import { toast, ToastContainer } from "react-toastify";
-import { useAppContext } from "../../../context/AppContext";
-import { toast, ToastContainer } from "react-toastify";
 
 const style = {
     position: 'absolute',

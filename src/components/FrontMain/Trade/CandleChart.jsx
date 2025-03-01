@@ -111,11 +111,7 @@ const CandleChart = ({ focusCoin, isDarkTheme, timeFrame }) => {
     }, [focusCoin, timeFrame]);
 
     return (
-<<<<<<< HEAD
         <Box sx={{border: '1px solid #ccc', borderRadius: '10px', padding: '20px', background: isDarkTheme ? 'black' : 'white'}}>
-=======
-        <Box>
->>>>>>> ec72901 (general fix)
             <ReactApexChart options={state.options} series={state.series} type="candlestick" height={350} />
         </Box>
     );

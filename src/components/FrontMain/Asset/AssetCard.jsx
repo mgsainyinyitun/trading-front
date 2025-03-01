@@ -5,17 +5,10 @@ import usdtIcon from '../../../images/coin-icons/usdt.png';
 import usdcIcon from '../../../images/coin-icons/usdc.png';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-<<<<<<< HEAD
 
 export default function AssetCard({ data, theme }) {
     const [estimatedValue, setEstimatedValue] = useState('********');
 
-=======
-
-export default function AssetCard({ data }) {
-    const [estimatedValue, setEstimatedValue] = useState('********');
-
->>>>>>> f4c3b16 (general fix)
     const getCoinIcon = (symbol) => {
         switch(symbol.toUpperCase()) {
             case 'BTC':
