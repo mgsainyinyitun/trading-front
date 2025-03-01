@@ -33,7 +33,7 @@ export default function Home() {
                         tsyms: 'USDT'
                     }
                 });
-                const rawData = response.data.RAW;
+                const rawData = response.data.RAW; 
 
                 const formattedData = Object.entries(rawData).map(([symbol, data]) => ({
                     name: symbol,
