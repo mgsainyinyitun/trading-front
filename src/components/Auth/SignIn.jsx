@@ -1,16 +1,16 @@
 import { useState } from 'react';
-import { 
-    Box, 
-    Container, 
-    TextField, 
-    Button, 
-    Typography, 
+import {
+    Box,
+    Container,
+    TextField,
+    Button,
+    Typography,
     Paper,
     InputAdornment,
     IconButton,
     CircularProgress
 } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Visibility, VisibilityOff, WbSunny, Nightlight } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
@@ -25,7 +25,7 @@ export default function SignIn() {
     });
     const [loading, setLoading] = useState(false); // New loading state
 
-    const { login } = useAppContext();
+    const { login, theme, setTheme } = useAppContext();
 
     const handleChange = (e) => {
         setFormData({
@@ -52,10 +52,10 @@ export default function SignIn() {
 
             if (response.status === 200) {
                 const { token, customer } = response.data;
-                
+
                 // Update both context and localStorage
                 login(token, customer);
-                
+
                 toast.success('Login successful');
                 setTimeout(() => {
                     navigate('/');
@@ -69,17 +69,27 @@ export default function SignIn() {
         }
     };
 
+    const toggleTheme = () => {
+        setTheme(theme === 'dark' ? 'light' : 'dark'); // Toggle between light and dark theme
+    };
+
     return (
         <Container component="main" maxWidth="xs">
             <ToastContainer />
-            <Paper elevation={3} sx={{ 
+            <Paper elevation={3} sx={{
                 marginTop: 6,
                 padding: 3,
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'center'
+                alignItems: 'center',
+                background: theme === 'dark' ? '#121212' : '#fff'
             }}>
-                <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
+                <Box sx={{ position: 'absolute', top: 16, right: 16 }}>
+                    <IconButton onClick={toggleTheme} sx={{ position: 'absolute', top: 16, right: 16 }}>
+                        {theme === 'dark' ? <WbSunny sx={{ color: '#fff' }} /> : <Nightlight sx={{ color: 'primary.main' }} />}
+                    </IconButton>
+                </Box>
+                <Typography component="h1" variant="h5" sx={{ mb: 2, color: theme === 'dark' ? '#fff' : 'primary.main' }} >
                     Sign In
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
@@ -95,11 +105,27 @@ export default function SignIn() {
                         value={formData.email}
                         size="small"
                         onChange={handleChange}
+                        sx={{
+                            borderRadius: '10px',
+                            background: theme === 'dark' ? 'gray' : '',
+                            '& .MuiInputLabel-root': { color: theme === 'dark' ? '#fff' : '' },
+                            '& .MuiInputBase-input': {
+                                color: theme === 'dark' ? '#ffffff' : '#000000' // Added input color
+                            }
+                        }}
                     />
                     <TextField
                         margin="normal"
                         required
                         fullWidth
+                        sx={{
+                            borderRadius: '10px',
+                            background: theme === 'dark' ? 'gray' : '',
+                            '& .MuiInputLabel-root': { color: theme === 'dark' ? '#fff' : '' },
+                            '& .MuiInputBase-input': {
+                                color: theme === 'dark' ? '#ffffff' : '#000000' // Added input color
+                            }
+                        }}
                         name="password"
                         label="Password"
                         type={showPassword ? 'text' : 'password'}
@@ -109,6 +135,14 @@ export default function SignIn() {
                         size="small"
                         onChange={handleChange}
                         InputProps={{
+                            sx: {
+                                borderRadius: '10px',
+                                background: theme === 'dark' ? 'gray' : '',
+                                '& .MuiInputLabel-root': { color: theme === 'dark' ? '#fff' : '' },
+                                '& .MuiInputBase-input': {
+                                    color: theme === 'dark' ? '#ffffff' : '#000000' // Added input color
+                                }
+                            },
                             endAdornment: (
                                 <InputAdornment position="end">
                                     <IconButton
@@ -125,12 +159,13 @@ export default function SignIn() {
                         type="submit"
                         fullWidth
                         variant="contained"
-                        sx={{ mt: 2, mb: 1 }}
+                        sx={{ mt: 2, mb: 1, borderRadius: '10px' }}
                         disabled={loading} // Disable button when loading
                     >
                         {loading ? <CircularProgress size={24} /> : 'Sign In'} {/* Show loading spinner */}
                     </Button>
                     <Button
+                        sx={{ mt: 2, mb: 1 , borderRadius: '10px'}}
                         fullWidth
                         variant="text"
                         size="small"

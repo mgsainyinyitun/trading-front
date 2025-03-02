@@ -142,11 +142,12 @@ export default function ExchangeHistory() {
                             placeholder="Search by currency..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            sx={{ flexGrow: 1, backgroundColor: theme === 'dark' ? '#3c3c3c' : 'white' }}
+                            sx={{ flexGrow: 1, backgroundColor: theme === 'dark' ? '#3c3c3c' : '', color: theme === 'dark' ? 'white' : '' }}
                             InputProps={{
+                                sx: { color: theme === 'dark' ? 'white' : '' },
                                 startAdornment: (
                                     <InputAdornment position="start">
-                                        <SearchIcon fontSize="small" />
+                                        <SearchIcon fontSize="small" sx={{ color: theme === 'dark' ? 'white' : '' }} />
                                     </InputAdornment>
                                 ),
                             }}
@@ -157,12 +158,12 @@ export default function ExchangeHistory() {
                                 value={filter.status}
                                 label="Status"
                                 onChange={(e) => setFilter({ ...filter, status: e.target.value })}
-                                sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : 'white' }}
+                                sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '', color: theme === 'dark' ? 'white' : '' }}
                             >
-                                <MenuItem value="ALL">All</MenuItem>
-                                <MenuItem value="PENDING">Pending</MenuItem>
-                                <MenuItem value="COMPLETED">Completed</MenuItem>
-                                <MenuItem value="FAILED">Failed</MenuItem>
+                                <MenuItem value="ALL" sx={{ color: theme === 'dark' ? 'white' : 'black', backgroundColor: theme === 'dark' ? '#3c3c3c' : '' }}>All</MenuItem>
+                                <MenuItem value="PENDING" sx={{ color: theme === 'dark' ? 'white' : 'black', backgroundColor: theme === 'dark' ? '#3c3c3c' : '' }}>Pending</MenuItem>
+                                <MenuItem value="COMPLETED" sx={{ color: theme === 'dark' ? 'white' : 'black', backgroundColor: theme === 'dark' ? '#3c3c3c' : '' }}>Completed</MenuItem>
+                                <MenuItem value="FAILED" sx={{ color: theme === 'dark' ? 'white' : 'black', backgroundColor: theme === 'dark' ? '#3c3c3c' : '' }}>Failed</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>
@@ -172,13 +173,13 @@ export default function ExchangeHistory() {
                     <Table stickyHeader size="small">
                         <TableHead>
                             <TableRow>
-                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5' }}>Date</TableCell>
-                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5' }}>From</TableCell>
-                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5' }}>To</TableCell>
-                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5' }}>Amount</TableCell>
-                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5' }}>Exchanged Amount</TableCell>
-                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5' }}>Exchange Rate</TableCell>
-                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5' }}>Status</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5', color: theme === 'dark' ? 'white' : 'black' }}>Date</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5', color: theme === 'dark' ? 'white' : 'black' }}>From</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5', color: theme === 'dark' ? 'white' : 'black' }}>To</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5', color: theme === 'dark' ? 'white' : 'black' }}>Amount</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5', color: theme === 'dark' ? 'white' : 'black' }}>Exchanged Amount</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5', color: theme === 'dark' ? 'white' : 'black' }}>Exchange Rate</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f5f5f5', color: theme === 'dark' ? 'white' : 'black' }}>Status</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

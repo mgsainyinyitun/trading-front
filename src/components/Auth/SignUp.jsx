@@ -10,10 +10,11 @@ import {
     IconButton,
     CircularProgress
 } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Visibility, VisibilityOff, WbSunny, Nightlight } from '@mui/icons-material'; // Importing theme icons
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
+import { useAppContext } from '../../context/AppContext';
 
 export default function SignUp() {
     const navigate = useNavigate();
@@ -28,6 +29,7 @@ export default function SignUp() {
         confirmPassword: ''
     });
     const [loading, setLoading] = useState(false); // New loading state
+    const { theme, setTheme } = useAppContext();
 
     const handleChange = (e) => {
         setFormData({
@@ -46,7 +48,6 @@ export default function SignUp() {
 
         // get API_URL from .env
         const API_URL = process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : 'http://localhost:3001';
-        console.log(API_URL);
 
         setLoading(true); // Set loading to true when submitting
 
@@ -75,6 +76,10 @@ export default function SignUp() {
         }
     };
 
+    const toggleTheme = () => {
+        setTheme(theme === 'dark' ? 'light' : 'dark'); // Toggle between light and dark theme
+    };
+
     return (
         <Container component="main" maxWidth="xs">
             <ToastContainer />
@@ -83,9 +88,16 @@ export default function SignUp() {
                 padding: 3,
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'center'
+                alignItems: 'center',
+                background: theme === 'dark' ? '#121212' : '#fff',
+                borderRadius: '10px'
             }}>
-                <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
+                <Box sx={{ position: 'absolute', top: 16, right: 16 }}>
+                    <IconButton onClick={toggleTheme} sx={{ position: 'absolute', top: 16, right: 16 }}>
+                        {theme === 'dark' ? <WbSunny sx={{ color: '#fff' }} /> : <Nightlight sx={{ color: 'primary.main' }} />}
+                    </IconButton>
+                </Box>
+                <Typography component="h1" variant="h5" sx={{ mb: 2, color: theme === 'dark' ? '#fff' : 'primary.main' }}>
                     Create Account
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
@@ -101,6 +113,14 @@ export default function SignUp() {
                         value={formData.email}
                         size='small'
                         onChange={handleChange}
+                        sx={{
+                            borderRadius: '10px',
+                            background: theme === 'dark' ? 'gray' : '',
+                            '& .MuiInputLabel-root': { color: theme === 'dark' ? '#fff' : 'primary.main' },
+                            '& .MuiInputBase-input': {
+                                color: theme === 'dark' ? '#ffffff' : '#000000'
+                            }
+                        }}
                     />
                     <TextField
                         margin="normal"
@@ -113,6 +133,14 @@ export default function SignUp() {
                         value={formData.name}
                         size='small'
                         onChange={handleChange}
+                        sx={{
+                            borderRadius: '10px',
+                            background: theme === 'dark' ? 'gray' : '',
+                            '& .MuiInputLabel-root': { color: theme === 'dark' ? '#fff' : 'primary.main' },
+                            '& .MuiInputBase-input': {
+                                color: theme === 'dark' ? '#ffffff' : '#000000'
+                            }
+                        }}
                     />
                     <TextField
                         margin="normal"
@@ -125,6 +153,14 @@ export default function SignUp() {
                         size='small'
                         value={formData.phone}
                         onChange={handleChange}
+                        sx={{
+                            borderRadius: '10px',
+                            background: theme === 'dark' ? 'gray' : '',
+                            '& .MuiInputLabel-root': { color: theme === 'dark' ? '#fff' : 'primary.main' },
+                            '& .MuiInputBase-input': {
+                                color: theme === 'dark' ? '#ffffff' : '#000000'
+                            }
+                        }}
                     />
                     <TextField
                         margin="normal"
@@ -137,6 +173,14 @@ export default function SignUp() {
                         size='small'
                         value={formData.ssn}
                         onChange={handleChange}
+                        sx={{
+                            borderRadius: '10px',
+                            background: theme === 'dark' ? 'gray' : '',
+                            '& .MuiInputLabel-root': { color: theme === 'dark' ? '#fff' : 'primary.main' },
+                            '& .MuiInputBase-input': {
+                                color: theme === 'dark' ? '#ffffff' : '#000000'
+                            }
+                        }}
                     />
                     <TextField
                         margin="normal"
@@ -160,7 +204,15 @@ export default function SignUp() {
                                         {showPassword ? <VisibilityOff /> : <Visibility />}
                                     </IconButton>
                                 </InputAdornment>
-                            )
+                            ),
+                            sx: {
+                                borderRadius: '10px',
+                                background: theme === 'dark' ? 'gray' : '',
+                                '& .MuiInputLabel-root': { color: theme === 'dark' ? '#fff' : 'primary.main' },
+                                '& .MuiInputBase-input': {
+                                    color: theme === 'dark' ? '#ffffff' : '#000000'
+                                }
+                            }
                         }}
                     />
                     <TextField
@@ -187,14 +239,22 @@ export default function SignUp() {
                                         {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                                     </IconButton>
                                 </InputAdornment>
-                            )
+                            ),
+                            sx: {
+                                borderRadius: '10px',
+                                background: theme === 'dark' ? 'gray' : '',
+                                '& .MuiInputLabel-root': { color: theme === 'dark' ? '#fff' : 'primary.main' },
+                                '& .MuiInputBase-input': {
+                                    color: theme === 'dark' ? '#ffffff' : '#000000'
+                                }
+                            }
                         }}
                     />
                     <Button
                         type="submit"
                         fullWidth
                         variant="contained"
-                        sx={{ mt: 2, mb: 1 }}
+                        sx={{ mt: 2, mb: 1, borderRadius: '10px' }}
                         disabled={loading} // Disable button when loading
                     >
                         {loading ? <CircularProgress size={24} /> : 'Sign Up'}
@@ -204,6 +264,7 @@ export default function SignUp() {
                         variant="text"
                         size='small'
                         onClick={() => navigate('/signin')}
+                        sx={{ color: theme === 'dark' ? '#fff' : 'primary.main', mt: 2, mb: 1, borderRadius: '10px' }}
                     >
                         Already have an account? Sign In
                     </Button>

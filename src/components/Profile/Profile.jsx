@@ -3,10 +3,12 @@ import { Container, Paper, Typography, Box, Grid, Divider, Chip } from '@mui/mat
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import { format } from 'date-fns';
+import { useAppContext } from '../../context/AppContext';
 
 export default function Profile() {
     const [profileData, setProfileData] = useState(null);
     const token = localStorage.getItem('token');
+    const { theme } = useAppContext();
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -30,20 +32,20 @@ export default function Profile() {
     if (!profileData) return null;
 
     return (
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4,borderRadius: '10px' }}>
             <ToastContainer />
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
-                    <Paper sx={{ p: 3, height: '100%' }}>
-                        <Typography variant="h5" gutterBottom>Profile Information</Typography>
+                    <Paper sx={{ p: 3, height: '100%', backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white' }}>
+                        <Typography variant="h5" gutterBottom sx={{ color: theme === 'dark' ? 'white' : 'black' }}>Profile Information</Typography>
                         <Divider sx={{ mb: 2 }} />
                         
                         {['name', 'email', 'phone', 'loginId'].map((field) => (
                             <Box key={field} sx={{ mb: 2 }}>
-                                <Typography variant="subtitle2" color="text.secondary">
+                                <Typography variant="subtitle2" sx={{ color: theme === 'dark' ? 'lightgray' : 'text.secondary' }}>
                                     {field.charAt(0).toUpperCase() + field.slice(1)}
                                 </Typography>
-                                <Typography variant="body1">{profileData[field]}</Typography>
+                                <Typography variant="body1" sx={{ color: theme === 'dark' ? 'white' : 'black' }}>{profileData[field]}</Typography>
                             </Box>
                         ))}
 
@@ -58,21 +60,21 @@ export default function Profile() {
                 </Grid>
 
                 <Grid item xs={12} md={6}>
-                    <Paper sx={{ p: 3 }}>
-                        <Typography variant="h5" gutterBottom>Accounts</Typography>
+                    <Paper sx={{ p: 3, backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white' }}>
+                        <Typography variant="h5" gutterBottom sx={{ color: theme === 'dark' ? 'white' : 'black' }}>Accounts</Typography>
                         <Divider sx={{ mb: 2 }} />
                         
                         <Grid container spacing={2}>
                             {profileData.accounts.map((account) => (
                                 <Grid item xs={12} key={account.id}>
-                                    <Box sx={{ p: 2, border: '1px solid #eee', borderRadius: 1 }}>
-                                        <Typography variant="subtitle1">
+                                    <Box sx={{ p: 2, border: '1px solid #444', borderRadius: 1, backgroundColor: theme === 'dark' ? '#2c2c2c' : '' }}>
+                                        <Typography variant="subtitle1" sx={{ color: theme === 'dark' ? 'white' : '' }}>
                                             Account #{account.accountNo}
                                         </Typography>
-                                        <Typography variant="body2">
+                                        <Typography variant="body2" sx={{ color: theme === 'dark' ? 'white' : '' }}>
                                             Balance: {account.balance} {account.currency.toUpperCase()}
                                         </Typography>
-                                        <Typography variant="caption" display="block" color="text.secondary">
+                                        <Typography variant="caption" display="block" sx={{ color: theme === 'dark' ? 'white' : '' }}>
                                             Created: {format(new Date(account.createdAt), 'PP')}
                                         </Typography>
                                     </Box>

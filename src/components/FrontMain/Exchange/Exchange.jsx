@@ -67,12 +67,14 @@ export default function Exchange() {
 
     const fetchUserBalance = async () => {
         try {
+            console.log('from coin : ', fromCoin);
             const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
-            const response = await axios.get(`${API_URL}/api/v1/balance`, {
+            const response = await axios.get(`${API_URL}/api/v1/customer/coin/balance?currency=${fromCoin}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
+            console.log(response);
             setUserBalance(response.data.balance || 0); // Set user balance
         } catch (error) {
             console.error('Error fetching user balance:', error);
@@ -88,7 +90,6 @@ export default function Exchange() {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            console.log("response", response.data);
             setExchangeHistory(response.data || []);
         } catch (error) {
             console.error('Error fetching exchanges:', error);
@@ -99,6 +100,7 @@ export default function Exchange() {
         if (fromCoin && toCoin) {
             fetchExchangeRate();
             fetchBaseRate(); // Fetch rate for 1 unit
+            fetchUserBalance(); // Refetch user balance when fromCoin changes
         }
     }, [fromCoin, toCoin, amount]);
 
@@ -217,7 +219,7 @@ export default function Exchange() {
     const handleExchangeAll = () => {
         if (userBalance > 0) {
             setAmount(userBalance); // Set amount to user balance
-            handleExchange(); // Call exchange
+            // handleExchange(); // Call exchange
         } else {
             toast.error('Insufficient balance');
         }
@@ -238,7 +240,10 @@ export default function Exchange() {
                         <FormControl sx={{ flex: 1 }}>
                             <Select
                                 value={fromCoin}
-                                onChange={(e) => setFromCoin(e.target.value)}
+                                onChange={(e) => {
+                                    setFromCoin(e.target.value);
+                                    fetchUserBalance(); // Refetch user balance when fromCoin changes
+                                }}
                                 sx={{ borderRadius: 2, backgroundColor: theme === 'dark' ? '#333' : 'white' }}
                                 size="small"
                             >
