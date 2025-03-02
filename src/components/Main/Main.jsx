@@ -29,7 +29,7 @@ export default function Main() {
 
     return (
         <Box sx={{ height: '100%', width: '100%', overflow: 'auto', marginTop: isAuthPage ? 0 : 5, background: theme === 'dark' ? '#121212' : '' }}>
-            <Container sx={{  width: '100%', background: theme === 'dark' ? '#1e1e1e' : '#eeeeee', padding: 0 }}>
+            <Container sx={{  width: '100%', minHeight: '100%', background: theme === 'dark' ? '#1e1e1e' : '#eeeeee', padding: 0 , border: '1px solid transparent'	}}>
                 {!isAuthPage && <TopBar />}
                 <Box sx={{ flexGrow: 1, background: theme === 'dark' ? '#1e1e1e' : '#eeeeee', paddingBottom: 1, margin: '0 auto' }}>
                     <Routes>

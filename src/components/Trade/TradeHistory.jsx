@@ -149,11 +149,12 @@ export default function TradeHistory() {
                             placeholder="Search by account..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            sx={{ flexGrow: 1, backgroundColor: theme === 'dark' ? '#3c3c3c' : 'white' }}
+                            sx={{ flexGrow: 1, backgroundColor: theme === 'dark' ? '#3c3c3c' : '', color: theme === 'dark' ? 'white' : '' }}
                             InputProps={{
+                                sx: { color: theme === 'dark' ? 'white' : '' },
                                 startAdornment: (
                                     <InputAdornment position="start">
-                                        <SearchIcon fontSize="small" />
+                                        <SearchIcon fontSize="small" sx={{ color: theme === 'dark' ? 'white' : '' }} />
                                     </InputAdornment>
                                 ),
                             }}
@@ -193,13 +194,13 @@ export default function TradeHistory() {
                     <Table stickyHeader size="small">
                         <TableHead>
                             <TableRow>
-                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' }}>Account</TableCell>
-                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' }}>Type</TableCell>
-                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' }}>Amount</TableCell>
-                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' }}>Period</TableCell>
-                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' }}>Status</TableCell>
-                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' }}>Result</TableCell>
-                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' }}>Date</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' , color: theme === 'dark' ? 'white' : 'black'}}>Account</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' , color: theme === 'dark' ? 'white' : 'black'}}>Type</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' , color: theme === 'dark' ? 'white' : 'black'}}>Amount</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' , color: theme === 'dark' ? 'white' : 'black'}}>Period</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' , color: theme === 'dark' ? 'white' : 'black'}}>Status</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' , color: theme === 'dark' ? 'white' : 'black'}}>Result</TableCell>
+                                <TableCell sx={{ backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f5f5f5' , color: theme === 'dark' ? 'white' : 'black'}}>Date</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
