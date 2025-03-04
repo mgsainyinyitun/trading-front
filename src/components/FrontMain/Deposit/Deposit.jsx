@@ -4,6 +4,9 @@ import UsdtIcon from '../../../images/coin-icons/usdt.png';
 import UsdcIcon from '../../../images/coin-icons/usdc.png';
 import EthIcon from '../../../images/coin-icons/ethereum-cryptocurrency.svg';
 import BtcIcon from '../../../images/coin-icons/bitcoin-cryptocurrency.svg';
+import AdaIcon from '../../../images/coin-icons/ada.png';
+import SolIcon from '../../../images/coin-icons/sol.png';
+import XrpIcon from '../../../images/coin-icons/xrp.png';
 import { useAppContext } from '../../../context/AppContext';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 
@@ -11,7 +14,10 @@ const coins = [
     { id: 1, name: 'USDT', icon: UsdtIcon, network: 'TRC20' },
     { id: 2, name: 'USDC', icon: UsdcIcon, network: 'ERC20' },
     { id: 3, name: 'ETH', icon: EthIcon, network: 'ERC20' },
-    { id: 4, name: 'BTC', icon: BtcIcon, network: 'BTC' }
+    { id: 4, name: 'BTC', icon: BtcIcon, network: 'BTC' },
+    { id: 5, name: 'ADA', icon: AdaIcon, network: 'TRC20' },
+    { id: 6, name: 'SOL', icon: SolIcon, network: 'SOL' },
+    { id: 7, name: 'XRP', icon: XrpIcon, network: 'XRP' },
 ];
 
 export default function Deposit() {
