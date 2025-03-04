@@ -1,11 +1,13 @@
-import { Box, Button, Card, Modal, TextField, Typography, Dialog, CircularProgress } from "@mui/material";
+import { Box, Button, Card, Modal, TextField, Typography, Dialog, CircularProgress, IconButton } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useInterval } from "react-use";
 import { useAppContext } from "../../../context/AppContext";
 import { toast, ToastContainer } from "react-toastify";
+import CloseIcon from '@mui/icons-material/Close';
 
 const style = {
+
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -83,6 +85,7 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
     const [tradeFinished, setTradeFinished] = useState(false);
     const [showResult, setShowResult] = useState(false);
     const [tradeResult, setTradeResult] = useState(null);
+    const [loading, setLoading] = useState(false); // New loading state
 
     const handleModalClose = () => {
         handleClose();
@@ -98,7 +101,7 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
                     'Content-Type': 'application/json'
                 }
             });
-            setBalance(response.data.balance);
+            setBalance(parseFloat(response.data.balance).toFixed(4));
         } catch (error) {
             console.error('Error fetching balance:', error);
         }
@@ -154,7 +157,7 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
                 axios.post(`${API_URL}/api/v1/trade-success`, {
                     tradeId: tradeRequest.id,
                     customerId: customer.id,
-                    outcome:expectedOutcome.type
+                    outcome: expectedOutcome.type
                 }, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -181,6 +184,9 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
     const handleConfirmOrder = async () => {
         const API_URL = process.env.REACT_APP_API_URL;
 
+        // Set loading state before making the request
+        setLoading(true); // Set loading to true
+
         try {
             const response = await axios.post(`${API_URL}/api/v1/trade-request`, {
                 currency: "USDT",
@@ -205,6 +211,8 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
             }
         } catch (res) {
             toast.error("Trade request failed  : " + res.response.data.error)
+        } finally {
+            setLoading(false); // Reset loading state after request
         }
     };
 
@@ -217,7 +225,13 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
                 aria-labelledby="parent-modal-title"
                 aria-describedby="parent-modal-description"
             >
-                <Box sx={{ ...style, width: { xs: '75%', sm: '50%', md: '30%', lg: '20%', xl: '15%' }, maxHeight: 500 }}>
+                <Box sx={{
+                    ...style,
+                    width: { xs: '75%', sm: '50%', md: '30%', lg: '20%', xl: '15%' },
+                    maxHeight: 500,
+                    backgroundColor: '#09122C',
+                    color: 'white'
+                }}>
                     <h2 id="parent-modal-title">Order Confirmation</h2>
                     <Box mb={1}>
                         <Box display='flex' justifyContent='space-between'>
@@ -229,14 +243,14 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
                             <Typography color={tradeType === 'long' ? 'success.main' : 'error.main'} sx={{ fontWeight: 'bold' }}>{tradeType.toUpperCase()}</Typography>
                         </Box>
                         <Box display='flex' justifyContent='space-between'>
-                            <Typography>Current </Typography>
+                            <Typography>Current price</Typography>
                             <Typography color={priceChange >= 0 ? 'success.main' : 'error.main'}>
                                 {currentPrice ? currentPrice.toFixed(2) : '...'} ({priceChange ? priceChange.toFixed(2) : '0'}%)
                             </Typography>
                         </Box>
                     </Box>
 
-                    <Typography variant="body2" gutterBottom>
+                    <Typography variant="body2" gutterBottom sx={{ color: 'white' }}>
                         Choose the expiry time (left-sliding yields higher)
                     </Typography>
 
@@ -249,33 +263,42 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
 
                     <Box mb={1}>
                         <TextField
-                            label="Buy Quantity"
+                            label="Quantity to buy"
                             variant="outlined"
                             fullWidth
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
-                            helperText="Min100buy from, Max99999Capped"
                             size="small"
+                            sx={{ border: '1px solid lightgray', borderRadius: 1 }}
+                            InputLabelProps={{
+                                style: { color: 'white' } // Change label color to white and position it outside to the left
+                            }}
+                            InputProps={{
+                                style: { color: 'white' } // Change input text color to white
+                            }}
                         />
                     </Box>
                     <Box display='flex' justifyContent='space-between' mb={1}>
                         <Typography variant="body2" gutterBottom>
                             Available balance: <Typography component="span" color="primary.main" display="inline">{balance}</Typography> USDT
                         </Typography>
-                        <Typography variant="body2" gutterBottom>
-                            Handling fee: 0%
-                        </Typography>
                     </Box>
 
                     <Button
                         variant="contained"
                         size="small"
-                        sx={{ height: 50, borderRadius: 10 }}
+                        sx={{
+                            height: 50, borderRadius: 10, backgroundColor: 'blue',
+                            "&.Mui-disabled": {
+                                color: 'white',
+                                background: '#3D3BF3'
+                            }
+                        }} // Set primary color text to white
                         fullWidth
                         onClick={handleConfirmOrder}
                         disabled={!selectedTime || !amount}
                     >
-                        Confirm order
+                        {loading ? <CircularProgress size={24} color="inherit" /> : 'Order Confirmation'} {/* Show loading spinner */}
                     </Button>
                 </Box>
             </Modal>
@@ -288,118 +311,168 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
                     setAmount(0);
                 }}
                 PaperProps={{
-                    sx: { borderRadius: '10px', p: 3, minWidth: 300 }
+                    sx: { borderRadius: '10px', minWidth: 300 }
                 }}
             >
-                <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
-                    <Typography variant="h6" color="primary">{focusCoin}/USDT</Typography>
+                <Box sx={{ p: 3, background: 'linear-gradient(to right,rgb(44, 0, 92),rgb(82, 0, 170))' }}>
+                    <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+                        <Typography variant="h6" color="white">{focusCoin}</Typography>
 
-                    <Box position="relative" display="inline-flex">
-                        <CircularProgress
-                            variant="determinate"
-                            value={progress}
-                            size={120}
-                            sx={{
-                                '& .MuiLinearProgress-bar': {
-                                    backgroundColor: 'blue'
-                                },
-                                '& .MuiCircularProgress-circle': {
-                                    strokeLinecap: 'round',
-                                },
-                                "& .MuiLinearProgress-barColorPrimary": {
-                                    backgroundColor: "green",
-                                },
-                            }}
-                        />
-                        <Box
-                            sx={{
-                                top: 0,
-                                left: 0,
-                                bottom: 0,
-                                right: 0,
-                                position: 'absolute',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}
-                        >
-                            <Typography variant="caption" component="div" color="text.secondary">
-                                {timeLeft}s
-                            </Typography>
+                        <Box position="relative" display="inline-flex">
+                            <Box position="relative" display="inline-flex">
+                                <CircularProgress
+                                    variant="determinate"
+                                    value={100} // Always full
+                                    size={120}
+                                    thickness={2}
+                                    sx={{
+                                        color: "#3D3BF3", // Custom trace (incomplete) color
+                                    }}
+                                />
+                                <CircularProgress
+                                    variant="determinate"
+                                    value={progress}
+                                    size={120}
+                                    thickness={2}
+                                    color="primary"
+                                    sx={{
+                                        position: "absolute",
+                                        left: 0,
+                                        color: '#e0e0e0',
+                                    }}
+                                />
+                            </Box>
+                            <Box
+                                sx={{
+                                    top: 0,
+                                    left: 0,
+                                    bottom: 0,
+                                    right: 0,
+                                    position: 'absolute',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: 'white',
+                                }}
+                            >
+                                <Typography variant="caption" component="div" color="white">
+                                    {timeLeft}s
+                                </Typography>
+                            </Box>
                         </Box>
-                    </Box>
-                    <Box width="100%" sx={{
-                        p: 2,
-                        borderRadius: 2,
-                        bgcolor: '#f8f9fa',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 1.5
-                    }}>
-                        <Typography sx={{
-                            textAlign: 'left',
-                            fontWeight: 'bold',
-                            color: tradeType === 'long' ? '#2e7d32' : '#d32f2f',
-                            bgcolor: tradeType === 'long' ? '#e8f5e9' : '#ffebee',
-                            py: 1,
-                            borderRadius: 1
-                        }}>
-                            DIRECTION: {tradeType.toUpperCase()}
-                        </Typography>
 
-                        <Typography sx={{
-                            textAlign: 'left',
-                            bgcolor: '#e3f2fd',
-                            py: 1,
-                            borderRadius: 1,
-                            color: '#1976d2'
-                        }}>
-                            Amount: {amount} USDT
-                        </Typography>
-
-                        <Box sx={{
+                        <Box width="100%" sx={{
+                            p: 2,
+                            borderRadius: 2,
                             display: 'flex',
-                            justifyContent: 'left',
-                            alignItems: 'center',
-                            gap: 1,
-                            bgcolor: '#fff',
-                            py: 1,
-                            borderRadius: 1
+                            flexDirection: 'column',
+                            gap: 1.1,
+                            color: 'white'
                         }}>
-                            <Typography sx={{
-                                color: priceChange >= 0 ? '#2e7d32' : '#d32f2f'
+                            <Box sx={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                borderRadius: 1
                             }}>
-                                Current Price: <span style={{color: priceChange >= 0 ? '#2e7d32' : '#d32f2f'}}>{currentPrice?.toFixed(2)}</span> USDT
-                            </Typography>
-                            <Typography sx={{
-                                color: priceChange >= 0 ? '#2e7d32' : '#d32f2f',
-                                fontWeight: 'bold'
-                            }}>
-                                ({priceChange >= 0 ? '+' : ''}{priceChange?.toFixed(2)}%)
-                            </Typography>
-                        </Box>
+                                <Typography sx={{
+                                    color: priceChange >= 0 ? 'violet' : 'violet'
+                                }}>
+                                    Current Price
+                                </Typography>
+                                <Typography sx={{
+                                    color: priceChange >= 0 ? 'violet' : 'violet',
+                                    fontWeight: 'bold'
+                                }}>
+                                    <span style={{ color: priceChange >= 0 ? 'violet' : 'violet' }}>{currentPrice?.toFixed(2)}</span>
+                                </Typography>
+                            </Box>
 
-                        <Typography sx={{
-                            textAlign: 'left',
-                            bgcolor: expectedOutcome ? expectedOutcome.type === 'win' ? '#e8f5e9' : '#ffebee' : 'transparent',
-                            color: expectedOutcome ? expectedOutcome.type === 'win' ? '#2e7d32' : '#d32f2f' : 'gray',
-                            py: 1,
-                            borderRadius: 1,
-                            fontWeight: 'bold'
-                        }}>
-                            {expectedOutcome ?
-                                <>
-                                    Expected {expectedOutcome.type}: {expectedOutcome.value} USDT
-                                </>
-                                :
-                                'Waiting for the result...'
-                            }
-                        </Typography>
+                            <Box display='flex' justifyContent='space-between'>
+                                <Typography sx={{
+                                    textAlign: 'left',
+                                    borderRadius: 1
+                                }}>
+                                    Direction
+                                </Typography>
+                                <Typography sx={{
+                                    textAlign: 'left',
+                                    color: tradeType === 'long' ? '#2e7d32' : '#d32f2f',
+                                    borderRadius: 1
+                                }}>
+                                    {tradeType}
+                                </Typography>
+                            </Box>
+
+                            <Box display='flex' justifyContent='space-between'>
+                                <Typography sx={{
+                                    textAlign: 'left',
+                                    borderRadius: 1
+                                }}>
+                                    Name
+                                </Typography>
+                                <Typography sx={{
+                                    textAlign: 'left',
+                                    borderRadius: 1
+                                }}>
+                                    {focusCoin}
+                                </Typography>
+                            </Box>
+                            <Box display='flex' justifyContent='space-between'>
+                                <Typography sx={{
+                                    textAlign: 'left',
+                                    borderRadius: 1,
+                                }}>
+                                    Amount
+                                </Typography>
+                                <Typography sx={{
+                                    textAlign: 'left',
+                                    borderRadius: 1,
+                                }}>
+                                    {amount} USDT
+                                </Typography>
+                            </Box>
+                            <Box sx={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                borderRadius: 1
+                            }}>
+                                <Typography sx={{
+                                }}>
+                                    Price
+                                </Typography>
+                                <Typography sx={{
+                                }}>
+                                    <span style={{ color: priceChange >= 0 ? 'violet' : 'violet' }}>{currentPrice?.toFixed(2)}</span>
+                                </Typography>
+                            </Box>
+
+                            <Box display='flex' justifyContent='space-between'>
+                                {expectedOutcome ?
+                                    <>
+                                        <Typography sx={{
+                                            color: expectedOutcome ? expectedOutcome.type === 'win' ? '#2e7d32' : '#d32f2f' : 'gray',
+                                        }}></Typography>
+                                        Expected {expectedOutcome.type}
+                                        <Typography />
+                                        <Typography sx={{
+                                            color: expectedOutcome ? expectedOutcome.type === 'win' ? '#2e7d32' : '#d32f2f' : 'gray',
+                                        }}></Typography>
+                                        {expectedOutcome.value} USDT
+                                        <Typography />
+                                    </>
+                                    :
+                                    'Waiting for the result...'
+                                }
+
+                            </Box>
+
+
+                        </Box>
                     </Box>
                 </Box>
             </Dialog>
 
-            {/** Result Dialog */}
+            {/** Result Dialog showResult */}
             <Dialog
                 open={showResult}
                 onClose={() => {
@@ -407,38 +480,141 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
                     handleModalClose();
                 }}
                 PaperProps={{
-                    sx: { borderRadius: '10px', p: 3, minWidth: 300 }
+                    sx: { borderRadius: '10px', minWidth: 300, overflow: 'hidden' }
                 }}
             >
-                <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
-                    <Typography variant="h4" color={tradeResult?.type === 'win' ? 'success.main' : 'error.main'}>
-                        {tradeResult?.type === 'win' ? 'You Won!' : 'You Lost'}
-                    </Typography>
-
-                    <Typography variant="h5" color={tradeResult?.type === 'win' ? 'success.main' : 'error.main'}>
-                        {tradeResult?.value} USDT
-                    </Typography>
-
-                    <Box display="flex" gap={2}>
-                        <Button
-                            variant="contained"
-                            onClick={() => {
-                                setShowResult(false);
-                                handleModalClose();
-                            }}
-                        >
-                            Close
-                        </Button>
-
-                        <Button
-                            variant="outlined"
-                            onClick={() => {
-                                window.location.href = '/trade-history';
-                            }}
-                        >
-                            View History
-                        </Button>
+                <IconButton
+                    aria-label="close"
+                    onClick={() => {
+                        setShowResult(false);
+                        handleModalClose();
+                    }}
+                    sx={(theme) => ({
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: theme.palette.grey[500],
+                    })}
+                >
+                    <CloseIcon />
+                </IconButton>
+                <Box display="flex" flexDirection="column" alignItems="center"
+                    sx={{ background: 'linear-gradient(to right,rgb(44, 0, 92),rgb(82, 0, 170))' }}
+                >
+                    <Box display='flex' flexDirection='column' p={2}>
+                        <Typography variant="h6" color='white' textAlign='center'>
+                            {focusCoin}
+                        </Typography>
                     </Box>
+                    <Box display='flex' flexDirection='column' alignItems="center">
+                        <Box sx={{ display: 'flex', direction: 'column', alignItems: 'center', mt: 3 }}>
+                            <Typography variant="h6" color={tradeResult?.type === 'win' ? 'success.main' : 'error.main'}>
+                                {tradeResult?.type === 'win' ? '+' : '-'}
+                            </Typography>
+
+                            <Typography variant="h6" color={tradeResult?.type === 'win' ? 'success.main' : 'error.main'}>
+                                {tradeResult?.value} USDT
+                            </Typography>
+                        </Box>
+                        <Typography variant="body2" color='gray' mb={3}>
+                            Completion of maturity settlement
+                        </Typography>
+                    </Box>
+
+                    <Box display='flex' flexDirection='column' width='100%'>
+                        <Box p={2}>
+                            <Box sx={{
+                                display: 'flex',
+                                width: '100%',
+                                justifyContent: 'space-between',
+                                borderRadius: 1,
+                                color: 'white'
+                            }}>
+                                <Typography sx={{
+                                }}>
+                                    Selection period
+                                </Typography>
+                                <Typography sx={{
+                                }}>
+                                    {selectedTime}s
+                                </Typography>
+                            </Box>
+
+
+                            <Box sx={{
+                                display: 'flex',
+                                width: '100%',
+                                justifyContent: 'space-between',
+                                borderRadius: 1,
+                                color: 'white'
+                            }}>
+                                <Typography sx={{
+                                }}>
+                                    Current price
+                                </Typography>
+                                <Typography sx={{
+                                }}>
+                                    {currentPrice?.toFixed(2)}
+                                </Typography>
+                            </Box>
+
+
+                            <Box sx={{
+                                display: 'flex',
+                                width: '100%',
+                                justifyContent: 'space-between',
+                                borderRadius: 1,
+                                color: 'white'
+                            }}>
+                                <Typography sx={{
+                                }}>
+                                    Direction
+                                </Typography>
+                                <Typography sx={{
+                                }}>
+                                    {tradeType}
+                                </Typography>
+                            </Box>
+
+
+                            <Box sx={{
+                                display: 'flex',
+                                width: '100%',
+                                justifyContent: 'space-between',
+                                borderRadius: 1,
+                                color: 'white'
+                            }}>
+                                <Typography sx={{
+                                }}>
+                                    Amount
+                                </Typography>
+                                <Typography sx={{
+                                }}>
+                                    {amount} USDT
+                                </Typography>
+                            </Box>
+
+
+                            <Box sx={{
+                                display: 'flex',
+                                width: '100%',
+                                justifyContent: 'space-between',
+                                borderRadius: 1,
+                                color: 'white'
+                            }}>
+                                <Typography sx={{
+                                }}>
+                                    Price
+                                </Typography>
+                                <Typography sx={{
+                                }}>
+                                    {currentPrice?.toFixed(2)}
+                                </Typography>
+                            </Box>
+                        </Box>
+                    </Box>
+
+
                 </Box>
             </Dialog>
         </>
