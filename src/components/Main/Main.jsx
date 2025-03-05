@@ -24,7 +24,7 @@ import { useAppContext } from '../../context/AppContext'; // Importing context t
 
 export default function Main() {
     const location = useLocation();
-    const isAuthPage = ['/signup', '/signin'].includes(location.pathname);
+    const isAuthPage = ['/signup', '/signin', '/trade/0'].includes(location.pathname);
     const { theme } = useAppContext(); // Accessing theme from context
 
     return (

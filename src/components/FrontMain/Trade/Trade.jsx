@@ -18,6 +18,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import LoginIcon from '@mui/icons-material/Login';
 import Exchange from "../Exchange/Exchange";
 import CandleChart from "./CandleChart";
+import ChartV2 from "../chart/ChartV2";
 
 export default function Trade() {
     const { tabValue } = useParams();
@@ -113,6 +114,12 @@ export default function Trade() {
     useInterval(() => {
         fetchData(timeFrame); // Fetch data every 5 seconds for the last timeframe
     }, [5000])
+
+
+
+    useEffect(() => {
+        setTheme('dark');
+    }, []);
 
     useEffect(() => {
         setLoading(true);
@@ -271,7 +278,7 @@ export default function Trade() {
                     </Box>
 
                     {/** graph control */}
-                    <Box pb={3} sx={{
+                    {/* <Box pb={3} sx={{
                         overflow: 'auto',
                         margin: 'auto',
                         padding: 0,
@@ -289,11 +296,17 @@ export default function Trade() {
                             <Tab label="1 D" value={1440} sx={{ color: theme === 'dark' ? 'white' : 'inherit' }} />
                             <Tab label="1 W" value={10080} sx={{ color: theme === 'dark' ? 'white' : 'inherit' }} />
                         </Tabs>
-                    </Box>
+                    </Box> */}
 
-                    <Box sx={{ padding: '20px', background: theme === 'dark' ? '#1e1e1e' : 'white' }}>
+
+                    {/* <Box sx={{ padding: '20px', background: theme === 'dark' ? '#1e1e1e' : 'white', marginBottom: '50px' }}>
                         <CandleChart focusCoin={focusCoin} isDarkTheme={theme === 'dark'} timeFrame={timeFrame} />
-                    </Box>
+                    </Box> */}
+
+                    <ChartV2 focusCoin={focusCoin} timeFrame={timeFrame} />
+
+
+
                     <Box sx={{
                         position: 'fixed',
                         bottom: 51,
