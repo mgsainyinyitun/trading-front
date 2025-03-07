@@ -8,10 +8,10 @@ import { useAppContext } from '../../../context/AppContext';
 
 export default function Market() {
     const [value, setValue] = useState(0);
-    const [currencyData, setCurrencyData] = useState([]);
     const [selectedCurrency, setSelectedCurrency] = useState('USDT');
     const [loading, setLoading] = useState(false);
-    const { theme } = useAppContext();
+    const { theme,currencyDataCtx, setCurrencyDataCtx } = useAppContext();
+    const [currencyData, setCurrencyData] = useState(currencyDataCtx);
 
     const fetchCryptoPairs = async () => {
         try {
@@ -38,7 +38,7 @@ export default function Market() {
     };
 
     const forceFetchCryptoPairs = async () => {
-        setLoading(true);
+        currencyData.length ===0 && setLoading(true);
         try {
             const response = await axios.get('https://min-api.cryptocompare.com/data/pricemultifull', {
                 params: {
@@ -57,6 +57,9 @@ export default function Market() {
             }));
 
             setCurrencyData(formattedData);
+            // store in appContext
+            setCurrencyDataCtx(formattedData);
+
         } catch (error) {
             console.error('Error fetching crypto data:', error);
         } finally {

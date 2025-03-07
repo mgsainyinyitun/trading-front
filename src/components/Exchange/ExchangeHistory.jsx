@@ -19,14 +19,17 @@ import {
     InputLabel,
     Button,
     CircularProgress,
+    IconButton // Import IconButton for the back button
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import DownloadIcon from '@mui/icons-material/Download';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import back icon
 import { format } from 'date-fns';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import * as XLSX from 'xlsx';
 import { useAppContext } from '../../context/AppContext';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const statusColors = {
     PENDING: 'warning',
@@ -51,6 +54,7 @@ export default function ExchangeHistory() {
         status: 'ALL'
     });
     const { theme } = useAppContext();
+    const navigate = useNavigate(); // Initialize useNavigate
 
     useEffect(() => {
         fetchExchanges();
@@ -117,6 +121,9 @@ export default function ExchangeHistory() {
             <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden', backgroundColor: theme === 'dark' ? '#2c2c2c' : 'white' }}>
                 <Box sx={{ p: 2, backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f8f9fa' }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                        <IconButton onClick={() => navigate(-1)} color="primary" size="small"> {/* Back button */}
+                            <ArrowBackIcon />
+                        </IconButton>
                         <Typography variant="h6" sx={{ color: theme === 'dark' ? 'white' : 'primary.main' }}>
                             Exchange History 📊
                         </Typography>

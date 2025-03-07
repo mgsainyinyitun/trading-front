@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom'; // Added useNavigate
 import {
     Box,
     Container,
@@ -9,7 +9,8 @@ import {
     Chip,
     CircularProgress,
     useTheme,
-    useMediaQuery
+    useMediaQuery,
+    IconButton // Added IconButton
 } from '@mui/material';
 import axios from 'axios';
 import {
@@ -24,10 +25,12 @@ import {
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import back button icon
 import { useAppContext } from '../../../context/AppContext';
 
 export default function MarketDetail() {
     const { coin } = useParams();
+    const navigate = useNavigate(); // Initialize navigate
     const [marketData, setMarketData] = useState(null);
     const [historicalData, setHistoricalData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -98,6 +101,9 @@ export default function MarketDetail() {
                 <Grid container spacing={1} alignItems="center" sx={{ mb: 2 }}>
                     <Grid item xs={12} sm={6}>
                         <Box display="flex" alignItems="center" gap={1}>
+                            <IconButton onClick={() => navigate(-1)} aria-label="back"> {/* Back button */}
+                                <ArrowBackIcon />
+                            </IconButton>
                             <img
                                 src={marketData.imageUrl}
                                 alt={coin}

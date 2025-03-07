@@ -15,7 +15,8 @@ import { useAppContext } from "../../../context/AppContext";
 export default function Asset() {
     const [value, setValue] = useState(0);
     const [showBalance, setShowBalance] = useState(true);
-    const [assets, setAssets] = useState(null);
+    const {assetCtx, setAssetCtx} = useAppContext();
+    const [assets, setAssets] = useState(assetCtx);
     const [totalBalance, setTotalBalance] = useState(0);
     const navigate = useNavigate();
     const { theme } = useAppContext();
@@ -85,6 +86,7 @@ export default function Asset() {
                 });
 
                 setAssets(allAssets);
+                setAssetCtx(allAssets);
 
                 // Get crypto prices from CryptoCompare
                 const pricePromises = allAssets.map(async (account) => {

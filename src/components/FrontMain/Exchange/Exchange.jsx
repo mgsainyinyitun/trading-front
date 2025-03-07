@@ -26,6 +26,7 @@ import {
     Snackbar
 } from '@mui/material';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import back button icon
 import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
 import { getCoinStringList } from '../../../utils/utils';
@@ -41,7 +42,7 @@ const statusColors = {
     FAILED: 'error'
 };
 
-export default function Exchange() {
+export default function Exchange({setValue}) {
     const [fromCoin, setFromCoin] = useState('USDT');
     const [toCoin, setToCoin] = useState('BTC');
     const [amount, setAmount] = useState('');
@@ -55,7 +56,7 @@ export default function Exchange() {
     const [exchangeData, setExchangeData] = useState(null);
     const [exchangeHistory, setExchangeHistory] = useState([]);
     const [userBalance, setUserBalance] = useState(0); // New state for user balance
-    const { theme } = useAppContext();
+    const { theme, setTheme } = useAppContext();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -63,6 +64,7 @@ export default function Exchange() {
         fetchExchanges();
         fetchExchangeHistory();
         fetchUserBalance(); // Fetch user balance on component mount
+        // setTheme('light');
     }, []);
 
     const fetchUserBalance = async () => {
@@ -228,6 +230,11 @@ export default function Exchange() {
     return (
         <Container sx={{ mb: 4, backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white'  }}>
             <ToastContainer />
+
+            {/* Back Button */}
+            <IconButton onClick={() => setValue(0)} color="primary" size="small" sx={{ mb: 2 }}>
+                <ArrowBackIcon />
+            </IconButton>
 
             {/* Exchange Form */}
             <Paper elevation={3} sx={{ p: 3, borderRadius: 2, mb: 3, background: theme === 'dark' ? '#1e1e1e' : 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)' }}>

@@ -11,6 +11,9 @@ export const AppProvider = ({ children }) => {
         return savedCustomer ? JSON.parse(savedCustomer) : null;
     });
     const [theme, setTheme] = useState(() => (localStorage.getItem('theme') || 'light'));
+    const [currencyDataCtx, setCurrencyDataCtx] = useState([]);
+    const [assetCtx, setAssetCtx] = useState([]);
+
 
     const updateTheme = (newTheme) => {
         setTheme(newTheme);
@@ -32,7 +35,7 @@ export const AppProvider = ({ children }) => {
     };
 
     return (
-        <AppContext.Provider value={{ token, customer, login, logout, theme, setTheme: updateTheme }}>
+        <AppContext.Provider value={{ token, customer, login, logout, theme, setTheme: updateTheme, currencyDataCtx, setCurrencyDataCtx, assetCtx, setAssetCtx }}>
             {children}
         </AppContext.Provider>
     );

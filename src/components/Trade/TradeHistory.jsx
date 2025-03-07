@@ -19,15 +19,18 @@ import {
     InputLabel,
     Button,
     CircularProgress,
+    IconButton // Import IconButton for the back button
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import DownloadIcon from '@mui/icons-material/Download';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import back icon
 import { format } from 'date-fns';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import * as XLSX from 'xlsx';
 import NoDataIcon from '@mui/icons-material/RemoveShoppingCart'; // Import an icon for no data
 import { useAppContext } from '../../context/AppContext';
+import { useNavigate } from 'react-router-dom';
 
 const statusColors = {
     PENDING: 'warning',
@@ -118,12 +121,17 @@ export default function TradeHistory() {
         XLSX.writeFile(workbook, "trade_history.xlsx");
     };
 
+    const navigate = useNavigate();
+
     return (
         <Container maxWidth="md" sx={{ mt: { xs: 2, sm: 3 }, mb: 4, height: '100vh', backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white' }}>
             <ToastContainer />
             <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden', height: '100%', backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white' }}>
                 <Box sx={{ p: 2, backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f8f9fa' }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                        <IconButton onClick={() => navigate('/mine')} color="primary" size="small">
+                            <ArrowBackIcon />
+                        </IconButton>
                         <Typography variant="h6" sx={{ color: theme === 'dark' ? 'white' : 'primary.main' }}>
                             Trade History 📈
                         </Typography>

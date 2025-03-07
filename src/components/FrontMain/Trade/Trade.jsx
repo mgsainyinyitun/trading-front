@@ -31,11 +31,10 @@ export default function Trade() {
     const [focusCoinImage, setFocusCoinImage] = useState('https://www.cryptocompare.com/media/37746251/btc.png');
     const [loginDialogOpen, setLoginDialogOpen] = useState(false);
     const [tradeType, setTradeType] = useState('');
-    const { customer } = useAppContext();
+    const { customer, theme, setTheme } = useAppContext();
     const navigate = useNavigate();
 
     const [cryptoPairs, setCryptoPairs] = useState([]);
-    const { theme, setTheme } = useAppContext();
     const [timeFrame, setTimeFrame] = useState(30); // New state for timeframe
 
     const handleTradeClick = (type) => {
@@ -332,7 +331,7 @@ export default function Trade() {
                 </>)}
 
             {value === 1 && (
-                <Exchange />
+                <Exchange setValue={setValue}/>
             )}
 
             <ConfirmModal
@@ -340,6 +339,7 @@ export default function Trade() {
                 tradeType={tradeType}
                 open={open}
                 handleClose={() => { setOpen(false) }}
+                setOpen={setOpen}
             />
 
             <Dialog

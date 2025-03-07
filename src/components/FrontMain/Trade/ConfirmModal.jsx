@@ -70,7 +70,7 @@ const DisplayCard = ({ s, p, selected, onClick }) => {
     )
 }
 
-export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }) {
+export default function ConfirmModal({ focusCoin, tradeType, open, handleClose,setOpen }) {
     const [currentPrice, setCurrentPrice] = useState(null);
     const [priceChange, setPriceChange] = useState(0);
     const [balance, setBalance] = useState("0");
@@ -82,6 +82,8 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
     const [expectedOutcome, setExpectedOutcome] = useState(null);
     const { customer } = useAppContext();
     const [tradeRequest, setTradeRequest] = useState(null);
+    const [sequence, setSequence] = useState([]);
+    const [i, setI] = useState(0);
     const [tradeFinished, setTradeFinished] = useState(false);
     const [showResult, setShowResult] = useState(false);
     const [tradeResult, setTradeResult] = useState(null);
@@ -145,14 +147,19 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
             if (timeLeft > 0) {
                 setTimeLeft(prev => prev - 1);
                 setProgress((selectedTime - timeLeft) / selectedTime * 100);
-                const outcome = Math.random() > 0.5 ? 'win' : 'lose';
+                // const outcome = Math.random() > 0.5 ? 'win' : 'lose';
+                const outcome = sequence[i]==1?'win':'lose';
                 setExpectedOutcome({
                     type: outcome,
                     value: outcome === 'win' ? parseFloat((amount * (ration[selectedTime] / 100)).toFixed(3)) : -amount
                 });
+                console.log('value i:',sequence[i]);
+                setI(i + 1);
             } else {
+                setOpen(false);
                 setTradeRequest(null);
                 setShowProgress(false);
+                console.log('tradeRequest:', tradeRequest);
                 const API_URL = process.env.REACT_APP_API_URL;
                 axios.post(`${API_URL}/api/v1/trade-success`, {
                     tradeId: tradeRequest.id,
@@ -172,10 +179,12 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
                             toast.error("Failed to record trade result");
                             handleModalClose();
                         }
+                        setI(0);
                     })
                     .catch(err => {
                         toast.error("Failed to record trade result");
                         handleModalClose();
+                        setI(0);
                     });
             }
         }
@@ -202,7 +211,9 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
             });
 
             if (response.status === 200 || response.status === 201) {
-                setTradeRequest(response.data);
+                console.log(response.data);
+                setSequence(response.data.sequence);
+                setTradeRequest(response.data.trade);
                 setShowProgress(true);
                 setTimeLeft(selectedTime);
                 setProgress(0);
@@ -311,7 +322,7 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
                     setAmount(0);
                 }}
                 PaperProps={{
-                    sx: { borderRadius: '10px', minWidth: 300 }
+                    sx: { borderRadius: '10px', minWidth: 400, width: '98%' }
                 }}
             >
                 <Box sx={{ p: 3, background: 'linear-gradient(to right,rgb(44, 0, 92),rgb(82, 0, 170))' }}>
@@ -480,7 +491,7 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose }
                     handleModalClose();
                 }}
                 PaperProps={{
-                    sx: { borderRadius: '10px', minWidth: 300, overflow: 'hidden' }
+                    sx: { borderRadius: '10px', minWidth: 400, width: '98%', overflow: 'hidden' }
                 }}
             >
                 <IconButton

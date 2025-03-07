@@ -6,11 +6,14 @@ import {
     AccordionSummary, 
     AccordionDetails,
     Paper,
-    Divider
+    Divider,
+    IconButton
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import HelpIcon from '@mui/icons-material/Help';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import back icon
 import { useAppContext } from '../../../context/AppContext';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const helpTopics = [
     {
@@ -69,6 +72,8 @@ const helpTopics = [
 
 export default function HelpCenter() {
     const { theme } = useAppContext();
+    const navigate = useNavigate(); // Initialize useNavigate
+
     return (
         <Container maxWidth="md" sx={{ mt: 2, mb: 4 }}>
             <Paper elevation={2} sx={{ 
@@ -77,6 +82,9 @@ export default function HelpCenter() {
                 background: theme === 'dark' ? 'linear-gradient(145deg, #1e1e1e 0%, #2c2c2c 100%)' : 'linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)'
             }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
+                    <IconButton onClick={() => navigate(-1)} color="primary" size="small"> {/* Back button to navigate */}
+                        <ArrowBackIcon />
+                    </IconButton>
                     <HelpIcon color="primary" />
                     <Typography variant="h5" component="h1" sx={{ fontWeight: 600, color: theme === 'dark' ? 'white' : 'black' }}>
                         Help Center

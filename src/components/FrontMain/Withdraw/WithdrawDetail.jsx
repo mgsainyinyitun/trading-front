@@ -22,6 +22,8 @@ import {
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import back button icon
+import IconButton from '@mui/material/IconButton'; // Import IconButton
 
 export default function WithdrawDetail() {
     const [coin, setCoin] = useState('usdt');
@@ -117,9 +119,14 @@ export default function WithdrawDetail() {
         <Container maxWidth="sm" sx={{ mt: 2, mb: 4 }}>
             <ToastContainer />
             <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-                <Typography variant="h6" gutterBottom>
-                    Withdraw Crypto
-                </Typography>
+                <Box display="flex" alignItems="center" mb={2}>
+                    <IconButton onClick={() => navigate(-1)} aria-label="back">
+                        <ArrowBackIcon />
+                    </IconButton>
+                    <Typography variant="h6" gutterBottom sx={{ pl: 1 }}>
+                        Withdraw Crypto
+                    </Typography>
+                </Box>
 
                 <Box sx={{ mb: 3 }}>
                     <Typography variant="body2" color="text.secondary" gutterBottom>

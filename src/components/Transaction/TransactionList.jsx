@@ -22,11 +22,13 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import DownloadIcon from '@mui/icons-material/Download';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import back icon
 import { format } from 'date-fns';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import * as XLSX from 'xlsx';
 import { useAppContext } from '../../context/AppContext';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const statusColors = {
     PENDING: 'warning',
@@ -54,6 +56,7 @@ export default function TransactionList() {
         status: 'ALL'
     });
     const { theme } = useAppContext();
+    const navigate = useNavigate(); // Initialize useNavigate
 
     useEffect(() => {
         fetchTransactions();
@@ -123,6 +126,9 @@ export default function TransactionList() {
             <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden', flex: 1, display: 'flex', flexDirection: 'column', backgroundColor: theme === 'dark' ? '#2c2c2c' : 'white' }}>
                 <Box sx={{ p: 2, backgroundColor: theme === 'dark' ? '#1e1e1e' : '#f8f9fa' }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                        <IconButton onClick={() => navigate(-1)} sx={{ color: theme === 'dark' ? 'white' : 'black' }}>
+                            <ArrowBackIcon />
+                        </IconButton>
                         <Typography variant="h6" sx={{ fontSize: { xs: '1.1rem', sm: '1.25rem' }, color: theme === 'dark' ? 'white' : 'black' }}>
                             Transaction History 📊
                         </Typography>

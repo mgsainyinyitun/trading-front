@@ -1,9 +1,9 @@
-import { Box, Container, Grid, Paper, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Box, Container, Grid, Paper, Typography, IconButton } from '@mui/material';import { useNavigate } from 'react-router-dom';
 import UsdtIcon from '../../../images/coin-icons/usdt.png';
 import UsdcIcon from '../../../images/coin-icons/usdc.png';
 import EthIcon from '../../../images/coin-icons/ethereum-cryptocurrency.svg';
 import BtcIcon from '../../../images/coin-icons/bitcoin-cryptocurrency.svg';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import back button icon
 
 const coins = [
     { id: 1, name: 'USDT', icon: UsdtIcon, network: 'TRC20', fee: '1 USDT' },
@@ -16,9 +16,14 @@ export default function Withdraw() {
     const navigate = useNavigate();
     return (
         <Container maxWidth="sm" sx={{ mt: 2, mb: 2 }}>
-            <Typography variant="h6" gutterBottom sx={{ pl: 1 }}>
-                Select Withdrawal Coin
-            </Typography>
+            <Box display="flex" alignItems="center" mb={2}>
+                <IconButton onClick={() => navigate(-1)} aria-label="back">
+                    <ArrowBackIcon />
+                </IconButton>
+                <Typography variant="h6" gutterBottom sx={{ pl: 1 }}>
+                    Select Withdrawal Coin
+                </Typography>
+            </Box>
             <Grid container spacing={2}>
                 {coins.map((coin) => (
                     <Grid item xs={6} sm={6} key={coin.id}>
