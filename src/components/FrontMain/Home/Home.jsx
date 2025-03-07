@@ -23,6 +23,7 @@ import { useAppContext } from '../../../context/AppContext';
 export default function Home() {
     const navigate = useNavigate();
     const [currencyData, setCurrencyData] = useState([]);
+    const { theme,setTheme } = useAppContext();
 
     useEffect(() => {
         const fetchCryptoPairs = async () => {
@@ -53,6 +54,8 @@ export default function Home() {
         const interval = setInterval(fetchCryptoPairs, 10000);
 
         return () => clearInterval(interval);
+
+        
     }, []);
 
     const settings = {
@@ -93,7 +96,6 @@ export default function Home() {
     };
 
     const themeUi = useTheme();
-    const { theme } = useAppContext();
     const isDarkTheme = theme === 'dark';
 
     return (

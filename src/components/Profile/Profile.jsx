@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react';
-import { Container, Paper, Typography, Box, Grid, Divider, Chip } from '@mui/material';
+import { Container, Paper, Typography, Box, Grid, Divider, Chip, IconButton } from '@mui/material';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import { format } from 'date-fns';
 import { useAppContext } from '../../context/AppContext';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import back icon
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 export default function Profile() {
     const [profileData, setProfileData] = useState(null);
     const token = localStorage.getItem('token');
     const { theme } = useAppContext();
+    const navigate = useNavigate(); // Initialize useNavigate
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -32,8 +35,11 @@ export default function Profile() {
     if (!profileData) return null;
 
     return (
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4,borderRadius: '10px' }}>
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4, borderRadius: '10px' }}>
             <ToastContainer />
+            <IconButton onClick={() => navigate(-1)} sx={{ mb: 2 }}>
+                <ArrowBackIcon />
+            </IconButton>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
                     <Paper sx={{ p: 3, height: '100%', backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white' }}>

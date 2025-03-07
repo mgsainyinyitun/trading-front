@@ -34,6 +34,8 @@ export default function Trade() {
     const { customer, theme, setTheme } = useAppContext();
     const navigate = useNavigate();
 
+    const [previousTheme, setPreviousTheme] = useState(theme);
+
     const [cryptoPairs, setCryptoPairs] = useState([]);
     const [timeFrame, setTimeFrame] = useState(30); // New state for timeframe
 
@@ -118,6 +120,11 @@ export default function Trade() {
 
     useEffect(() => {
         setTheme('dark');
+
+        return () => {
+            console.log('unmounting');
+            setTheme(previousTheme);
+        };
     }, []);
 
     useEffect(() => {

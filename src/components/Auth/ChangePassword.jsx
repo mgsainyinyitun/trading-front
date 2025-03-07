@@ -8,13 +8,17 @@ import {
     Button,
     CircularProgress,
     Alert,
+    IconButton
 } from '@mui/material';
 import { useAppContext } from '../../context/AppContext';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useNavigate } from 'react-router-dom';
 
 export default function ChangePassword() {
     const { theme } = useAppContext();
+    const navigate = useNavigate();
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -33,7 +37,7 @@ export default function ChangePassword() {
         try {
             const API_URL = process.env.REACT_APP_API_URL;
             const response = await axios.post(`${API_URL}/api/v1/customer/change-password`, {
-                oldPassword:currentPassword,
+                oldPassword: currentPassword,
                 newPassword,
             }, {
                 headers: {
@@ -57,6 +61,9 @@ export default function ChangePassword() {
         <Container maxWidth="sm" sx={{ mt: 4, mb: 4 }}>
             <ToastContainer />
             <Paper elevation={3} sx={{ p: 3, borderRadius: 2, background: theme === 'dark' ? '#1e1e1e' : '#ffffff' }}>
+                <IconButton onClick={() => navigate(-1)}>
+                    <ArrowBackIcon color='primary' />
+                </IconButton>
                 <Typography variant="h5" gutterBottom sx={{ fontSize: '1.2rem', color: theme === 'dark' ? '#fff' : 'primary.main' }}>
                     Change Password
                 </Typography>
