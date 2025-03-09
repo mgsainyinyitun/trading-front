@@ -35,6 +35,9 @@ jobs:
             
             echo "Pulling latest changes..."
             git pull origin main || { echo "Git pull failed"; exit 1; }
+
+            echo "Go to project directory... or error"
+            cd /home/ec2-user/projects/trading-front || { echo "Failed to change directory"; exit 1; }
             
             echo "Stopping trading-front container..."
             docker stop trading-front || { echo "Warning: Failed to stop container (might not exist)"; }
