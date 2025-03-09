@@ -113,6 +113,7 @@ export default function Home() {
                     }
                 </Slider>
             </Box>
+            Hi
 
             {/** support and language section */}
             <Box p={3} sx={{ background: isDarkTheme ? 'rgba(50, 50, 50, 0.9)' : 'rgba(255, 255, 255, 0.9)', borderRadius: '15px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', mt: 2 }}>
