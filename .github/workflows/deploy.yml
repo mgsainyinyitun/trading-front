@@ -1,0 +1,44 @@
+name: Deploy Trading Frontend
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.AWS_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.AWS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy Trading Frontend
+        run: |
+          ssh ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} << 'EOF'
+            cd /home/ec2-user/projects/trading-front
+            git pull origin main
+            
+            # Stop and remove only the trading-front container
+            docker stop trading-front
+            
+            # go to project directory
+            cd /home/ec2-user/projects/trading-front
+
+            # Rebuild and start only the trading-front container
+            docker-compose up --build -d trading-front
+            
+            echo "trading-front has been successfully deployed!"
+          EOF

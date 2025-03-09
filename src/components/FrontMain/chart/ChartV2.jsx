@@ -7,13 +7,14 @@ const ChartV2 = ({ focusCoin, timeFrame }) => {
         const script = document.createElement("script");
         script.src = "https://s3.tradingview.com/tv.js";
         script.async = true;
+        let widget;
         script.onload = () => {
-            const widget = new window.TradingView.widget({
+             widget = new window.TradingView.widget({
                 // "autosize": true,
                 "width": "100%",
                 "height": window.innerHeight / 1.7,
                 "symbol": `COINBASE:${focusCoin ? focusCoin : 'BTC'}USDT`, // btc/usdt
-                "interval": "1",
+                "interval": "1", 
                 "timezone": "Etc/UTC",
                 "theme": "dark",
                 "style": "1",
@@ -24,11 +25,13 @@ const ChartV2 = ({ focusCoin, timeFrame }) => {
                 "save_image": false,
                 "calendar": false,
                 "hide_volume": true,
+                "details":true,
                 "studies": [
                     "BB@tv-basicstudies",
                 ],
                 container_id: "tradingview_chart",
             });
+            console.log(widget);
         };
         document.body.appendChild(script);
     }, [focusCoin, timeFrame]);
