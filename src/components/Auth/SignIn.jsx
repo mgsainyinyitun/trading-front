@@ -39,6 +39,7 @@ export default function SignIn() {
         setLoading(true); // Set loading to true when submitting
 
         const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+        console.log(process.env.REACT_APP_API_URL);
         console.log(API_URL);
         try {
             const response = await axios.post(`${API_URL}/api/v1/customer/login`, {
