@@ -15,8 +15,8 @@ const coins = [
     { id: 2, name: 'USDC', icon: UsdcIcon, network: 'ERC20' },
     { id: 3, name: 'ETH', icon: EthIcon, network: 'ERC20' },
     { id: 4, name: 'BTC', icon: BtcIcon, network: 'BTC' },
-    { id: 5, name: 'ADA', icon: AdaIcon, network: 'TRC20' },
-    { id: 6, name: 'SOL', icon: SolIcon, network: 'SOL' },
+    { id: 5, name: 'ADA', icon: AdaIcon, network: 'BNB' },
+    { id: 6, name: 'SOL', icon: SolIcon, network: 'OFFICIAL TRUMP' },
     { id: 7, name: 'XRP', icon: XrpIcon, network: 'XRP' },
 ];
 

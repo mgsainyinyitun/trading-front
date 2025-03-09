@@ -47,6 +47,7 @@ const dummyAddresses = {
 export default function DepositDetail() {
     const { coin } = useParams();
     const [file, setFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState(null);
     const [amount, setAmount] = useState('');
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(false);
@@ -67,6 +68,9 @@ export default function DepositDetail() {
         if (file) {
             if (file.type.startsWith('image/')) {
                 setFile(file);
+                // Create preview URL for the image
+                const url = URL.createObjectURL(file);
+                setPreviewUrl(url);
                 toast.success('Screenshot uploaded!');
             } else {
                 toast.error('Please upload an image file');
@@ -102,6 +106,7 @@ export default function DepositDetail() {
             setAmount('');
             setDescription('');
             setFile(null);
+            setPreviewUrl(null);
         } catch (error) {
             toast.error(error.response?.data?.message || 'Oops! Deposit failed');
         } finally {
@@ -196,6 +201,20 @@ export default function DepositDetail() {
                         <Typography variant="caption" display="block" color="text.secondary" sx={{ fontSize: '0.7rem', color: theme === 'dark' ? '#ffffff' : '#000000' }}>
                             {file ? `📎 ${file.name}` : 'No file selected'}
                         </Typography>
+                        {previewUrl && (
+                            <Box sx={{ mt: 2, maxWidth: '100%', overflow: 'hidden' }}>
+                                <img 
+                                    src={previewUrl} 
+                                    alt="Preview" 
+                                    style={{ 
+                                        width: '100%', 
+                                        maxHeight: '200px',
+                                        objectFit: 'contain',
+                                        borderRadius: '4px'
+                                    }} 
+                                />
+                            </Box>
+                        )}
                     </Box>
 
                     <Alert severity="warning" sx={{ 

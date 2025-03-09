@@ -21,6 +21,7 @@ import WithdrawDetail from "../FrontMain/Withdraw/WithdrawDetail";
 import ExchangeHistory from "../Exchange/ExchangeHistory";
 import ChangePassword from "../Auth/ChangePassword";
 import { useAppContext } from '../../context/AppContext'; // Importing context to access theme
+import Orders from "../FrontMain/Orders/Orders";
 
 export default function Main() {
     const location = useLocation();
@@ -29,7 +30,7 @@ export default function Main() {
 
     return (
         <Box sx={{ height: '100%', width: '100%', overflow: 'auto', marginTop: isAuthPage ? 0 : 5, background: theme === 'dark' ? '#121212' : '' }}>
-            <Container sx={{  width: '100%', minHeight: '100%', background: theme === 'dark' ? '#1e1e1e' : '#eeeeee', padding: 0 , border: '1px solid transparent'	}}>
+            <Box sx={{  width: '99%', minHeight: '100%', background: theme === 'dark' ? '#1e1e1e' : '#eeeeee', padding: 0 , border: '1px solid transparent'}}>
                 {!isAuthPage && <TopBar />}
                 <Box sx={{ flexGrow: 1, background: theme === 'dark' ? '#1e1e1e' : '#eeeeee', paddingBottom: 1, margin: '0 auto' }}>
                     <Routes>
@@ -52,9 +53,10 @@ export default function Main() {
                         <Route path='/withdraw' element={<WithdrawDetail />} />
                         <Route path='/exchange-history' element={<ExchangeHistory />} />
                         <Route path='/change-password' element={<ChangePassword />} />
+                        <Route path='/orders' element={<Orders />} />
                     </Routes>
                 </Box>
-            </Container>
+            </Box>
         </Box>
     )
 };

@@ -40,7 +40,7 @@ export default function Mine() {
 
     const handleClick = (menuId, menuName) => {
         if (menuId === 3) {
-            navigate('/transactions');
+            navigate('/orders');
         } else if (menuId === 9 && menuName === 'Online Customer Service') {
             window.open('https://t.me/support', '_blank');
         } else if (menuId === 10) {

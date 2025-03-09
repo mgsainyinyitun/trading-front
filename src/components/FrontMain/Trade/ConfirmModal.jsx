@@ -75,7 +75,7 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose,s
     const [priceChange, setPriceChange] = useState(0);
     const [balance, setBalance] = useState("0");
     const [selectedTime, setSelectedTime] = useState(null);
-    const [amount, setAmount] = useState(0);
+    const [amount, setAmount] = useState();
     const [showProgress, setShowProgress] = useState(false);
     const [progress, setProgress] = useState(0);
     const [timeLeft, setTimeLeft] = useState(0);
@@ -91,7 +91,7 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose,s
 
     const handleModalClose = () => {
         handleClose();
-        setAmount(0);
+        setAmount(null);
     };
 
     const fetchBalance = async () => {
@@ -279,13 +279,15 @@ export default function ConfirmModal({ focusCoin, tradeType, open, handleClose,s
                             fullWidth
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
+                            type="number"
+                            inputProps={{ min: "0", step: "any" }}
                             size="small"
                             sx={{ border: '1px solid lightgray', borderRadius: 1 }}
                             InputLabelProps={{
-                                style: { color: 'white' } // Change label color to white and position it outside to the left
+                                style: { color: 'white' }
                             }}
                             InputProps={{
-                                style: { color: 'white' } // Change input text color to white
+                                style: { color: 'white' }
                             }}
                         />
                     </Box>

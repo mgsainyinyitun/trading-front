@@ -124,12 +124,12 @@ export default function TradeHistory() {
     const navigate = useNavigate();
 
     return (
-        <Container maxWidth="md" sx={{ mt: { xs: 2, sm: 3 }, mb: 4, height: '100vh', backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white' }}>
+        <Container maxWidth="md" sx={{ mt: { xs: 2, sm: 3 }, mb: 4, height: '100vh', backgroundColor: theme === 'dark' ? '#1e1e1e' : '' }}>
             <ToastContainer />
-            <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden', height: '100%', backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white' }}>
+            <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden', height: '100%', backgroundColor: theme === 'dark' ? '#1e1e1e' : '' }}>
                 <Box sx={{ p: 2, backgroundColor: theme === 'dark' ? '#2c2c2c' : '#f8f9fa' }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                        <IconButton onClick={() => navigate('/mine')} color="primary" size="small">
+                        <IconButton onClick={() => navigate(-1)} color="primary" size="small">
                             <ArrowBackIcon />
                         </IconButton>
                         <Typography variant="h6" sx={{ color: theme === 'dark' ? 'white' : 'primary.main' }}>

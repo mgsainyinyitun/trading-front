@@ -8,6 +8,7 @@ import ScreenShareIcon from '@mui/icons-material/ScreenShare';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import QuizIcon from '@mui/icons-material/Quiz';
 import { Avatar } from '@mui/material';
+import FeedbackIcon from '@mui/icons-material/Feedback';
 import { CurrencyExchange } from '@mui/icons-material';
 
 export const minemenu = [
@@ -25,28 +26,34 @@ export const minemenu = [
         icon: <HowToRegIcon style={{ color: '#4a148c', fontSize: 45 }} />,
     },
     {
-        id: 3,
-        name: 'Transaction Records',
+        id: 9,
+        name: 'Online Customer Service',
         status: null,
-        icon: <ReceiptIcon style={{ color: '#01579b', fontSize: 45 }} />,
+        icon: <SupportAgentIcon style={{ color: '#37474f', fontSize: 45 }} />,
     },
     {
-        id: 4,
-        name: 'Trading Records',
+        id: 3,
+        name: 'Order Records',
         status: null,
-        icon: <AssignmentIcon style={{ color: '#616161', fontSize: 45 }} />,
+        icon: <AssignmentIcon style={{ color: '#01579b', fontSize: 45 }} />,
     },
+    // {
+    //     id: 4,
+    //     name: 'Trading Records',
+    //     status: null,
+    //     icon: <AssignmentIcon style={{ color: '#616161', fontSize: 45 }} />,
+    // },
+    // {
+    //     id: 4,
+    //     name: 'Trading Records',
+    //     status: null,
+    //     icon: <AssignmentIcon style={{ color: '#616161', fontSize: 45 }} />,
+    // },
     {
         id: 5,
         name: 'Exchange Records',
         status: null,
         icon: <CurrencyExchange style={{ color: '#616161', fontSize: 45 }} />,
-    },
-    {
-        id: 7,
-        name: 'Payment Method Management',
-        status: null,
-        icon: <AccountBalanceWalletIcon style={{ color: '#0091ea', fontSize: 45 }} />,
     },
     {
         id: 8,
@@ -55,15 +62,21 @@ export const minemenu = [
         icon: <ScreenShareIcon style={{ color: '#e65100', fontSize: 45 }} />,
     },
     {
-        id: 9,
-        name: 'Online Customer Service',
-        status: null,
-        icon: <SupportAgentIcon style={{ color: '#37474f', fontSize: 45 }} />,
-    },
-    {
         id: 10,
         name: 'Help Center',
         status: null,
         icon: <QuizIcon style={{ color: '#00b0ff', fontSize: 45 }} />,
+    },
+    {
+        id: 11,
+        name: 'Suggestions',
+        status: null,
+        icon: <FeedbackIcon style={{ color: '#00b0ff', fontSize: 45 }} />,
+    },
+    {
+        id: 7,
+        name: 'Payment Method Management',
+        status: null,
+        icon: <AccountBalanceWalletIcon style={{ color: '#0091ea', fontSize: 45 }} />,
     },
 ]

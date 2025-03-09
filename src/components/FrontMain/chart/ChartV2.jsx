@@ -1,18 +1,18 @@
 import { useEffect } from "react";
 
 
-const ChartV2 = ({focusCoin, timeFrame}) => {
+const ChartV2 = ({ focusCoin, timeFrame }) => {
 
     useEffect(() => {
         const script = document.createElement("script");
         script.src = "https://s3.tradingview.com/tv.js";
         script.async = true;
         script.onload = () => {
-            new window.TradingView.widget({
+            const widget = new window.TradingView.widget({
                 // "autosize": true,
                 "width": "100%",
                 "height": window.innerHeight / 1.7,
-                "symbol": `COINBASE:${focusCoin? focusCoin:'BTC'}USDT`, // btc/usdt
+                "symbol": `COINBASE:${focusCoin ? focusCoin : 'BTC'}USDT`, // btc/usdt
                 "interval": "1",
                 "timezone": "Etc/UTC",
                 "theme": "dark",

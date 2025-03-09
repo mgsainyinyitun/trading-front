@@ -116,9 +116,9 @@ export default function ExchangeHistory() {
     };
 
     return (
-        <Container maxWidth="md" sx={{ mt: { xs: 2, sm: 3 }, mb: 4, backgroundColor: theme === 'dark' ? '#1e1e1e' : 'white' }}>
+        <Container maxWidth="md" sx={{ mt: { xs: 2, sm: 3 }, mb: 4, backgroundColor: theme === 'dark' ? '#1e1e1e' : '' }}>
             <ToastContainer />
-            <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden', backgroundColor: theme === 'dark' ? '#2c2c2c' : 'white' }}>
+            <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden', backgroundColor: theme === 'dark' ? '#2c2c2c' : '' }}>
                 <Box sx={{ p: 2, backgroundColor: theme === 'dark' ? '#3c3c3c' : '#f8f9fa' }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                         <IconButton onClick={() => navigate(-1)} color="primary" size="small"> {/* Back button */}

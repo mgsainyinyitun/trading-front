@@ -143,7 +143,7 @@ export default function Trade() {
     };
 
     return (
-        <Box sx={{ background: theme === 'dark' ? '#121212' : 'white', color: theme === 'dark' ? 'white' : 'black' }}>
+        <Box sx={{ background: theme === 'dark' ? '#121212' : 'white', color: theme === 'dark' ? 'white' : 'black', paddingBottom:10 }}>
             {/** Navigation */}
             <Box pb={1} sx={{
                 overflow: 'hidden',
