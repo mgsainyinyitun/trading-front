@@ -11,7 +11,7 @@ import { useAppContext } from '../../../context/AppContext';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 
 const coins = [
-    { id: 1, name: 'USDT', icon: UsdtIcon, network: 'TRC20' },
+    { id: 1, name: 'USDT', icon: UsdtIcon, network: 'ERC20' },
     { id: 2, name: 'USDC', icon: UsdcIcon, network: 'ERC20' },
     { id: 3, name: 'ETH', icon: EthIcon, network: 'ERC20' },
     { id: 4, name: 'BTC', icon: BtcIcon, network: 'BTC' },

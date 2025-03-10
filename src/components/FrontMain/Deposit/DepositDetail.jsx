@@ -35,10 +35,10 @@ const VisuallyHiddenInput = styled('input')`
 `;
 
 const dummyAddresses = {
-    btc: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
-    eth: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e',
-    usdt: 'TWd2ksavh8QD5YP1HYvkBkKXsEpThHxgLv',
-    usdc: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e',
+    btc: 'bc1qxtrlrddw8pjr35vmxsp8w0qr9q3gqf5pletmt2',
+    eth: '0x1A1260Dc8F60d6b43FbC980904b925593012cE59',
+    usdt: '0x1A1260Dc8F60d6b43FbC980904b925593012cE59',
+    usdc: '0x1A1260Dc8F60d6b43FbC980904b925593012cE59',
     ada: 'DQ84Wfeq9yjJ4axcxp8vKY2yS5Ff942421',
     sol: 'So11111111111111111111111111111111111111112',
     xrp: 'rJ96ZfD3Y53z52Rp9b32Z1feq19HKgVp'

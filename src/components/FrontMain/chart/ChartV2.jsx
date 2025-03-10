@@ -27,7 +27,7 @@ const ChartV2 = ({ focusCoin, timeFrame }) => {
                 "hide_volume": true,
                 "details":true,
                 "studies": [
-                    "BB@tv-basicstudies",
+                    // "BB@tv-basicstudies",
                 ],
                 container_id: "tradingview_chart",
             });
