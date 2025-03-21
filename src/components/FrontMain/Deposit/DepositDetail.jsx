@@ -36,12 +36,12 @@ const VisuallyHiddenInput = styled('input')`
 
 const dummyAddresses = {
     btc: 'bc1qxtrlrddw8pjr35vmxsp8w0qr9q3gqf5pletmt2',
-    eth: '0x1A1260Dc8F60d6b43FbC980904b925593012cE59',
-    usdt: '0x1A1260Dc8F60d6b43FbC980904b925593012cE59',
-    usdc: '0x1A1260Dc8F60d6b43FbC980904b925593012cE59',
+    eth: '0xf97812788A2c3427C588279D466b7aA1F7C4347C',
+    usdt: '0xf97812788A2c3427C588279D466b7aA1F7C4347C',
+    usdc: '0xf97812788A2c3427C588279D466b7aA1F7C4347C',
     ada: '0xd647b5e728f8a09f3b9b5e8a950adc304060eaa8',
     sol: '0xd647b5e728f8a09f3b9b5e8a950adc304060eaa8',
-    xrp: '0xd647b5e728f8a09f3b9b5e8a950adc304060eaa8'
+    xrp: 'r3xYjoEg9efgVsU8kjtY8B8wgay27hnD4i'
 };
 
 export default function DepositDetail() {
