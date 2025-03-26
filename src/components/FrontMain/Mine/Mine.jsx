@@ -43,11 +43,9 @@ export default function Mine() {
         if (menuId === 3) {
             navigate('/orders');
         } else if (menuId === 9 && menuName === 'Online Customer Service') {
-            window.open('https://t.me/Coinbaseviptrading', '_blank');
+            window.open('https://t.me/coinexservice', '_blank');
         } else if (menuId === 10) {
             navigate('/help');
-        } else if (menuId === 4) {
-            navigate('/trade-history');
         } else if (menuId === 5) {
             navigate('/exchange-history');
         } else if (menuId === 12) {
