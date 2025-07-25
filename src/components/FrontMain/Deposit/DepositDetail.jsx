@@ -35,13 +35,21 @@ const VisuallyHiddenInput = styled('input')`
 `;
 
 const dummyAddresses = {
-    btc: 'bc1qxtrlrddw8pjr35vmxsp8w0qr9q3gqf5pletmt2',
-    eth: '0xf97812788A2c3427C588279D466b7aA1F7C4347C',
-    usdt: '0xf97812788A2c3427C588279D466b7aA1F7C4347C',
-    usdc: '0xf97812788A2c3427C588279D466b7aA1F7C4347C',
+    // btc: 'bc1qxtrlrddw8pjr35vmxsp8w0qr9q3gqf5pletmt2',
+    // eth: '0xf97812788A2c3427C588279D466b7aA1F7C4347C',
+    // usdt: '0xf97812788A2c3427C588279D466b7aA1F7C4347C',
+    // usdc: '0xf97812788A2c3427C588279D466b7aA1F7C4347C',
+    // ada: '0xd647b5e728f8a09f3b9b5e8a950adc304060eaa8',
+    // sol: '0xd647b5e728f8a09f3b9b5e8a950adc304060eaa8',
+    // xrp: 'r3xYjoEg9efgVsU8kjtY8B8wgay27hnD4i'
+
+    btc: 'bc1q6z2v260rr8pqqegvnl4dg3rwg45u3zupzm0nd3',
+    eth: '0xF0ce77cc1AC59000d95F35A7bf7eCcDe4a59D524',
+    usdt: '0xF0ce77cc1AC59000d95F35A7bf7eCcDe4a59D524',
+    usdc: '0xF0ce77cc1AC59000d95F35A7bf7eCcDe4a59D524',
     ada: '0xd647b5e728f8a09f3b9b5e8a950adc304060eaa8',
-    sol: '0xd647b5e728f8a09f3b9b5e8a950adc304060eaa8',
-    xrp: 'r3xYjoEg9efgVsU8kjtY8B8wgay27hnD4i'
+    sol: 'BVWMJxj8H35SvbrtLHEtEvwtJjPk9fAZv2AqNYHYvYDF',
+    xrp: 'rKM9MT38RX6TtfuE7RMSJBreYBdT4k6XMf'
 };
 
 export default function DepositDetail() {
