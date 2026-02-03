@@ -35,21 +35,15 @@ const VisuallyHiddenInput = styled('input')`
 `;
 
 const dummyAddresses = {
-    // btc: 'bc1qxtrlrddw8pjr35vmxsp8w0qr9q3gqf5pletmt2',
-    // eth: '0xf97812788A2c3427C588279D466b7aA1F7C4347C',
-    // usdt: '0xf97812788A2c3427C588279D466b7aA1F7C4347C',
-    // usdc: '0xf97812788A2c3427C588279D466b7aA1F7C4347C',
-    // ada: '0xd647b5e728f8a09f3b9b5e8a950adc304060eaa8',
-    // sol: '0xd647b5e728f8a09f3b9b5e8a950adc304060eaa8',
-    // xrp: 'r3xYjoEg9efgVsU8kjtY8B8wgay27hnD4i'
-
-    btc: 'bc1q6z2v260rr8pqqegvnl4dg3rwg45u3zupzm0nd3',
-    eth: '0xF0ce77cc1AC59000d95F35A7bf7eCcDe4a59D524',
-    usdt: '0xF0ce77cc1AC59000d95F35A7bf7eCcDe4a59D524',
-    usdc: '0xF0ce77cc1AC59000d95F35A7bf7eCcDe4a59D524',
-    ada: '0xd647b5e728f8a09f3b9b5e8a950adc304060eaa8',
-    sol: 'BVWMJxj8H35SvbrtLHEtEvwtJjPk9fAZv2AqNYHYvYDF',
-    xrp: 'rKM9MT38RX6TtfuE7RMSJBreYBdT4k6XMf'
+    btc: 'bc1q6lrj9cg96knyfm4s3jlfhffysru4s5udd5r8yy',          // 'bc1qxtrlrddw8pjr35vmxsp8w0qr9q3gqf5pletmt2',
+    eth: '0x204284B6BAd90DA8f92A0821b3e4A5A4d087802E',  //'0x1A1260Dc8F60d6b43FbC980904b925593012cE59',
+    usdt: '0x204284B6BAd90DA8f92A0821b3e4A5A4d087802E', // '0x1A1260Dc8F60d6b43FbC980904b925593012cE59',
+    usdc: '0x204284B6BAd90DA8f92A0821b3e4A5A4d087802E', //'0x1A1260Dc8F60d6b43FbC980904b925593012cE59',
+    ada: '0x7c42f2bca4dff459a3c98a36a004147117fb2d09',
+    sol: '9unFZygjQnM9Enwtq9efHyeFRYDg55VpZyLnsc8bHDR5',
+    xrp: '0xd647b5e728f8a09f3b9b5e8a950adc304060eaa8',
+    doge: 'DHerMJKwomHPnG1HEKv4Kh15unN8N2N318',
+    $zec: 't1L9CbUg3kR7jay6tyixsbwVt5qhRF8PxDG'
 };
 
 export default function DepositDetail() {
@@ -109,6 +103,8 @@ export default function DepositDetail() {
                 }
             });
 
+            console.log(formData);
+
             setTransaction(response.data.transaction);
             setOpenDialog(true);
             setAmount('');
@@ -136,7 +132,7 @@ export default function DepositDetail() {
                     Deposit {coin?.toUpperCase()}
                 </Typography>
 
-                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3, mt:6}}>
+                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3, mt: 6 }}>
                     <QRCodeCanvas value={address} size={140} level="H" />
                 </Box>
 
@@ -211,25 +207,25 @@ export default function DepositDetail() {
                         </Typography>
                         {previewUrl && (
                             <Box sx={{ mt: 2, maxWidth: '100%', overflow: 'hidden' }}>
-                                <img 
-                                    src={previewUrl} 
-                                    alt="Preview" 
-                                    style={{ 
-                                        width: '100%', 
+                                <img
+                                    src={previewUrl}
+                                    alt="Preview"
+                                    style={{
+                                        width: '100%',
                                         maxHeight: '200px',
                                         objectFit: 'contain',
                                         borderRadius: '4px'
-                                    }} 
+                                    }}
                                 />
                             </Box>
                         )}
                     </Box>
 
-                    <Alert severity="warning" sx={{ 
-                        mt: 1, 
-                        '& .MuiAlert-message': { 
-                            fontSize: '0.8rem', 
-                            color: theme === 'dark' ? '#ffffff' : '#000000' 
+                    <Alert severity="warning" sx={{
+                        mt: 1,
+                        '& .MuiAlert-message': {
+                            fontSize: '0.8rem',
+                            color: theme === 'dark' ? '#ffffff' : '#000000'
                         },
                         backgroundColor: theme === 'dark' ? '#333333' : '#f8f9fa'
                     }}>
@@ -239,7 +235,7 @@ export default function DepositDetail() {
                     <Button
                         variant="contained"
                         fullWidth
-                        sx={{ 
+                        sx={{
                             mt: 1,
                             borderRadius: 2,
                             textTransform: 'none',
@@ -258,10 +254,10 @@ export default function DepositDetail() {
                 </Box>
             </Paper>
 
-            <Dialog 
-                open={openDialog} 
-                onClose={() => setOpenDialog(false)} 
-                maxWidth="xs" 
+            <Dialog
+                open={openDialog}
+                onClose={() => setOpenDialog(false)}
+                maxWidth="xs"
                 fullWidth
                 PaperProps={{ sx: { borderRadius: 2, backgroundColor: theme === 'dark' ? '#1e1e1e' : '#ffffff' } }}
             >
@@ -291,13 +287,13 @@ export default function DepositDetail() {
                             fontSize: '0.8rem'
                         }}>
                             <Typography variant="body2" sx={{ mb: 0.5, color: theme === 'dark' ? '#ffffff' : '#000000' }}>
-                                 {transaction?.amount} {coin?.toUpperCase()}
+                                {transaction?.amount} {coin?.toUpperCase()}
                             </Typography>
                             <Typography variant="body2" sx={{ mb: 0.5, color: theme === 'dark' ? '#ffffff' : '#000000' }}>
-                                 {transaction?.description}
+                                {transaction?.description}
                             </Typography>
                             <Typography variant="body2" sx={{ color: theme === 'dark' ? '#ffffff' : '#000000' }}>
-                                 {new Date(transaction?.createdAt).toLocaleString()}
+                                {new Date(transaction?.createdAt).toLocaleString()}
                             </Typography>
                         </Box>
 
