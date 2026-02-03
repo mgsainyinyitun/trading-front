@@ -21,8 +21,8 @@ const coins = [
     { id: 5, name: 'ADA', icon: AdaIcon, network: 'BNB' },
     { id: 6, name: 'SOL', icon: SolIcon, network: 'OFFICIAL TRUMP' },
     { id: 7, name: 'XRP', icon: XrpIcon, network: 'XRP' },
-    { id: 8, name: 'DOGE', icon: DogeIcon, network: 'DOGE' },
-    { id: 9, name: '$ZEC', icon: ZecIcon, network: 'ZEC' },
+    // { id: 8, name: 'DOGE', icon: DogeIcon, network: 'DOGE' },
+    // { id: 9, name: '$ZEC', icon: ZecIcon, network: 'ZEC' },
 ];
 
 export default function Deposit() {
