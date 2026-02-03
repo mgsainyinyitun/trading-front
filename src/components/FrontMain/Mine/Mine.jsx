@@ -6,7 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAppContext } from "../../../context/AppContext";
-import LogoImg from "../../../images/logo.jpg";
+// import LogoImg from "../../../images/logo.jpg";
+import LogoImg from "../../../images/user-logo.png";
+
 
 export default function Mine() {
     const navigate = useNavigate();
@@ -43,7 +45,8 @@ export default function Mine() {
         if (menuId === 3) {
             navigate('/orders');
         } else if (menuId === 9 && menuName === 'Online Customer Service') {
-            window.open('#', '_blank');
+            // window.open('https://t.me/Coinex6633', '_blank');
+            navigate('/online/help');
         } else if (menuId === 10) {
             navigate('/help');
         } else if (menuId === 5) {
