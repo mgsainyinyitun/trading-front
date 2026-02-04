@@ -156,15 +156,16 @@ export default function Home() {
                         </Typography>
                     </Grid>
                     <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
-                        <a href="http://t.me/Bithumb6633" target="_blank" rel="noopener noreferrer"
-                            style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}
+                        <Box
+                            onClick={() => navigate('/online/help')}
+                            sx={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none' }}
                         >
                             <SupportAgentRoundedIcon sx={{ fontSize: 50, color: isDarkTheme ? '#4caf50' : '#388e3c', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.1)' } }} />
                             <Typography
                                 variant="body1" component="div" sx={{ color: isDarkTheme ? '#4caf50' : '#388e3c', fontWeight: 'bold' }}>
                                 Support
                             </Typography>
-                        </a>
+                        </Box>
                     </Grid>
                     <Grid item xs={4} display="flex" flexDirection="column" alignItems="center">
                         <GTranslateRoundedIcon sx={{ fontSize: 50, color: isDarkTheme ? '#f44336' : '#d32f2f', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.1)' } }} />
